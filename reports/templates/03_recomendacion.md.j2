@@ -1,0 +1,53 @@
+# 03 · Recomendación para Banco [EMPRESA]
+
+> **Para:** Gerencia de Productos de Banca Personas y Riesgo Crediticio (caso ficticio).
+> **Decisión:** cómo relanzar la línea hipotecaria UVA con el fondeo del programa ({{ r.fgs }}, tasa tope UVA + 7,5%, 120 días para colocar).
+> **Cifras:** `data/processed/resultados/kpis.json` · fecha de corte {{ fecha_corte }}. Este archivo se genera con `src/build_docs.py`.
+
+---
+
+## La recomendación
+
+**Recomiendo lanzar un hipotecario UVA a 30 años, con 80% financiado y cuota inicial de hasta 25% del ingreso, dirigido a hogares inquilinos con dos ingresos, y abrir una línea separada para monotributistas y autónomos con aportes,** porque:
+
+1. **Es la combinación que más hogares suma sin subir el tope de cuota:** los elegibles pasan de {{ r.elegibles }} a **{{ r.prop }} ({{ r.prop_delta }})**, y a **{{ r.prop_indep }}** con la línea de independientes.
+2. **Ataca el freno real, que es el efectivo inicial:** la vivienda de referencia cuesta {{ r.mediana_precio_ing }} ingresos mensuales del hogar típico y el anticipo es el límite más exigente. Bajar la tasa de 7,5% a 5,5%, sola, {{ 'no suma hogares' if r.qps['¿Y si la tasa baja de 7,5% a 5,5%?'].dif == '0' else 'suma ' ~ r.qps['¿Y si la tasa baja de 7,5% a 5,5%?'].dif ~ ' hogares' }}.
+3. **Protege al deudor y al banco frente a un desacople entre UVA y salarios:** un crédito de sep-2023 pasó del 25% al {{ r.stress24 }} del ingreso en dos años. Con un tope de 30% al otorgar, ese deudor habría quedado cerca del 40%.
+4. **La demanda sobra frente al fondeo:** el programa alcanza para ~{{ r.fgs_creditos }} créditos (préstamo medio {{ r.prestamo_medio }}) y hay {{ r.prop }} hogares elegibles. El banco puede seleccionar por menor riesgo.
+
+## Plan de acción (120 días de colocación)
+
+| Semanas | Acción | Responsable | Indicador |
+|---|---|---|---|
+| 1-2 | Aprobar el producto 30 años / 80% / cuota 25% y la regla de sumar el ingreso de la pareja | Productos + Riesgo | Producto aprobado |
+| 1-4 | Precalificación digital con el simulador: ingreso del hogar, efectivo disponible, edad y zona | Canales digitales | Solicitudes precalificadas por semana |
+| 3-6 | Línea de independientes: validación con 12 a 24 meses de facturación o aportes, cuota hasta 25% del ingreso promedio | Riesgo + Operaciones | % de aprobación y tiempo de validación |
+| 3-8 | Campañas priorizadas: parejas con dos ingresos; GBA Oeste y Gran Córdoba por proporción de elegibles, CABA por volumen | Marketing | Costo por crédito colocado |
+| 6-12 | Ahorro programado en UVA para casi elegibles con ingreso formal | Productos | Cuentas abiertas; conversión a crédito a 12-24 meses |
+| 1-17 | Tablero de colocación y mora temprana, separado por línea | Riesgo | Mora a 30 y 90 días; cuota/ingreso actualizado |
+
+## Qué no hacer
+
+- **Subir el tope de cuota al 30%:** {{ 'no suma hogares' if r.qps['¿Y si acepta cuotas de hasta 30% del ingreso?'].dif == '0' else 'suma apenas ' ~ r.qps['¿Y si acepta cuotas de hasta 30% del ingreso?'].dif ~ ' hogares' }} (el freno es el anticipo) y aumenta el riesgo en un escenario de desacople.
+- **Alargar el plazo sin financiar más:** 30 años con 75% deja afuera {{ r.qps['¿Y si el banco presta a 30 años en vez de 20?'].dif|replace('−', '') }} hogares por la regla de edad.
+- **Financiar 90%:** la cuota supera el tope y el grupo elegible se achica frente al 80%.
+
+## Riesgos y cómo mitigarlos
+
+| Riesgo | Mitigación |
+|---|---|
+| Desacople UVA-salarios | Tope de cuota 25%; opción de extender el plazo si la cuota supera el 30% del sueldo |
+| Mayor exposición por 80% financiado | Selección por perfil (dos ingresos, antigüedad laboral), seguro de desempleo o incapacidad |
+| Ingresos variables de independientes | Promedio de 12 meses (no el mejor mes), tablero de mora separado el primer año |
+| Suba de precios de las viviendas | Con precios 20% más altos quedan afuera {{ (r.qle_lista|selectattr('pregunta', 'equalto', 'Si los precios suben 20%')|first).dif|replace('−', '') }} hogares: revisar la oferta de viviendas usadas o más chicas |
+
+## Próximos pasos del análisis
+
+1. Validar con datos propios del banco: mora histórica por perfil y scoring.
+2. Piloto en GBA Oeste y Gran Córdoba, donde la proporción de elegibles es mayor.
+3. Medir la demanda real con una campaña de precalificación.
+4. Dimensionar el monotributo social con datos administrativos (la EPH casi no lo capta).
+
+## Límites
+
+La encuesta no mide ahorros, deudas ni historial crediticio; los precios son de publicación; la EPH capta algo menos de inquilinos que el Censo (cantidades reales entre {{ r.rango_censo }}); las estimaciones tienen margen de error (IC {{ r.ic_inf }}–{{ r.ic_sup }}) y valen a la fecha de corte. Detalle en el documento metodológico, sección 10.

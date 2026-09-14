@@ -1,0 +1,9 @@
+pregunta,hogares_base,hogares,diferencia,diferencia_pct,por_que
+¿Y si el banco presta a 30 años en vez de 20?,154793.1357999695,136628.66681754962,-18164.468982419872,-11.73467343273722,"Baja la cuota, pero el anticipo no cambia y deja afuera a quienes tienen más de 55 años"
+¿Y si financia el 80% en vez del 75%?,154793.1357999695,167594.30237123003,12801.166571260546,8.269854154129153,"Baja el efectivo necesario, pero sube la cuota"
+¿Y si hace las dos cosas: 30 años y 80%?,154793.1357999695,200951.5324804735,46158.396680504025,29.819407974363887,El plazo largo compensa la cuota más alta y el anticipo baja
+"¿Y si la tasa baja de 7,5% a 5,5%?",154793.1357999695,154793.1357999695,0.0,0.0,Solo abarata la cuota; lo que frena es el anticipo
+¿Y si acepta cuotas de hasta 30% del ingreso?,154793.1357999695,154793.1357999695,0.0,0.0,"Mismo motivo: la cuota no es el freno principal, y sube el riesgo"
+¿Y si un plan de ahorro permite juntar 24 meses de ingreso?,154793.1357999695,194261.80954117444,39468.673741204955,25.497689892533803,"Ataca directamente el anticipo, que es el freno principal"
+¿Y si acepta monotributistas y autónomos con aportes?,154793.1357999695,201273.11048378664,46479.974683817156,30.027154914595577,Suma hogares que pueden pagar pero no tienen recibo de sueldo
+¿Y si se compra una vivienda 20% más barata (usada o más chica)?,154793.1357999695,240695.9643820795,85902.82858211,55.49524411283806,Reduce cuota y anticipo a la vez

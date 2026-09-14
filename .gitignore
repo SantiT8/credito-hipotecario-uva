@@ -1,0 +1,15 @@
+# Entorno
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Datos crudos y base local (se regeneran con src/download.py y los notebooks 01-02)
+data/raw/*
+!data/raw/manifest.json
+data/processed/*.duckdb
+data/processed/*.duckdb.wal
+
+# Material de trabajo que no se publica
+publicacion/
+reports/checkpoint3_validacion.*

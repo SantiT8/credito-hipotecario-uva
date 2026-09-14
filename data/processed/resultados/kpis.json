@@ -1,0 +1,2323 @@
+{
+  "fecha_corte": "2026-09-13",
+  "mercado": {
+    "uva": 2116.04,
+    "fecha_uva": "2026-09-13",
+    "tc_minorista": 1531.73,
+    "fecha_tc": "2026-09-11",
+    "usd_m2": {
+      "CABA": 2471.0,
+      "Gran Córdoba": 1474.0,
+      "Partidos del GBA": 1780.735490077875
+    },
+    "usd_m2_corredor": {
+      "Norte": 2125.320422195522,
+      "Oeste": 1506.2943192080145,
+      "Sur": 1733.091001169027
+    }
+  },
+  "producto_base": {
+    "tna": 0.075,
+    "plazo_anios": 20,
+    "ltv": 0.75,
+    "tope_cuota_ingreso": 0.25,
+    "gastos_compra": 0.07,
+    "tope_prestamo_uva": 150000,
+    "meses_ingreso_anticipo": 12,
+    "requiere_ingreso_formal": true,
+    "edad_max_fin_credito": 85
+  },
+  "m2_referencia": {
+    "1-2 integrantes": 45,
+    "3-4 integrantes": 60,
+    "5 o más": 75
+  },
+  "universo": {
+    "hogares_3_mercados": 6004001.5,
+    "inquilinos": 1244790.75,
+    "propietarios": 4029689.75,
+    "otra_situacion": 729521.0,
+    "pct_inquilinos": 20.732685526477635,
+    "inquilinos_sin_ingreso_declarado": 348545.0,
+    "observaciones_inquilinos": 2706,
+    "observaciones_inquilinos_con_ingreso": 2028,
+    "hogares_encuestados_inquilinos_con_ingreso": 1504,
+    "observaciones_total": 13175,
+    "por_mercado": [
+      {
+        "mercado": "CABA",
+        "hogares": 1258576.75,
+        "inquilinos": 432436.75
+      },
+      {
+        "mercado": "Gran Córdoba",
+        "hogares": 605438.0,
+        "inquilinos": 180864.25
+      },
+      {
+        "mercado": "Partidos del GBA",
+        "hogares": 4139986.75,
+        "inquilinos": 631489.75
+      }
+    ],
+    "censo": {
+      "inquilinos_eph": 1244790.75,
+      "hogares_eph_3_mercados": 6004001.5,
+      "pct_inquilinos_eph": 20.732685526477635,
+      "inquilinos_con_pct_censo_24p": 1416381.1214853178,
+      "inquilinos_con_pct_censo_31p": 1407878.6149800634,
+      "factor_ajuste_min": 1.0912846195234018,
+      "factor_ajuste_max": 1.1378467597749404,
+      "hogares_censo_24p": 5574450.0,
+      "hogares_censo_31p": 5934950.0,
+      "alquilados_censo_24p": 1358421.0,
+      "alquilados_censo_31p": 1415167.0,
+      "pct_propia_pais_censo": 65.66588431477133,
+      "pct_alquilada_pais_censo": 20.97597698060205,
+      "hogares_pais_censo": 15932302.0
+    }
+  },
+  "base": {
+    "elegibles_hogares": 154793.1357999695,
+    "elegibles_pct": 12.435303592919315,
+    "elegibles_ic95": [
+      10.379191677084961,
+      14.274745305162902
+    ],
+    "elegibles_rango_censo": [
+      168923.36830630398,
+      176130.8680053976
+    ],
+    "pasan_cuota_pct": 22.120242186050575,
+    "pasan_cuota_ic95": [
+      19.61292541536607,
+      24.485872054999376
+    ],
+    "pasan_cuota_hogares": 275350.0650022897,
+    "embudo": [
+      {
+        "etapa": "Inquilinos",
+        "hogares": 1244787.75,
+        "pct_del_total": 100.0,
+        "pct_de_etapa_anterior": 100.0,
+        "muestra_hogares": 1504
+      },
+      {
+        "etapa": "Pagan la cuota",
+        "hogares": 275350.0650022897,
+        "pct_del_total": 22.12024218605057,
+        "pct_de_etapa_anterior": 22.12024218605057,
+        "muestra_hogares": 473
+      },
+      {
+        "etapa": "Juntan el anticipo",
+        "hogares": 219882.47949652438,
+        "pct_del_total": 17.664254769258804,
+        "pct_de_etapa_anterior": 79.85561198058765,
+        "muestra_hogares": 397
+      },
+      {
+        "etapa": "Ingreso demostrable",
+        "hogares": 156403.07097965802,
+        "pct_del_total": 12.564637704673588,
+        "pct_de_etapa_anterior": 71.13030166740967,
+        "muestra_hogares": 276
+      },
+      {
+        "etapa": "Cumplen la edad",
+        "hogares": 154793.1357999695,
+        "pct_del_total": 12.435303592919315,
+        "pct_de_etapa_anterior": 98.97064989222756,
+        "muestra_hogares": 273
+      }
+    ],
+    "queda_afuera_en_pct": {
+      "Cumplen la edad": 0.129334111754276,
+      "Elegible": 12.435303592919311,
+      "Ingreso demostrable": 5.0996170645852175,
+      "Juntan el anticipo": 4.455987416791767,
+      "Pagan la cuota": 77.87975781394942
+    },
+    "ingreso_mediano_inquilinos": 2177549.928327833,
+    "ingreso_mediano_elegibles": 4989975.0730169825,
+    "prestamo_medio_elegibles_ars": 110060265.8218588
+  },
+  "h1": {
+    "calor_zona": [
+      {
+        "m2": 30,
+        "zona": "CABA",
+        "pct_elegible": 31.276702020768465
+      },
+      {
+        "m2": 30,
+        "zona": "GBA Norte",
+        "pct_elegible": 26.33678440868307
+      },
+      {
+        "m2": 30,
+        "zona": "GBA Oeste",
+        "pct_elegible": 38.14938954725608
+      },
+      {
+        "m2": 30,
+        "zona": "GBA Sur",
+        "pct_elegible": 31.771262214301707
+      },
+      {
+        "m2": 30,
+        "zona": "Gran Córdoba",
+        "pct_elegible": 36.381794105532045
+      },
+      {
+        "m2": 30,
+        "zona": "Total",
+        "pct_elegible": 32.5046731464957
+      },
+      {
+        "m2": 35,
+        "zona": "CABA",
+        "pct_elegible": 24.465959584630735
+      },
+      {
+        "m2": 35,
+        "zona": "GBA Norte",
+        "pct_elegible": 20.781151997470133
+      },
+      {
+        "m2": 35,
+        "zona": "GBA Oeste",
+        "pct_elegible": 30.66062532269819
+      },
+      {
+        "m2": 35,
+        "zona": "GBA Sur",
+        "pct_elegible": 25.291628731528125
+      },
+      {
+        "m2": 35,
+        "zona": "Gran Córdoba",
+        "pct_elegible": 31.34293905105756
+      },
+      {
+        "m2": 35,
+        "zona": "Total",
+        "pct_elegible": 26.092616586520652
+      },
+      {
+        "m2": 40,
+        "zona": "CABA",
+        "pct_elegible": 21.76595530652619
+      },
+      {
+        "m2": 40,
+        "zona": "GBA Norte",
+        "pct_elegible": 16.291479369582426
+      },
+      {
+        "m2": 40,
+        "zona": "GBA Oeste",
+        "pct_elegible": 25.916381337590792
+      },
+      {
+        "m2": 40,
+        "zona": "GBA Sur",
+        "pct_elegible": 20.596767970751703
+      },
+      {
+        "m2": 40,
+        "zona": "Gran Córdoba",
+        "pct_elegible": 26.333525926867903
+      },
+      {
+        "m2": 40,
+        "zona": "Total",
+        "pct_elegible": 22.06990726979246
+      },
+      {
+        "m2": 45,
+        "zona": "CABA",
+        "pct_elegible": 17.760377583194682
+      },
+      {
+        "m2": 45,
+        "zona": "GBA Norte",
+        "pct_elegible": 13.381425132215734
+      },
+      {
+        "m2": 45,
+        "zona": "GBA Oeste",
+        "pct_elegible": 21.565315156805635
+      },
+      {
+        "m2": 45,
+        "zona": "GBA Sur",
+        "pct_elegible": 17.249211257076666
+      },
+      {
+        "m2": 45,
+        "zona": "Gran Córdoba",
+        "pct_elegible": 21.343878981226275
+      },
+      {
+        "m2": 45,
+        "zona": "Total",
+        "pct_elegible": 18.14986588202108
+      },
+      {
+        "m2": 50,
+        "zona": "CABA",
+        "pct_elegible": 13.809085537809773
+      },
+      {
+        "m2": 50,
+        "zona": "GBA Norte",
+        "pct_elegible": 10.757945074557114
+      },
+      {
+        "m2": 50,
+        "zona": "GBA Oeste",
+        "pct_elegible": 17.740224259787986
+      },
+      {
+        "m2": 50,
+        "zona": "GBA Sur",
+        "pct_elegible": 14.330329607172995
+      },
+      {
+        "m2": 50,
+        "zona": "Gran Córdoba",
+        "pct_elegible": 17.660596745077115
+      },
+      {
+        "m2": 50,
+        "zona": "Total",
+        "pct_elegible": 14.649874429271833
+      },
+      {
+        "m2": 55,
+        "zona": "CABA",
+        "pct_elegible": 11.255172748705295
+      },
+      {
+        "m2": 55,
+        "zona": "GBA Norte",
+        "pct_elegible": 8.92288887294026
+      },
+      {
+        "m2": 55,
+        "zona": "GBA Oeste",
+        "pct_elegible": 15.606321670586777
+      },
+      {
+        "m2": 55,
+        "zona": "GBA Sur",
+        "pct_elegible": 11.630141643817906
+      },
+      {
+        "m2": 55,
+        "zona": "Gran Córdoba",
+        "pct_elegible": 15.022295696502077
+      },
+      {
+        "m2": 55,
+        "zona": "Total",
+        "pct_elegible": 12.250749279004783
+      },
+      {
+        "m2": 60,
+        "zona": "CABA",
+        "pct_elegible": 7.511773459333147
+      },
+      {
+        "m2": 60,
+        "zona": "GBA Norte",
+        "pct_elegible": 7.243412463799466
+      },
+      {
+        "m2": 60,
+        "zona": "GBA Oeste",
+        "pct_elegible": 13.524910005717041
+      },
+      {
+        "m2": 60,
+        "zona": "GBA Sur",
+        "pct_elegible": 9.165126052897586
+      },
+      {
+        "m2": 60,
+        "zona": "Gran Córdoba",
+        "pct_elegible": 10.996077173795852
+      },
+      {
+        "m2": 60,
+        "zona": "Total",
+        "pct_elegible": 9.31083766675205
+      },
+      {
+        "m2": 65,
+        "zona": "CABA",
+        "pct_elegible": 5.3798320901778185
+      },
+      {
+        "m2": 65,
+        "zona": "GBA Norte",
+        "pct_elegible": 5.751750301749796
+      },
+      {
+        "m2": 65,
+        "zona": "GBA Oeste",
+        "pct_elegible": 10.954664612439855
+      },
+      {
+        "m2": 65,
+        "zona": "GBA Sur",
+        "pct_elegible": 7.3191671354842285
+      },
+      {
+        "m2": 65,
+        "zona": "Gran Córdoba",
+        "pct_elegible": 9.106402859599314
+      },
+      {
+        "m2": 65,
+        "zona": "Total",
+        "pct_elegible": 7.289477755561845
+      },
+      {
+        "m2": 70,
+        "zona": "CABA",
+        "pct_elegible": 4.739330465076214
+      },
+      {
+        "m2": 70,
+        "zona": "GBA Norte",
+        "pct_elegible": 4.418973032427857
+      },
+      {
+        "m2": 70,
+        "zona": "GBA Oeste",
+        "pct_elegible": 8.537227975793186
+      },
+      {
+        "m2": 70,
+        "zona": "GBA Sur",
+        "pct_elegible": 5.565657639187068
+      },
+      {
+        "m2": 70,
+        "zona": "Gran Córdoba",
+        "pct_elegible": 7.387021775970409
+      },
+      {
+        "m2": 70,
+        "zona": "Total",
+        "pct_elegible": 5.879381572898993
+      },
+      {
+        "m2": 75,
+        "zona": "CABA",
+        "pct_elegible": 4.417200755258889
+      },
+      {
+        "m2": 75,
+        "zona": "GBA Norte",
+        "pct_elegible": 3.792316027974598
+      },
+      {
+        "m2": 75,
+        "zona": "GBA Oeste",
+        "pct_elegible": 6.788888748021495
+      },
+      {
+        "m2": 75,
+        "zona": "GBA Sur",
+        "pct_elegible": 4.46079797823089
+      },
+      {
+        "m2": 75,
+        "zona": "Gran Córdoba",
+        "pct_elegible": 6.380881820368287
+      },
+      {
+        "m2": 75,
+        "zona": "Total",
+        "pct_elegible": 5.025583605506433
+      },
+      {
+        "m2": 80,
+        "zona": "CABA",
+        "pct_elegible": 3.799419334026309
+      },
+      {
+        "m2": 80,
+        "zona": "GBA Norte",
+        "pct_elegible": 3.0990445917322167
+      },
+      {
+        "m2": 80,
+        "zona": "GBA Oeste",
+        "pct_elegible": 6.0246227055703665
+      },
+      {
+        "m2": 80,
+        "zona": "GBA Sur",
+        "pct_elegible": 3.575407752139526
+      },
+      {
+        "m2": 80,
+        "zona": "Gran Córdoba",
+        "pct_elegible": 4.411866341930009
+      },
+      {
+        "m2": 80,
+        "zona": "Total",
+        "pct_elegible": 4.128471025957884
+      },
+      {
+        "m2": 85,
+        "zona": "CABA",
+        "pct_elegible": 2.8517035527923884
+      },
+      {
+        "m2": 85,
+        "zona": "GBA Norte",
+        "pct_elegible": 2.672790899654004
+      },
+      {
+        "m2": 85,
+        "zona": "GBA Oeste",
+        "pct_elegible": 4.672414718405687
+      },
+      {
+        "m2": 85,
+        "zona": "GBA Sur",
+        "pct_elegible": 2.934472073740923
+      },
+      {
+        "m2": 85,
+        "zona": "Gran Córdoba",
+        "pct_elegible": 3.2217488783039236
+      },
+      {
+        "m2": 85,
+        "zona": "Total",
+        "pct_elegible": 3.2109302017978165
+      },
+      {
+        "m2": 90,
+        "zona": "CABA",
+        "pct_elegible": 2.4157415747355957
+      },
+      {
+        "m2": 90,
+        "zona": "GBA Norte",
+        "pct_elegible": 2.1685621603532113
+      },
+      {
+        "m2": 90,
+        "zona": "GBA Oeste",
+        "pct_elegible": 3.9519925610898636
+      },
+      {
+        "m2": 90,
+        "zona": "GBA Sur",
+        "pct_elegible": 2.3738787774471124
+      },
+      {
+        "m2": 90,
+        "zona": "Gran Córdoba",
+        "pct_elegible": 2.6178437449029524
+      },
+      {
+        "m2": 90,
+        "zona": "Total",
+        "pct_elegible": 2.668391789766581
+      }
+    ],
+    "calor_integrantes": [
+      {
+        "m2": 30,
+        "integrantes": "1",
+        "pct_elegible": 16.642015292702048
+      },
+      {
+        "m2": 30,
+        "integrantes": "2",
+        "pct_elegible": 37.774732560133785
+      },
+      {
+        "m2": 30,
+        "integrantes": "3",
+        "pct_elegible": 41.716822991700475
+      },
+      {
+        "m2": 30,
+        "integrantes": "4",
+        "pct_elegible": 38.34230496218542
+      },
+      {
+        "m2": 30,
+        "integrantes": "5 o más",
+        "pct_elegible": 25.14910118587467
+      },
+      {
+        "m2": 35,
+        "integrantes": "1",
+        "pct_elegible": 11.785147148249047
+      },
+      {
+        "m2": 35,
+        "integrantes": "2",
+        "pct_elegible": 31.32121525473302
+      },
+      {
+        "m2": 35,
+        "integrantes": "3",
+        "pct_elegible": 32.655279955128634
+      },
+      {
+        "m2": 35,
+        "integrantes": "4",
+        "pct_elegible": 32.2386781596424
+      },
+      {
+        "m2": 35,
+        "integrantes": "5 o más",
+        "pct_elegible": 21.11119162946892
+      },
+      {
+        "m2": 40,
+        "integrantes": "1",
+        "pct_elegible": 7.719901246922388
+      },
+      {
+        "m2": 40,
+        "integrantes": "2",
+        "pct_elegible": 27.57578664812936
+      },
+      {
+        "m2": 40,
+        "integrantes": "3",
+        "pct_elegible": 28.40590257277597
+      },
+      {
+        "m2": 40,
+        "integrantes": "4",
+        "pct_elegible": 27.751954675424294
+      },
+      {
+        "m2": 40,
+        "integrantes": "5 o más",
+        "pct_elegible": 17.818615249158892
+      },
+      {
+        "m2": 45,
+        "integrantes": "1",
+        "pct_elegible": 5.811866644831113
+      },
+      {
+        "m2": 45,
+        "integrantes": "2",
+        "pct_elegible": 22.72280698329958
+      },
+      {
+        "m2": 45,
+        "integrantes": "3",
+        "pct_elegible": 24.769472801069416
+      },
+      {
+        "m2": 45,
+        "integrantes": "4",
+        "pct_elegible": 21.501712881932626
+      },
+      {
+        "m2": 45,
+        "integrantes": "5 o más",
+        "pct_elegible": 14.540087222257014
+      },
+      {
+        "m2": 50,
+        "integrantes": "1",
+        "pct_elegible": 4.286166210535316
+      },
+      {
+        "m2": 50,
+        "integrantes": "2",
+        "pct_elegible": 18.62447966596767
+      },
+      {
+        "m2": 50,
+        "integrantes": "3",
+        "pct_elegible": 20.69394279477328
+      },
+      {
+        "m2": 50,
+        "integrantes": "4",
+        "pct_elegible": 17.768532659074392
+      },
+      {
+        "m2": 50,
+        "integrantes": "5 o más",
+        "pct_elegible": 9.603564875023611
+      },
+      {
+        "m2": 55,
+        "integrantes": "1",
+        "pct_elegible": 3.404656040850442
+      },
+      {
+        "m2": 55,
+        "integrantes": "2",
+        "pct_elegible": 16.65838455406921
+      },
+      {
+        "m2": 55,
+        "integrantes": "3",
+        "pct_elegible": 16.64765877353697
+      },
+      {
+        "m2": 55,
+        "integrantes": "4",
+        "pct_elegible": 14.403074065043656
+      },
+      {
+        "m2": 55,
+        "integrantes": "5 o más",
+        "pct_elegible": 8.12671206843409
+      },
+      {
+        "m2": 60,
+        "integrantes": "1",
+        "pct_elegible": 2.254735623968828
+      },
+      {
+        "m2": 60,
+        "integrantes": "2",
+        "pct_elegible": 12.94577267977027
+      },
+      {
+        "m2": 60,
+        "integrantes": "3",
+        "pct_elegible": 11.436224226747454
+      },
+      {
+        "m2": 60,
+        "integrantes": "4",
+        "pct_elegible": 12.584598476000213
+      },
+      {
+        "m2": 60,
+        "integrantes": "5 o más",
+        "pct_elegible": 6.555298397824098
+      },
+      {
+        "m2": 65,
+        "integrantes": "1",
+        "pct_elegible": 1.3649633076245795
+      },
+      {
+        "m2": 65,
+        "integrantes": "2",
+        "pct_elegible": 10.075217795414623
+      },
+      {
+        "m2": 65,
+        "integrantes": "3",
+        "pct_elegible": 9.227593714259726
+      },
+      {
+        "m2": 65,
+        "integrantes": "4",
+        "pct_elegible": 9.653831856256565
+      },
+      {
+        "m2": 65,
+        "integrantes": "5 o más",
+        "pct_elegible": 5.8917275951176915
+      },
+      {
+        "m2": 70,
+        "integrantes": "1",
+        "pct_elegible": 0.8894545522716665
+      },
+      {
+        "m2": 70,
+        "integrantes": "2",
+        "pct_elegible": 8.36497595229744
+      },
+      {
+        "m2": 70,
+        "integrantes": "3",
+        "pct_elegible": 7.507022292469493
+      },
+      {
+        "m2": 70,
+        "integrantes": "4",
+        "pct_elegible": 7.424702046550451
+      },
+      {
+        "m2": 70,
+        "integrantes": "5 o más",
+        "pct_elegible": 5.100044144111931
+      },
+      {
+        "m2": 75,
+        "integrantes": "1",
+        "pct_elegible": 0.841885601232911
+      },
+      {
+        "m2": 75,
+        "integrantes": "2",
+        "pct_elegible": 7.240989256854763
+      },
+      {
+        "m2": 75,
+        "integrantes": "3",
+        "pct_elegible": 6.568982111924724
+      },
+      {
+        "m2": 75,
+        "integrantes": "4",
+        "pct_elegible": 5.527269916251995
+      },
+      {
+        "m2": 75,
+        "integrantes": "5 o más",
+        "pct_elegible": 4.9112055496329035
+      },
+      {
+        "m2": 80,
+        "integrantes": "1",
+        "pct_elegible": 0.648559803039038
+      },
+      {
+        "m2": 80,
+        "integrantes": "2",
+        "pct_elegible": 6.059658017855167
+      },
+      {
+        "m2": 80,
+        "integrantes": "3",
+        "pct_elegible": 5.464843671391617
+      },
+      {
+        "m2": 80,
+        "integrantes": "4",
+        "pct_elegible": 4.135369549838507
+      },
+      {
+        "m2": 80,
+        "integrantes": "5 o más",
+        "pct_elegible": 4.358451471616476
+      },
+      {
+        "m2": 85,
+        "integrantes": "1",
+        "pct_elegible": 0.4749757790615452
+      },
+      {
+        "m2": 85,
+        "integrantes": "2",
+        "pct_elegible": 5.553057094721063
+      },
+      {
+        "m2": 85,
+        "integrantes": "3",
+        "pct_elegible": 3.96923180629502
+      },
+      {
+        "m2": 85,
+        "integrantes": "4",
+        "pct_elegible": 3.4908863328642283
+      },
+      {
+        "m2": 85,
+        "integrantes": "5 o más",
+        "pct_elegible": 1.6117850486668799
+      },
+      {
+        "m2": 90,
+        "integrantes": "1",
+        "pct_elegible": 0.4490932991083885
+      },
+      {
+        "m2": 90,
+        "integrantes": "2",
+        "pct_elegible": 4.41270565448246
+      },
+      {
+        "m2": 90,
+        "integrantes": "3",
+        "pct_elegible": 3.63620691715934
+      },
+      {
+        "m2": 90,
+        "integrantes": "4",
+        "pct_elegible": 2.7396847569321205
+      },
+      {
+        "m2": 90,
+        "integrantes": "5 o más",
+        "pct_elegible": 1.1489624520669104
+      }
+    ]
+  },
+  "h2": {
+    "pct_fallan_ambos": 77.87975781394941,
+    "pct_solo_falla_anticipo": 4.455987416791766,
+    "pct_solo_falla_cuota": 0.0,
+    "pct_pasan_ambos": 17.664254769258804,
+    "precio_max_ingresos_por_cuota": 41.377377068404805,
+    "precio_max_ingresos_por_anticipo": 37.5,
+    "barrera_activa": "anticipo",
+    "ltv_equilibrio": 0.7716245622453308,
+    "precio_max_ingresos_en_equilibrio": 40.21778766476973,
+    "mediana_precio_en_ingresos": 71.51165295056947
+  },
+  "h3": {
+    "perfil": [
+      {
+        "agrupacion": "tipo_hogar",
+        "tipo_hogar": "Extendido o compuesto",
+        "jefatura": "Todas",
+        "hogares": 110536.0,
+        "pct_de_inquilinos": 8.879907438035119,
+        "muestra_hogares": 143,
+        "ingreso_mediano": 2337231.197675826,
+        "ingreso_por_persona_mediano": 698855.4855869825,
+        "perceptores_promedio": 2.317665737859159,
+        "pct_ingreso_demostrable": 34.75360968372295,
+        "pct_pasan_cuota_y_anticipo": 16.64799427472852,
+        "pct_elegible": 8.74599194367093,
+        "ic95_inf": 3.980394553435965,
+        "ic95_sup": 15.245921278086222,
+        "muestra_chica": false
+      },
+      {
+        "agrupacion": "tipo_hogar",
+        "tipo_hogar": "Monoparental",
+        "jefatura": "Todas",
+        "hogares": 170796.25,
+        "pct_de_inquilinos": 13.720913464966216,
+        "muestra_hogares": 231,
+        "ingreso_mediano": 1775318.3706443505,
+        "ingreso_por_persona_mediano": 687647.3457877367,
+        "perceptores_promedio": 1.3782913852031295,
+        "pct_ingreso_demostrable": 46.219984338063625,
+        "pct_pasan_cuota_y_anticipo": 11.103633073697818,
+        "pct_elegible": 4.59223246637808,
+        "ic95_inf": 1.681133199485311,
+        "ic95_sup": 8.69133248185543,
+        "muestra_chica": false
+      },
+      {
+        "agrupacion": "tipo_hogar",
+        "tipo_hogar": "Pareja con hijos",
+        "jefatura": "Todas",
+        "hogares": 486708.25,
+        "pct_de_inquilinos": 39.09969792038844,
+        "muestra_hogares": 405,
+        "ingreso_mediano": 2536169.1009205007,
+        "ingreso_por_persona_mediano": 706913.1353440726,
+        "perceptores_promedio": 1.914731772062627,
+        "pct_ingreso_demostrable": 67.06774541010965,
+        "pct_pasan_cuota_y_anticipo": 16.85335988323015,
+        "pct_elegible": 12.59094562737007,
+        "ic95_inf": 9.322173382259829,
+        "ic95_sup": 16.14229205621346,
+        "muestra_chica": false
+      },
+      {
+        "agrupacion": "tipo_hogar",
+        "tipo_hogar": "Pareja sin hijos",
+        "jefatura": "Todas",
+        "hogares": 178353.5,
+        "pct_de_inquilinos": 14.328024998639327,
+        "muestra_hogares": 237,
+        "ingreso_mediano": 2784644.0269451984,
+        "ingreso_por_persona_mediano": 1392322.0134725992,
+        "perceptores_promedio": 1.8845705298746591,
+        "pct_ingreso_demostrable": 73.69227405125214,
+        "pct_pasan_cuota_y_anticipo": 38.045165831715266,
+        "pct_elegible": 32.88911479355436,
+        "ic95_inf": 25.81515517063488,
+        "ic95_sup": 40.2456108456324,
+        "muestra_chica": false
+      },
+      {
+        "agrupacion": "tipo_hogar",
+        "tipo_hogar": "Unipersonal",
+        "jefatura": "Todas",
+        "hogares": 298393.75,
+        "pct_de_inquilinos": 23.971456177970904,
+        "muestra_hogares": 515,
+        "ingreso_mediano": 1549881.1172291948,
+        "ingreso_por_persona_mediano": 1549881.1172291948,
+        "perceptores_promedio": 0.9835670150597994,
+        "pct_ingreso_demostrable": 44.7113922459837,
+        "pct_pasan_cuota_y_anticipo": 10.936651939202836,
+        "pct_elegible": 5.811866644831113,
+        "ic95_inf": 3.7389949182673567,
+        "ic95_sup": 8.333416705371047,
+        "muestra_chica": false
+      },
+      {
+        "agrupacion": "jefatura",
+        "tipo_hogar": "Todos",
+        "jefatura": "Mujer",
+        "hogares": 542450.25,
+        "pct_de_inquilinos": 43.577730420306594,
+        "muestra_hogares": 760,
+        "ingreso_mediano": 1972575.9673826115,
+        "ingreso_por_persona_mediano": 834725.4277413664,
+        "perceptores_promedio": 1.5799624020820342,
+        "pct_ingreso_demostrable": 51.26677515587835,
+        "pct_pasan_cuota_y_anticipo": 14.199189773293915,
+        "pct_elegible": 10.203465661630114,
+        "ic95_inf": 7.818551061853622,
+        "ic95_sup": 13.021264792391044,
+        "muestra_chica": false
+      },
+      {
+        "agrupacion": "jefatura",
+        "tipo_hogar": "Todos",
+        "jefatura": "Varón",
+        "hogares": 702337.5,
+        "pct_de_inquilinos": 56.422269579693406,
+        "muestra_hogares": 756,
+        "ingreso_mediano": 2395270.8175360286,
+        "ingreso_por_persona_mediano": 1056737.125383542,
+        "perceptores_promedio": 1.7029807606741774,
+        "pct_ingreso_demostrable": 61.30008720878495,
+        "pct_pasan_cuota_y_anticipo": 20.340497136108652,
+        "pct_elegible": 14.159063243781336,
+        "ic95_inf": 11.62740784616083,
+        "ic95_sup": 16.864764766727642,
+        "muestra_chica": false
+      },
+      {
+        "agrupacion": "tipo_hogar × jefatura",
+        "tipo_hogar": "Extendido o compuesto",
+        "jefatura": "Mujer",
+        "hogares": 45118.25,
+        "pct_de_inquilinos": 3.624573747612796,
+        "muestra_hogares": 82,
+        "ingreso_mediano": 2043407.847110865,
+        "ingreso_por_persona_mediano": 651654.5606531842,
+        "perceptores_promedio": 2.1340200473200976,
+        "pct_ingreso_demostrable": 28.137172873504625,
+        "pct_pasan_cuota_y_anticipo": 7.926014797015147,
+        "pct_elegible": 3.5470924066355294,
+        "ic95_inf": 1.047313594426827,
+        "ic95_sup": 6.498143068713108,
+        "muestra_chica": false
+      },
+      {
+        "agrupacion": "tipo_hogar × jefatura",
+        "tipo_hogar": "Extendido o compuesto",
+        "jefatura": "Varón",
+        "hogares": 65417.75,
+        "pct_de_inquilinos": 5.255333690422323,
+        "muestra_hogares": 62,
+        "ingreso_mediano": 2869235.6669847653,
+        "ingreso_por_persona_mediano": 798396.0116827174,
+        "perceptores_promedio": 2.4443251258259417,
+        "pct_ingreso_demostrable": 39.31692850946418,
+        "pct_pasan_cuota_y_anticipo": 22.6634938993769,
+        "pct_elegible": 12.331643376758242,
+        "ic95_inf": 4.94912754641303,
+        "ic95_sup": 23.219457609527165,
+        "muestra_chica": false
+      },
+      {
+        "agrupacion": "tipo_hogar × jefatura",
+        "tipo_hogar": "Monoparental",
+        "jefatura": "Mujer",
+        "hogares": 138540.0,
+        "pct_de_inquilinos": 11.12960824044099,
+        "muestra_hogares": 194,
+        "ingreso_mediano": 1669450.8554827329,
+        "ingreso_por_persona_mediano": 611242.0851446548,
+        "perceptores_promedio": 1.3457214522881478,
+        "pct_ingreso_demostrable": 44.45719647755161,
+        "pct_pasan_cuota_y_anticipo": 5.536210154273062,
+        "pct_elegible": 1.9267747581084105,
+        "ic95_inf": 0.5969524674463951,
+        "ic95_sup": 3.8455489655249817,
+        "muestra_chica": false
+      },
+      {
+        "agrupacion": "tipo_hogar × jefatura",
+        "tipo_hogar": "Monoparental",
+        "jefatura": "Varón",
+        "hogares": 32256.250000000004,
+        "pct_de_inquilinos": 2.5913052245252257,
+        "muestra_hogares": 39,
+        "ingreso_mediano": 3240660.517842862,
+        "ingreso_por_persona_mediano": 1403946.664316629,
+        "perceptores_promedio": 1.5181786475489245,
+        "pct_ingreso_demostrable": 53.79112575082349,
+        "pct_pasan_cuota_y_anticipo": 35.01561203148446,
+        "pct_elegible": 16.040324259555526,
+        "ic95_inf": 3.4536102292475115,
+        "ic95_sup": 30.995502823124752,
+        "muestra_chica": true
+      },
+      {
+        "agrupacion": "tipo_hogar × jefatura",
+        "tipo_hogar": "Pareja con hijos",
+        "jefatura": "Mujer",
+        "hogares": 178910.5,
+        "pct_de_inquilinos": 14.372771582946571,
+        "muestra_hogares": 166,
+        "ingreso_mediano": 2536169.1009205007,
+        "ingreso_por_persona_mediano": 686879.1314993022,
+        "perceptores_promedio": 1.9124436519935946,
+        "pct_ingreso_demostrable": 61.09451373731559,
+        "pct_pasan_cuota_y_anticipo": 20.046499189477586,
+        "pct_elegible": 14.843827228116675,
+        "ic95_inf": 8.884948678847497,
+        "ic95_sup": 21.222674528519445,
+        "muestra_chica": false
+      },
+      {
+        "agrupacion": "tipo_hogar × jefatura",
+        "tipo_hogar": "Pareja con hijos",
+        "jefatura": "Varón",
+        "hogares": 307797.75,
+        "pct_de_inquilinos": 24.726926337441864,
+        "muestra_hogares": 240,
+        "ingreso_mediano": 2522432.399410085,
+        "ingreso_por_persona_mediano": 727974.4641531067,
+        "perceptores_promedio": 1.9160617645840492,
+        "pct_ingreso_demostrable": 70.53974566090882,
+        "pct_pasan_cuota_y_anticipo": 14.997315939275454,
+        "pct_elegible": 11.281435815714932,
+        "ic95_inf": 7.85000751340801,
+        "ic95_sup": 15.076408000013734,
+        "muestra_chica": false
+      },
+      {
+        "agrupacion": "tipo_hogar × jefatura",
+        "tipo_hogar": "Pareja sin hijos",
+        "jefatura": "Mujer",
+        "hogares": 56750.25,
+        "pct_de_inquilinos": 4.559030244312735,
+        "muestra_hogares": 88,
+        "ingreso_mediano": 3240660.517842862,
+        "ingreso_por_persona_mediano": 1620330.258921431,
+        "perceptores_promedio": 1.933180911097308,
+        "pct_ingreso_demostrable": 75.31817040453566,
+        "pct_pasan_cuota_y_anticipo": 43.24704154963183,
+        "pct_elegible": 38.311574467580726,
+        "ic95_inf": 27.13148679452181,
+        "ic95_sup": 49.11011918780554,
+        "muestra_chica": false
+      },
+      {
+        "agrupacion": "tipo_hogar × jefatura",
+        "tipo_hogar": "Pareja sin hijos",
+        "jefatura": "Varón",
+        "hogares": 121603.25,
+        "pct_de_inquilinos": 9.768994754326592,
+        "muestra_hogares": 151,
+        "ingreso_mediano": 2564348.757597395,
+        "ingreso_por_persona_mediano": 1282174.3787986976,
+        "perceptores_promedio": 1.8618848591628925,
+        "pct_ingreso_demostrable": 72.93349478735149,
+        "pct_pasan_cuota_y_anticipo": 35.61753542331176,
+        "pct_elegible": 30.35854145677335,
+        "ic95_inf": 22.193529371199812,
+        "ic95_sup": 39.66275558681582,
+        "muestra_chica": false
+      },
+      {
+        "agrupacion": "tipo_hogar × jefatura",
+        "tipo_hogar": "Unipersonal",
+        "jefatura": "Mujer",
+        "hogares": 123131.25000000001,
+        "pct_de_inquilinos": 9.891746604993504,
+        "muestra_hogares": 245,
+        "ingreso_mediano": 1352623.5204909337,
+        "ingreso_por_persona_mediano": 1352623.5204909337,
+        "perceptores_promedio": 0.9946033196284453,
+        "pct_ingreso_demostrable": 42.038881275062174,
+        "pct_pasan_cuota_y_anticipo": 4.360793523100645,
+        "pct_elegible": 2.257676599797834,
+        "ic95_inf": 0.8672120332358417,
+        "ic95_sup": 3.901304402488237,
+        "muestra_chica": false
+      },
+      {
+        "agrupacion": "tipo_hogar × jefatura",
+        "tipo_hogar": "Unipersonal",
+        "jefatura": "Varón",
+        "hogares": 175262.5,
+        "pct_de_inquilinos": 14.079709572977402,
+        "muestra_hogares": 274,
+        "ingreso_mediano": 1621741.8987305195,
+        "ingreso_por_persona_mediano": 1621741.8987305195,
+        "perceptores_promedio": 0.9758134227230583,
+        "pct_ingreso_demostrable": 46.588973682333645,
+        "pct_pasan_cuota_y_anticipo": 15.556543054516627,
+        "pct_elegible": 8.308874635602121,
+        "ic95_inf": 4.405916061502036,
+        "ic95_sup": 12.332774042318722,
+        "muestra_chica": false
+      }
+    ],
+    "tipos": [
+      "Unipersonal",
+      "Pareja sin hijos",
+      "Pareja con hijos",
+      "Monoparental",
+      "Extendido o compuesto"
+    ]
+  },
+  "h4": {
+    "test_zona": {
+      "test_entre": "mercado",
+      "chi2": 3.5982778031954914,
+      "deff_kish": 1.8035070838086185,
+      "chi2_ajustado": 1.9951559023526007,
+      "gl": 2,
+      "p_valor": 0.3687715430602471,
+      "diferencia_max_pp": 7.016928537850578,
+      "muestra_hogares": 1504
+    },
+    "test_edad": {
+      "test_entre": "tramo_edad_jefe",
+      "chi2": 20.029397785520594,
+      "deff_kish": 1.8014989540213833,
+      "chi2_ajustado": 11.11818452117894,
+      "gl": 4,
+      "p_valor": 0.025267405294988755,
+      "diferencia_max_pp": 16.70306703993228,
+      "muestra_hogares": 1523
+    },
+    "por_zona": [
+      {
+        "zona": "GBA Oeste",
+        "muestra_hogares": 546,
+        "hogares": 219356.70385207393,
+        "hogares_elegibles": 35989.55382034256,
+        "pct_elegible": 16.406862971743312,
+        "ic95_inf": 13.081572640804733,
+        "ic95_sup": 20.29583089706256
+      },
+      {
+        "zona": "Gran Córdoba",
+        "muestra_hogares": 521,
+        "hogares": 180864.5,
+        "hogares_elegibles": 28575.75,
+        "pct_elegible": 15.799535011016534,
+        "ic95_inf": 12.3812011084491,
+        "ic95_sup": 19.30082038812798
+      },
+      {
+        "zona": "GBA Sur",
+        "muestra_hogares": 546,
+        "hogares": 208587.06184752833,
+        "hogares_elegibles": 24478.591410342306,
+        "pct_elegible": 11.735431331898962,
+        "ic95_inf": 8.901022042747202,
+        "ic95_sup": 14.754428216821596
+      },
+      {
+        "zona": "CABA",
+        "muestra_hogares": 437,
+        "hogares": 432434.5,
+        "hogares_elegibles": 46636.5,
+        "pct_elegible": 10.78463906094449,
+        "ic95_inf": 7.462547664018652,
+        "ic95_sup": 14.337840068863953
+      },
+      {
+        "zona": "GBA Norte",
+        "muestra_hogares": 546,
+        "hogares": 203544.98430039774,
+        "hogares_elegibles": 19112.740569284608,
+        "pct_elegible": 9.389934433892734,
+        "ic95_inf": 7.33745010398771,
+        "ic95_sup": 11.593241369973411
+      }
+    ],
+    "por_edad": [
+      {
+        "tramo_edad_jefe": "50-64",
+        "muestra_hogares": 245,
+        "hogares": 190458.25,
+        "hogares_elegibles": 31812.36918058182,
+        "pct_elegible": 16.70306703993228,
+        "ic95_inf": 11.60049823669371,
+        "ic95_sup": 22.524467601909624
+      },
+      {
+        "tramo_edad_jefe": "30-39",
+        "muestra_hogares": 461,
+        "hogares": 390465.5,
+        "hogares_elegibles": 54664.280032423936,
+        "pct_elegible": 13.999772075234288,
+        "ic95_inf": 10.86578135972857,
+        "ic95_sup": 17.046218055537082
+      },
+      {
+        "tramo_edad_jefe": "40-49",
+        "muestra_hogares": 357,
+        "hogares": 335889.75,
+        "hogares_elegibles": 39973.95253971014,
+        "pct_elegible": 11.900914672064312,
+        "ic95_inf": 8.40374173672955,
+        "ic95_sup": 15.389767353554314
+      },
+      {
+        "tramo_edad_jefe": "18-29",
+        "muestra_hogares": 326,
+        "hogares": 242850.5,
+        "hogares_elegibles": 28342.534047253575,
+        "pct_elegible": 11.6707744259343,
+        "ic95_inf": 6.742090242610835,
+        "ic95_sup": 17.313612875503136
+      },
+      {
+        "tramo_edad_jefe": "65+",
+        "muestra_hogares": 134,
+        "hogares": 85123.75,
+        "hogares_elegibles": 0.0,
+        "pct_elegible": 0.0,
+        "ic95_inf": 0.0,
+        "ic95_sup": 0.0
+      }
+    ]
+  },
+  "h5": {
+    "stress_resumen": [
+      {
+        "horizonte_meses": 12,
+        "ventanas": 112,
+        "peor_cuota_ingreso_pct": 32.2,
+        "inicio_peor_ventana": "2023-09",
+        "mejor_cuota_ingreso_pct": 22.4,
+        "inicio_mejor_ventana": "2022-09",
+        "pct_ventanas_sobre_30": 6.3
+      },
+      {
+        "horizonte_meses": 24,
+        "ventanas": 100,
+        "peor_cuota_ingreso_pct": 32.9,
+        "inicio_peor_ventana": "2023-09",
+        "mejor_cuota_ingreso_pct": 21.3,
+        "inicio_mejor_ventana": "2021-09",
+        "pct_ventanas_sobre_30": 11.0
+      },
+      {
+        "horizonte_meses": 36,
+        "ventanas": 88,
+        "peor_cuota_ingreso_pct": 31.3,
+        "inicio_peor_ventana": "2023-05",
+        "mejor_cuota_ingreso_pct": 20.8,
+        "inicio_mejor_ventana": "2020-09",
+        "pct_ventanas_sobre_30": 12.5
+      }
+    ],
+    "sueldo_ultimo": {
+      "mes": "2026-05",
+      "bruto": 1608682.59,
+      "usd_bna": 1132.4891629385716,
+      "real_ago26": 1702124.1778386175
+    },
+    "sueldo_hitos": [
+      {
+        "mes": "2017-11",
+        "sueldo_bruto_mediano": 20992.0,
+        "sueldo_usd_bna": 1186.0,
+        "sueldo_real_ago26": 2123973.0
+      },
+      {
+        "mes": "2018-05",
+        "sueldo_bruto_mediano": 23688.0,
+        "sueldo_usd_bna": 1004.0,
+        "sueldo_real_ago26": 2078965.0
+      },
+      {
+        "mes": "2019-11",
+        "sueldo_bruto_mediano": 39828.0,
+        "sueldo_usd_bna": 667.0,
+        "sueldo_real_ago26": 1783094.0
+      },
+      {
+        "mes": "2023-09",
+        "sueldo_bruto_mediano": 342177.0,
+        "sueldo_usd_bna": 978.0,
+        "sueldo_real_ago26": 1822021.0
+      },
+      {
+        "mes": "2023-11",
+        "sueldo_bruto_mediano": 404395.0,
+        "sueldo_usd_bna": 1144.0,
+        "sueldo_real_ago26": 1762670.0
+      },
+      {
+        "mes": "2024-05",
+        "sueldo_bruto_mediano": 826588.0,
+        "sueldo_usd_bna": 914.0,
+        "sueldo_real_ago26": 1671081.0
+      },
+      {
+        "mes": "2025-05",
+        "sueldo_bruto_mediano": 1252643.0,
+        "sueldo_usd_bna": 1074.0,
+        "sueldo_real_ago26": 1764953.0
+      },
+      {
+        "mes": "2026-05",
+        "sueldo_bruto_mediano": 1608683.0,
+        "sueldo_usd_bna": 1132.0,
+        "sueldo_real_ago26": 1702124.0
+      }
+    ],
+    "independientes": {
+      "inquilinos_con_independiente_registrado": 251155.99999999997,
+      "inquilinos_solo_independiente_sin_asalariado_formal": 174335.75,
+      "de_ellos_pasan_cuota_y_anticipo": 47068.47468381715,
+      "elegibles_base": 154793.1357999695,
+      "elegibles_aceptando_independientes": 201273.11048378664,
+      "hogares_que_se_suman": 46479.974683817156,
+      "ingreso_mediano_de_los_que_se_suman": 5730394.548231139,
+      "inquilinos_con_monotributo_social": 36.0,
+      "monotributo_social_pasan_cuota_y_anticipo": 0.0
+    },
+    "volatilidad": [
+      {
+        "insercion": "Asalariado con aportes",
+        "muestra_hogares": 770,
+        "cambio_absoluto_mediano_pct": 23.44124016145981,
+        "pct_cae_mas_20": 26.017826527762132,
+        "pct_sube_mas_20": 31.242255290321484
+      },
+      {
+        "insercion": "Independiente con aportes",
+        "muestra_hogares": 207,
+        "cambio_absoluto_mediano_pct": 31.09711614531382,
+        "pct_cae_mas_20": 30.210825469396447,
+        "pct_sube_mas_20": 35.88084472137857
+      },
+      {
+        "insercion": "Sin aportes (informal o no ocupado)",
+        "muestra_hogares": 992,
+        "cambio_absoluto_mediano_pct": 28.09323806537649,
+        "pct_cae_mas_20": 27.888711140570592,
+        "pct_sube_mas_20": 33.244600806311695
+      }
+    ]
+  },
+  "contexto_mercado": {
+    "hitos": {
+      "mes_pico": "2018-05",
+      "stock_pico_billones": 14.1,
+      "mes_minimo": "2024-06",
+      "stock_minimo_billones": 0.56,
+      "mes_ultimo": "2026-06",
+      "stock_ultimo_billones": 7.37,
+      "pct_del_pico": 52.3,
+      "mes_ultima_tasa": "2026-08",
+      "tasa_uva_ultima": 6.91
+    },
+    "correlaciones": [
+      {
+        "rezago_meses": 0,
+        "correlacion": -0.24076993091936344,
+        "n": 86
+      },
+      {
+        "rezago_meses": 3,
+        "correlacion": -0.255180393809901,
+        "n": 86
+      },
+      {
+        "rezago_meses": 6,
+        "correlacion": -0.22093972905860185,
+        "n": 86
+      },
+      {
+        "rezago_meses": 9,
+        "correlacion": -0.26800163363654955,
+        "n": 86
+      },
+      {
+        "rezago_meses": 12,
+        "correlacion": -0.42190457621515287,
+        "n": 86
+      }
+    ],
+    "destino_ultimo": [
+      {
+        "mes": "2018-05",
+        "compra_usada": 2.6,
+        "compra_nueva": 9.15,
+        "construccion": 0.79,
+        "refaccion": 0.2,
+        "otros": 4.51,
+        "pct_compra_usada": 15.1
+      },
+      {
+        "mes": "2024-06",
+        "compra_usada": 0.09,
+        "compra_nueva": 0.29,
+        "construccion": 0.06,
+        "refaccion": 0.01,
+        "otros": 1.06,
+        "pct_compra_usada": 6.0
+      },
+      {
+        "mes": "2026-06",
+        "compra_usada": 1.54,
+        "compra_nueva": 3.88,
+        "construccion": 0.4,
+        "refaccion": 0.04,
+        "otros": 3.41,
+        "pct_compra_usada": 16.6
+      }
+    ]
+  },
+  "h7": {
+    "por_trabajos": [
+      {
+        "variable": "fuentes_trabajo",
+        "grupo": "1 trabajo",
+        "muestra_hogares": 647,
+        "hogares": 450359.25,
+        "pct_de_inquilinos": 36.17960170318193,
+        "ingreso_mediano": 1621741.8987305195,
+        "pct_con_ingreso_demostrable": 50.823314942459824,
+        "pct_pasan_cuota_y_anticipo": 9.841194788849803,
+        "pct_elegible": 5.27163669747837,
+        "ic95_inf": 3.302911220010744,
+        "ic95_sup": 7.618816656954816,
+        "hogares_elegibles": 23741.303493488358
+      },
+      {
+        "variable": "fuentes_trabajo",
+        "grupo": "2 o más trabajos",
+        "muestra_hogares": 755,
+        "hogares": 690942.5,
+        "pct_de_inquilinos": 55.506852473443764,
+        "ingreso_mediano": 2817965.667689445,
+        "pct_con_ingreso_demostrable": 69.43309320240107,
+        "pct_pasan_cuota_y_anticipo": 24.94141177510949,
+        "pct_elegible": 18.967111200495136,
+        "ic95_inf": 15.705243759850314,
+        "ic95_sup": 22.161689367784735,
+        "hogares_elegibles": 131051.83230648111
+      },
+      {
+        "variable": "fuentes_trabajo",
+        "grupo": "Sin trabajo en el hogar",
+        "muestra_hogares": 205,
+        "hogares": 103486.0,
+        "pct_de_inquilinos": 8.313545823374307,
+        "ingreso_mediano": 916863.1277169823,
+        "pct_con_ingreso_demostrable": 0.0,
+        "pct_pasan_cuota_y_anticipo": 3.1220980617527405,
+        "pct_elegible": 0.0,
+        "ic95_inf": 0.0,
+        "ic95_sup": 0.0,
+        "hogares_elegibles": 0.0
+      },
+      {
+        "variable": "detalle_trabajo",
+        "grupo": "1 persona con 1 trabajo",
+        "muestra_hogares": 647,
+        "hogares": 450359.25,
+        "pct_de_inquilinos": 36.17960170318193,
+        "ingreso_mediano": 1621741.8987305195,
+        "pct_con_ingreso_demostrable": 50.823314942459824,
+        "pct_pasan_cuota_y_anticipo": 9.841194788849803,
+        "pct_elegible": 5.27163669747837,
+        "ic95_inf": 3.302911220010744,
+        "ic95_sup": 7.618816656954816,
+        "hogares_elegibles": 23741.303493488358
+      },
+      {
+        "variable": "detalle_trabajo",
+        "grupo": "1 persona con 2 o más trabajos",
+        "muestra_hogares": 150,
+        "hogares": 90998.75,
+        "pct_de_inquilinos": 7.310382834342642,
+        "ingreso_mediano": 1869784.9581406608,
+        "pct_con_ingreso_demostrable": 47.851756205442385,
+        "pct_pasan_cuota_y_anticipo": 17.798393905042754,
+        "pct_elegible": 5.697974623215484,
+        "ic95_inf": 2.2124023472451095,
+        "ic95_sup": 10.14713198283727,
+        "hogares_elegibles": 5185.085682443301
+      },
+      {
+        "variable": "detalle_trabajo",
+        "grupo": "2 o más personas trabajando",
+        "muestra_hogares": 614,
+        "hogares": 599943.75,
+        "pct_de_inquilinos": 48.196469639101124,
+        "ingreso_mediano": 2963090.8995754514,
+        "pct_con_ingreso_demostrable": 72.70652457001177,
+        "pct_pasan_cuota_y_anticipo": 26.024856177028393,
+        "pct_elegible": 20.979757956314707,
+        "ic95_inf": 17.45535583495112,
+        "ic95_sup": 24.77839134068267,
+        "hogares_elegibles": 125866.74662403783
+      },
+      {
+        "variable": "detalle_trabajo",
+        "grupo": "Sin trabajo en el hogar",
+        "muestra_hogares": 205,
+        "hogares": 103486.0,
+        "pct_de_inquilinos": 8.313545823374307,
+        "ingreso_mediano": 916863.1277169823,
+        "pct_con_ingreso_demostrable": 0.0,
+        "pct_pasan_cuota_y_anticipo": 3.1220980617527405,
+        "pct_elegible": 0.0,
+        "ic95_inf": 0.0,
+        "ic95_sup": 0.0,
+        "hogares_elegibles": 0.0
+      }
+    ],
+    "solo_titulares": {
+      "elegibles_ingreso_hogar": 154793.1357999695,
+      "elegibles_solo_titulares": 139724.8185157074,
+      "diferencia_hogares": 15068.317284262099,
+      "diferencia_pct": -9.73448674347811,
+      "pct_ingreso_de_otros_miembros": 7.296367930161796
+    }
+  },
+  "que_pasa_si": [
+    {
+      "pregunta": "¿Y si el banco presta a 30 años en vez de 20?",
+      "hogares_base": 154793.1357999695,
+      "hogares": 136628.66681754962,
+      "diferencia": -18164.468982419872,
+      "diferencia_pct": -11.73467343273722,
+      "por_que": "Baja la cuota, pero el anticipo no cambia y deja afuera a quienes tienen más de 55 años"
+    },
+    {
+      "pregunta": "¿Y si financia el 80% en vez del 75%?",
+      "hogares_base": 154793.1357999695,
+      "hogares": 167594.30237123003,
+      "diferencia": 12801.166571260546,
+      "diferencia_pct": 8.269854154129153,
+      "por_que": "Baja el efectivo necesario, pero sube la cuota"
+    },
+    {
+      "pregunta": "¿Y si hace las dos cosas: 30 años y 80%?",
+      "hogares_base": 154793.1357999695,
+      "hogares": 200951.5324804735,
+      "diferencia": 46158.396680504025,
+      "diferencia_pct": 29.819407974363887,
+      "por_que": "El plazo largo compensa la cuota más alta y el anticipo baja"
+    },
+    {
+      "pregunta": "¿Y si la tasa baja de 7,5% a 5,5%?",
+      "hogares_base": 154793.1357999695,
+      "hogares": 154793.1357999695,
+      "diferencia": 0.0,
+      "diferencia_pct": 0.0,
+      "por_que": "Solo abarata la cuota; lo que frena es el anticipo"
+    },
+    {
+      "pregunta": "¿Y si acepta cuotas de hasta 30% del ingreso?",
+      "hogares_base": 154793.1357999695,
+      "hogares": 154793.1357999695,
+      "diferencia": 0.0,
+      "diferencia_pct": 0.0,
+      "por_que": "Mismo motivo: la cuota no es el freno principal, y sube el riesgo"
+    },
+    {
+      "pregunta": "¿Y si un plan de ahorro permite juntar 24 meses de ingreso?",
+      "hogares_base": 154793.1357999695,
+      "hogares": 194261.80954117444,
+      "diferencia": 39468.673741204955,
+      "diferencia_pct": 25.497689892533803,
+      "por_que": "Ataca directamente el anticipo, que es el freno principal"
+    },
+    {
+      "pregunta": "¿Y si acepta monotributistas y autónomos con aportes?",
+      "hogares_base": 154793.1357999695,
+      "hogares": 201273.11048378664,
+      "diferencia": 46479.974683817156,
+      "diferencia_pct": 30.027154914595577,
+      "por_que": "Suma hogares que pueden pagar pero no tienen recibo de sueldo"
+    },
+    {
+      "pregunta": "¿Y si se compra una vivienda 20% más barata (usada o más chica)?",
+      "hogares_base": 154793.1357999695,
+      "hogares": 240695.9643820795,
+      "diferencia": 85902.82858211,
+      "diferencia_pct": 55.49524411283806,
+      "por_que": "Reduce cuota y anticipo a la vez"
+    }
+  ],
+  "que_lo_empeora": [
+    {
+      "pregunta": "Si los precios suben 20%",
+      "hogares_base": 154793.1357999695,
+      "hogares": 101398.52944655986,
+      "diferencia": -53394.60635340963,
+      "diferencia_pct": -34.49416931666046,
+      "por_que": ""
+    },
+    {
+      "pregunta": "Si la tasa sube a 9,5%",
+      "hogares_base": 154793.1357999695,
+      "hogares": 136420.09136122584,
+      "diferencia": -18373.044438743644,
+      "diferencia_pct": -11.869418074510808,
+      "por_que": ""
+    },
+    {
+      "pregunta": "Si el banco exige cuota de hasta 20% del ingreso",
+      "hogares_base": 154793.1357999695,
+      "hogares": 114074.97718946377,
+      "diferencia": -40718.15861050572,
+      "diferencia_pct": -26.304886453830566,
+      "por_que": ""
+    },
+    {
+      "pregunta": "Si el anticipo hay que juntarlo en 6 meses de ingreso",
+      "hogares_base": 154793.1357999695,
+      "hogares": 18777.58179164158,
+      "diferencia": -136015.55400832792,
+      "diferencia_pct": -87.86924129768468,
+      "por_que": ""
+    },
+    {
+      "pregunta": "Si la edad máxima al terminar de pagar baja a 75",
+      "hogares_base": 154793.1357999695,
+      "hogares": 136628.66681754962,
+      "diferencia": -18164.468982419872,
+      "diferencia_pct": -11.73467343273722,
+      "por_que": ""
+    }
+  ],
+  "logit": {
+    "info": {
+      "n_observaciones": 2028,
+      "n_hogares": 1504,
+      "positivos": 357,
+      "auc_ponderado": 0.7769529614946007,
+      "pseudo_r2_mcfadden": 0.16079938958921136,
+      "errores": "robustos por conglomerado (hogar)",
+      "referencia": "GBA · 30-39 años · asalariado formal · secundario completo · pareja con hijos"
+    },
+    "odds_ratios": [
+      {
+        "variable": "educacion_Superior completo",
+        "odds_ratio": 3.1054819918282814,
+        "or_ic95_inf": 1.9977829343130078,
+        "or_ic95_sup": 4.827360488433699,
+        "p_valor": 4.785493405728092e-07
+      },
+      {
+        "variable": "educacion_Superior incompleto",
+        "odds_ratio": 2.4533016577523536,
+        "or_ic95_inf": 1.5003311833480664,
+        "or_ic95_sup": 4.011573638361253,
+        "p_valor": 0.000347684301296666
+      },
+      {
+        "variable": "tipo_hogar_Pareja sin hijos",
+        "odds_ratio": 2.452647787963149,
+        "or_ic95_inf": 1.5248853142205037,
+        "or_ic95_sup": 3.944874487085964,
+        "p_valor": 0.00021560639643043226
+      },
+      {
+        "variable": "dos_o_mas_perceptores",
+        "odds_ratio": 2.411947345077449,
+        "or_ic95_inf": 1.4392935763816719,
+        "or_ic95_sup": 4.041906453894624,
+        "p_valor": 0.0008305799377960388
+      },
+      {
+        "variable": "mercado_Gran Córdoba",
+        "odds_ratio": 1.3623335296237116,
+        "or_ic95_inf": 0.9599699973714113,
+        "or_ic95_sup": 1.9333444284914816,
+        "p_valor": 0.08341178717138817
+      },
+      {
+        "variable": "edad_50-64",
+        "odds_ratio": 1.3564707638643971,
+        "or_ic95_inf": 0.7950677408436397,
+        "or_ic95_sup": 2.3142844800449818,
+        "p_valor": 0.263315539591395
+      },
+      {
+        "variable": "tipo_hogar_Extendido o compuesto",
+        "odds_ratio": 1.2651260882681805,
+        "or_ic95_inf": 0.6083716155279125,
+        "or_ic95_sup": 2.630865705047533,
+        "p_valor": 0.5289812052949445
+      },
+      {
+        "variable": "situacion_Cuenta propia / patrón",
+        "odds_ratio": 1.1968374695903685,
+        "or_ic95_inf": 0.7355061201633137,
+        "or_ic95_sup": 1.9475295845225842,
+        "p_valor": 0.4694806111429197
+      },
+      {
+        "variable": "tipo_hogar_Unipersonal",
+        "odds_ratio": 1.0599670890122044,
+        "or_ic95_inf": 0.5474052747080801,
+        "or_ic95_sup": 2.0524651144221466,
+        "p_valor": 0.8628595182548467
+      },
+      {
+        "variable": "edad_40-49",
+        "odds_ratio": 0.9990697595016824,
+        "or_ic95_inf": 0.6521529839269999,
+        "or_ic95_sup": 1.530531039420159,
+        "p_valor": 0.9965879227707749
+      },
+      {
+        "variable": "tipo_hogar_Monoparental",
+        "odds_ratio": 0.9939297809020898,
+        "or_ic95_inf": 0.4744033687206398,
+        "or_ic95_sup": 2.082397542893114,
+        "p_valor": 0.9871266020961488
+      },
+      {
+        "variable": "edad_Hasta 29",
+        "odds_ratio": 0.7816393158730571,
+        "or_ic95_inf": 0.45895917737412195,
+        "or_ic95_sup": 1.331185975219044,
+        "p_valor": 0.36446195997990694
+      },
+      {
+        "variable": "edad_65+",
+        "odds_ratio": 0.7273357885800449,
+        "or_ic95_inf": 0.2857843796276753,
+        "or_ic95_sup": 1.8511065931544914,
+        "p_valor": 0.504150488785531
+      },
+      {
+        "variable": "situacion_Asalariado informal",
+        "odds_ratio": 0.6754164133877184,
+        "or_ic95_inf": 0.4143190265077096,
+        "or_ic95_sup": 1.101053300203776,
+        "p_valor": 0.11551698457812483
+      },
+      {
+        "variable": "jefatura_mujer",
+        "odds_ratio": 0.6635567109407619,
+        "or_ic95_inf": 0.4507111849401821,
+        "or_ic95_sup": 0.9769171996318637,
+        "p_valor": 0.0376815262345519
+      },
+      {
+        "variable": "mercado_CABA",
+        "odds_ratio": 0.5748459839636014,
+        "or_ic95_inf": 0.3741303794922016,
+        "or_ic95_sup": 0.8832426431865551,
+        "p_valor": 0.011519471021518957
+      },
+      {
+        "variable": "situacion_No ocupado",
+        "odds_ratio": 0.42444619342643086,
+        "or_ic95_inf": 0.19302031217072876,
+        "or_ic95_sup": 0.933345144291541,
+        "p_valor": 0.03304482822758027
+      },
+      {
+        "variable": "educacion_Hasta secundario incompleto",
+        "odds_ratio": 0.3426134275696103,
+        "or_ic95_inf": 0.1805740076531638,
+        "or_ic95_sup": 0.6500601181564345,
+        "p_valor": 0.00104553689338906
+      }
+    ]
+  },
+  "segmentos": {
+    "info": {
+      "k_optimo": 3,
+      "silhouette": {
+        "3": 0.22189302304993777,
+        "4": 0.25104963179543655,
+        "5": 0.2262094772957093,
+        "6": 0.255570948251618
+      },
+      "k_validos": [
+        3
+      ]
+    },
+    "casi_elegibles_hogares": 351411.9798035907,
+    "perfil": [
+      {
+        "segmento": 0,
+        "nombre": "Dos ingresos, a un paso de calificar",
+        "hogares": 174936.92076524164,
+        "muestra_hogares": 269.0,
+        "ingreso_mediano": 3862285.9255077876,
+        "cobertura_mediana": 0.7897055492195607,
+        "edad_mediana": 43.0,
+        "miembros_mediana": 3.0,
+        "pct_formal": 73.21385321434275,
+        "pct_2_perceptores": 95.17839627181046,
+        "pct_caba": 39.384910685869094,
+        "pct_gba": 49.070213646002195,
+        "pct_falla_formal": 6.8563285254665045
+      },
+      {
+        "segmento": 1,
+        "nombre": "Un ingreso, hogares jóvenes",
+        "hogares": 151981.55903834902,
+        "muestra_hogares": 387.0,
+        "ingreso_mediano": 2635981.492186324,
+        "cobertura_mediana": 0.7767352533493004,
+        "edad_mediana": 35.0,
+        "miembros_mediana": 2.0,
+        "pct_formal": 53.69845125084236,
+        "pct_2_perceptores": 33.971413476454686,
+        "pct_caba": 29.9302759412555,
+        "pct_gba": 45.308989770905995,
+        "pct_falla_formal": 9.971275525720928
+      },
+      {
+        "segmento": 2,
+        "nombre": "Pueden pagar, pero sin recibo de sueldo",
+        "hogares": 24493.5,
+        "muestra_hogares": 30.0,
+        "ingreso_mediano": 7105689.239806613,
+        "cobertura_mediana": 1.7978902592445047,
+        "edad_mediana": 39.0,
+        "miembros_mediana": 2.0,
+        "pct_formal": 0.0,
+        "pct_2_perceptores": 55.252413905730094,
+        "pct_caba": 22.635597199256946,
+        "pct_gba": 65.43470716720762,
+        "pct_falla_formal": 100.0
+      }
+    ]
+  },
+  "robustez": {
+    "subdeclaracion": {
+      "cobertura": [
+        {
+          "trimestre": "2T-2025",
+          "eph_media": 1163575.7260437782,
+          "sipa_media_neta": 1358222.5742,
+          "cobertura_media": 0.856690021316374,
+          "eph_mediana": 950000.0,
+          "sipa_mediana_neta": 1039694.0967,
+          "cobertura_mediana": 0.913730301071546
+        },
+        {
+          "trimestre": "3T-2025",
+          "eph_media": 1212485.809665364,
+          "sipa_media_neta": 1453593.1017,
+          "cobertura_media": 0.834130134662405,
+          "eph_mediana": 1000000.0,
+          "sipa_mediana_neta": 1115885.6897,
+          "cobertura_mediana": 0.8961491389578128
+        },
+        {
+          "trimestre": "4T-2025",
+          "eph_media": 1336810.1769481553,
+          "sipa_media_neta": 1531374.9331999999,
+          "cobertura_media": 0.8729476681159478,
+          "eph_mediana": 1100000.0,
+          "sipa_mediana_neta": 1156706.2766,
+          "cobertura_mediana": 0.9509760794532202
+        },
+        {
+          "trimestre": "1T-2026",
+          "eph_media": 1417837.122520436,
+          "sipa_media_neta": 1743643.9637999998,
+          "cobertura_media": 0.8131460045492782,
+          "eph_mediana": 1200000.0,
+          "sipa_mediana_neta": 1253861.7855,
+          "cobertura_mediana": 0.9570432833005421
+        }
+      ],
+      "escenarios": [
+        {
+          "escenario": "Sin corregir (base)",
+          "factor_sueldo_formal": 1.0,
+          "hogares_elegibles": 154793.1357999695,
+          "pct_elegible": 12.435303592919315
+        },
+        {
+          "escenario": "Corregido por la mediana",
+          "factor_sueldo_formal": 1.0758765131008152,
+          "hogares_elegibles": 182353.67538430987,
+          "pct_elegible": 14.649379011346303
+        },
+        {
+          "escenario": "Corregido por el promedio",
+          "factor_sueldo_formal": 1.1845134945614513,
+          "hogares_elegibles": 209131.08144146588,
+          "pct_elegible": 16.800541412900785
+        }
+      ]
+    },
+    "no_respuesta": {
+      "metodo": "PMM, m=10, k=5 donantes; reglas de Rubin",
+      "inquilinos_sin_ingreso_declarado_obs": 678,
+      "inquilinos_sin_ingreso_declarado_hogares": 348545.0,
+      "pct_inquilinos_sin_ingreso_declarado": 28.00028840188602,
+      "pct_elegible_imputacion": {
+        "estimacion": 11.134828516165387,
+        "ic95_inf": 9.652900155911508,
+        "ic95_sup": 12.616756876419265,
+        "varianza_dentro": 0.49395162739284687,
+        "varianza_entre": 0.07064932535979034,
+        "fraccion_info_faltante": 0.1359434940857698
+      },
+      "hogares_elegibles_imputacion": 138605.31539758897,
+      "hogares_elegibles_imputacion_min": 133581.91422179725,
+      "hogares_elegibles_imputacion_max": 143156.11592228714,
+      "pct_elegible_por_mercado_imputacion": {
+        "CABA": 9.405462186088485,
+        "Gran Córdoba": 15.19847067621158,
+        "Partidos del GBA": 11.155215171360894
+      },
+      "validacion": {
+        "repeticiones": 5,
+        "pct_elegible_real_promedio": 11.262364895370272,
+        "pct_elegible_imputado_promedio": 11.090029723905939,
+        "error_absoluto_medio_pp": 1.7412790876065032,
+        "detalle": [
+          {
+            "repeticion": 1,
+            "hogares_ocultos": 608,
+            "pct_elegible_real": 10.027778073422748,
+            "pct_elegible_imputado": 12.545888987643815,
+            "mediana_ingreso_real": 1948334.1463985874,
+            "mediana_ingreso_imputado": 1941481.8178893742
+          },
+          {
+            "repeticion": 2,
+            "hogares_ocultos": 608,
+            "pct_elegible_real": 12.501954580768434,
+            "pct_elegible_imputado": 9.133905792773346,
+            "mediana_ingreso_real": 1972575.9673826115,
+            "mediana_ingreso_imputado": 1971915.8459870615
+          },
+          {
+            "repeticion": 3,
+            "hogares_ocultos": 608,
+            "pct_elegible_real": 9.78811097760155,
+            "pct_elegible_imputado": 9.643903226474452,
+            "mediana_ingreso_real": 1997237.5229750476,
+            "mediana_ingreso_imputado": 1836514.7259954384
+          },
+          {
+            "repeticion": 4,
+            "hogares_ocultos": 608,
+            "pct_elegible_real": 11.232494903143172,
+            "pct_elegible_imputado": 12.636743779277527,
+            "mediana_ingreso_real": 1989985.4197354177,
+            "mediana_ingreso_imputado": 1891030.2009162758
+          },
+          {
+            "repeticion": 5,
+            "hogares_ocultos": 608,
+            "pct_elegible_real": 12.761485941915462,
+            "pct_elegible_imputado": 11.489706833360554,
+            "mediana_ingreso_real": 2107155.6036532773,
+            "mediana_ingreso_imputado": 1958248.5897346574
+          }
+        ]
+      }
+    }
+  },
+  "producto_propuesto": {
+    "parametros": {
+      "plazo_anios": 30,
+      "ltv": 0.8
+    },
+    "elegibles_hogares": 200951.5324804735,
+    "elegibles_pct": 16.143437504142657,
+    "delta_vs_base_hogares": 46158.396680504025,
+    "delta_vs_base_pct": 29.819407974363887,
+    "por_zona": [
+      {
+        "etapa": "Cumplen la edad",
+        "hogares": 68328.0,
+        "pct_del_total": 15.800774452547149,
+        "pct_de_etapa_anterior": 89.87126580405439,
+        "muestra_hogares": 60,
+        "zona": "CABA"
+      },
+      {
+        "etapa": "Cumplen la edad",
+        "hogares": 22987.826793422493,
+        "pct_del_total": 11.293732868158704,
+        "pct_de_etapa_anterior": 86.43292685012688,
+        "muestra_hogares": 156,
+        "zona": "GBA Norte"
+      },
+      {
+        "etapa": "Cumplen la edad",
+        "hogares": 40614.54652637024,
+        "pct_del_total": 18.515297601188973,
+        "pct_de_etapa_anterior": 86.97542581478713,
+        "muestra_hogares": 137,
+        "zona": "GBA Oeste"
+      },
+      {
+        "etapa": "Cumplen la edad",
+        "hogares": 31212.159160680818,
+        "pct_del_total": 14.963612260618584,
+        "pct_de_etapa_anterior": 86.44091495394174,
+        "muestra_hogares": 105,
+        "zona": "GBA Sur"
+      },
+      {
+        "etapa": "Cumplen la edad",
+        "hogares": 37809.0,
+        "pct_del_total": 20.904599852375675,
+        "pct_de_etapa_anterior": 90.89685182291353,
+        "muestra_hogares": 112,
+        "zona": "Gran Córdoba"
+      }
+    ],
+    "con_independientes_hogares": 258891.0476507487,
+    "con_independientes_pct": 20.798007343079064,
+    "con_independientes_delta_vs_base_pct": 67.24969509326249,
+    "factor_cuota_base": 0.008055931935518021,
+    "factor_cuota_propuesto": 0.0069921450855277645,
+    "prestamo_medio_elegibles_ars": 121636926.12305735
+  },
+  "fgs": {
+    "monto_ars": 2000000000000,
+    "creditos_financiables_aprox": 16442.375385059015
+  },
+  "ejemplos_vivienda": [
+    {
+      "zona": "CABA",
+      "m2": 45,
+      "usd_m2": 2471.0,
+      "precio_usd": 111195.0,
+      "precio_ars": 170320717.35,
+      "prestamo_ars": 127740538.01249999,
+      "cuota_ars": 1029069.0796351524,
+      "efectivo_necesario_ars": 54502629.55200001,
+      "efectivo_necesario_usd": 35582.40000000001,
+      "ingreso_requerido_por_cuota": 4116276.3185406094,
+      "ingreso_requerido_por_anticipo": 4541885.796000001,
+      "ingreso_requerido": 4541885.796000001,
+      "anios_ahorro_20pct_ingreso_mediano": 10.428890141425528
+    },
+    {
+      "zona": "CABA",
+      "m2": 60,
+      "usd_m2": 2471.0,
+      "precio_usd": 148260.0,
+      "precio_ars": 227094289.8,
+      "prestamo_ars": 170320717.35000002,
+      "cuota_ars": 1372092.1061802036,
+      "efectivo_necesario_ars": 72670172.73599999,
+      "efectivo_necesario_usd": 47443.19999999999,
+      "ingreso_requerido_por_cuota": 5488368.424720814,
+      "ingreso_requerido_por_anticipo": 6055847.727999999,
+      "ingreso_requerido": 6055847.727999999,
+      "anios_ahorro_20pct_ingreso_mediano": 13.905186855234033
+    },
+    {
+      "zona": "CABA",
+      "m2": 75,
+      "usd_m2": 2471.0,
+      "precio_usd": 185325.0,
+      "precio_ars": 283867862.25,
+      "prestamo_ars": 212900896.6875,
+      "cuota_ars": 1715115.1327252542,
+      "efectivo_necesario_ars": 90837715.92,
+      "efectivo_necesario_usd": 59304.0,
+      "ingreso_requerido_por_cuota": 6860460.530901017,
+      "ingreso_requerido_por_anticipo": 7569809.66,
+      "ingreso_requerido": 7569809.66,
+      "anios_ahorro_20pct_ingreso_mediano": 17.381483569042544
+    },
+    {
+      "zona": "GBA Norte",
+      "m2": 45,
+      "usd_m2": 2125.320422195522,
+      "precio_usd": 95639.41899879849,
+      "precio_ars": 146493767.2630296,
+      "prestamo_ars": 109870325.44727221,
+      "cuota_ars": 885107.8635364386,
+      "efectivo_necesario_ars": 46878005.52416947,
+      "efectivo_necesario_usd": 30604.614079615512,
+      "ingreso_requerido_por_cuota": 3540431.454145754,
+      "ingreso_requerido_por_anticipo": 3906500.4603474555,
+      "ingreso_requerido": 3906500.4603474555,
+      "anios_ahorro_20pct_ingreso_mediano": 8.969944637153061
+    },
+    {
+      "zona": "GBA Norte",
+      "m2": 60,
+      "usd_m2": 2125.320422195522,
+      "precio_usd": 127519.22533173132,
+      "precio_ars": 195325023.01737282,
+      "prestamo_ars": 146493767.2630296,
+      "cuota_ars": 1180143.8180485845,
+      "efectivo_necesario_ars": 62504007.36555931,
+      "efectivo_necesario_usd": 40806.152106154026,
+      "ingreso_requerido_por_cuota": 4720575.272194338,
+      "ingreso_requerido_por_anticipo": 5208667.2804632755,
+      "ingreso_requerido": 5208667.2804632755,
+      "anios_ahorro_20pct_ingreso_mediano": 11.959926182870753
+    },
+    {
+      "zona": "GBA Norte",
+      "m2": 75,
+      "usd_m2": 2125.320422195522,
+      "precio_usd": 159399.03166466416,
+      "precio_ars": 244156278.77171603,
+      "prestamo_ars": 183117209.07878703,
+      "cuota_ars": 1475179.772560731,
+      "efectivo_necesario_ars": 78130009.20694911,
+      "efectivo_necesario_usd": 51007.69013269252,
+      "ingreso_requerido_por_cuota": 5900719.090242924,
+      "ingreso_requerido_por_anticipo": 6510834.100579093,
+      "ingreso_requerido": 6510834.100579093,
+      "anios_ahorro_20pct_ingreso_mediano": 14.949907728588435
+    },
+    {
+      "zona": "GBA Oeste",
+      "m2": 45,
+      "usd_m2": 1506.2943192080145,
+      "precio_usd": 67783.24436436065,
+      "precio_ars": 103825628.89022215,
+      "prestamo_ars": 77869221.66766661,
+      "cuota_ars": 627309.1496264874,
+      "efectivo_necesario_ars": 33224201.244871084,
+      "efectivo_necesario_usd": 21690.638196595406,
+      "ingreso_requerido_por_cuota": 2509236.5985059496,
+      "ingreso_requerido_por_anticipo": 2768683.4370725905,
+      "ingreso_requerido": 2768683.4370725905,
+      "anios_ahorro_20pct_ingreso_mediano": 6.357336291247972
+    },
+    {
+      "zona": "GBA Oeste",
+      "m2": 60,
+      "usd_m2": 1506.2943192080145,
+      "precio_usd": 90377.65915248088,
+      "precio_ars": 138434171.85362953,
+      "prestamo_ars": 103825628.89022215,
+      "cuota_ars": 836412.1995019831,
+      "efectivo_necesario_ars": 44298934.993161455,
+      "efectivo_necesario_usd": 28920.850928793883,
+      "ingreso_requerido_por_cuota": 3345648.7980079325,
+      "ingreso_requerido_por_anticipo": 3691577.916096788,
+      "ingreso_requerido": 3691577.916096788,
+      "anios_ahorro_20pct_ingreso_mediano": 8.476448388330631
+    },
+    {
+      "zona": "GBA Oeste",
+      "m2": 75,
+      "usd_m2": 1506.2943192080145,
+      "precio_usd": 112972.07394060108,
+      "precio_ars": 173042714.8170369,
+      "prestamo_ars": 129782036.11277768,
+      "cuota_ars": 1045515.2493774788,
+      "efectivo_necesario_ars": 55373668.7414518,
+      "efectivo_necesario_usd": 36151.06366099234,
+      "ingreso_requerido_por_cuota": 4182060.9975099154,
+      "ingreso_requerido_por_anticipo": 4614472.395120983,
+      "ingreso_requerido": 4614472.395120983,
+      "anios_ahorro_20pct_ingreso_mediano": 10.595560485413284
+    },
+    {
+      "zona": "GBA Sur",
+      "m2": 45,
+      "usd_m2": 1733.091001169027,
+      "precio_usd": 77989.09505260622,
+      "precio_ars": 119458236.56492853,
+      "prestamo_ars": 89593677.4236964,
+      "cuota_ars": 721760.5671780558,
+      "efectivo_necesario_ars": 38226635.70077713,
+      "efectivo_necesario_usd": 24956.51041683399,
+      "ingreso_requerido_por_cuota": 2887042.268712223,
+      "ingreso_requerido_por_anticipo": 3185552.9750647605,
+      "ingreso_requerido": 3185552.9750647605,
+      "anios_ahorro_20pct_ingreso_mediano": 7.314534866970847
+    },
+    {
+      "zona": "GBA Sur",
+      "m2": 60,
+      "usd_m2": 1733.091001169027,
+      "precio_usd": 103985.46007014162,
+      "precio_ars": 159277648.75323802,
+      "prestamo_ars": 119458236.56492852,
+      "cuota_ars": 962347.4229040742,
+      "efectivo_necesario_ars": 50968847.60103617,
+      "efectivo_necesario_usd": 33275.34722244532,
+      "ingreso_requerido_por_cuota": 3849389.691616297,
+      "ingreso_requerido_por_anticipo": 4247403.966753014,
+      "ingreso_requerido": 4247403.966753014,
+      "anios_ahorro_20pct_ingreso_mediano": 9.752713155961128
+    },
+    {
+      "zona": "GBA Sur",
+      "m2": 75,
+      "usd_m2": 1733.091001169027,
+      "precio_usd": 129981.82508767703,
+      "precio_ars": 199097060.94154754,
+      "prestamo_ars": 149322795.70616066,
+      "cuota_ars": 1202934.278630093,
+      "efectivo_necesario_ars": 63711059.50129521,
+      "efectivo_necesario_usd": 41594.18402805665,
+      "ingreso_requerido_por_cuota": 4811737.114520372,
+      "ingreso_requerido_por_anticipo": 5309254.958441268,
+      "ingreso_requerido": 5309254.958441268,
+      "anios_ahorro_20pct_ingreso_mediano": 12.190891444951411
+    },
+    {
+      "zona": "Gran Córdoba",
+      "m2": 45,
+      "usd_m2": 1474.0,
+      "precio_usd": 66330.0,
+      "precio_ars": 101599650.9,
+      "prestamo_ars": 76199738.17500001,
+      "cuota_ars": 613859.9042420943,
+      "efectivo_necesario_ars": 32511888.287999995,
+      "efectivo_necesario_usd": 21225.599999999995,
+      "ingreso_requerido_por_cuota": 2455439.616968377,
+      "ingreso_requerido_por_anticipo": 2709324.0239999997,
+      "ingreso_requerido": 2709324.0239999997,
+      "anios_ahorro_20pct_ingreso_mediano": 6.2210376642902565
+    },
+    {
+      "zona": "Gran Córdoba",
+      "m2": 60,
+      "usd_m2": 1474.0,
+      "precio_usd": 88440.0,
+      "precio_ars": 135466201.2,
+      "prestamo_ars": 101599650.89999999,
+      "cuota_ars": 818479.8723227922,
+      "efectivo_necesario_ars": 43349184.383999996,
+      "efectivo_necesario_usd": 28300.799999999996,
+      "ingreso_requerido_por_cuota": 3273919.4892911687,
+      "ingreso_requerido_por_anticipo": 3612432.0319999997,
+      "ingreso_requerido": 3612432.0319999997,
+      "anios_ahorro_20pct_ingreso_mediano": 8.294716885720343
+    },
+    {
+      "zona": "Gran Córdoba",
+      "m2": 75,
+      "usd_m2": 1474.0,
+      "precio_usd": 110550.0,
+      "precio_ars": 169332751.5,
+      "prestamo_ars": 126999563.625,
+      "cuota_ars": 1023099.8404034904,
+      "efectivo_necesario_ars": 54186480.480000004,
+      "efectivo_necesario_usd": 35376.0,
+      "ingreso_requerido_por_cuota": 4092399.3616139614,
+      "ingreso_requerido_por_anticipo": 4515540.04,
+      "ingreso_requerido": 4515540.04,
+      "anios_ahorro_20pct_ingreso_mediano": 10.36839610715043
+    }
+  ]
+}

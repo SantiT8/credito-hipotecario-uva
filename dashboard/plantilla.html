@@ -1,0 +1,706 @@
+<!doctype html>
+<html lang="es-AR" class="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>¿Quién puede pagar hoy un crédito hipotecario UVA? · Dashboard</title>
+<meta name="description" content="Dashboard interactivo: cuántos hogares inquilinos de CABA, GBA y Gran Córdoba podrían pagar un crédito hipotecario UVA, qué los frena y qué producto amplía el mercado.">
+<meta name="author" content="Santiago Trotta">
+<meta name="robots" content="index, follow">
+<script>
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem("theme"); } catch (e) {}
+    if (!t) t = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    document.documentElement.classList.remove("light", "dark");
+    document.documentElement.classList.add(t);
+  })();
+</script>
+<style>
+  :root {
+    --bg: #F8FAFC; --card: #FFFFFF; --card-2: #F1F5F9; --ink: #0F172A; --ink-2: #475569; --muted: #64748B;
+    --line: #E2E8F0; --grid: #E8ECF1; --axis: #CBD5E1; --focus: #2563EB;
+    --blue: #2a78d6; --blue-soft: #EAF2FC; --blue-ink: #1c5cab; --orange: #eb6834; --aqua: #1baf7a; --yellow: #eda100; --pink: #e87ba4;
+    --red: #e34948; --gray-mark: #c3c2b7; --ok: #0f7a3d;
+    --ramp-lo: #eef4fc; --ramp-hi: #184f95;
+    --radius: 12px;
+  }
+  html.dark {
+    --bg: #000000; --card: #141414; --card-2: #1c1c1c; --ink: #F8FAFC; --ink-2: #CBD5E1; --muted: #94A3B8;
+    --line: #2A2A2A; --grid: #242424; --axis: #3f3f46; --focus: #60A5FA;
+    --blue: #4f94e8; --blue-soft: #0f213a; --blue-ink: #93c0f4; --orange: #f07f4f; --aqua: #2fc592; --yellow: #f0b429; --pink: #ec8fb4;
+    --red: #f16563; --gray-mark: #52525b; --ok: #4ade80;
+    --ramp-lo: #0f1b2d; --ramp-hi: #86b6ef;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.6 Inter, "Segoe UI", system-ui, -apple-system, sans-serif; transition: background .2s, color .2s; }
+  a { color: var(--blue-ink); }
+  button, input, select { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding-inline: 20px; }
+  header.top { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  header.top .wrap { display: flex; align-items: center; gap: 16px; height: 56px; }
+  header.top .marca { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  header.top nav { display: flex; gap: 14px; margin-left: auto; font-size: 13px; }
+  header.top nav a { color: var(--ink-2); text-decoration: none; white-space: nowrap; }
+  header.top nav a:hover { color: var(--ink); }
+  @media (max-width: 860px) { header.top nav { display: none; } header.top .tema { margin-left: auto; } }
+  .tema { border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 5px 12px; cursor: pointer; font-size: 13px; }
+  section { padding-block: 44px 8px; }
+  .kicker { color: var(--blue-ink); font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+  h1 { font-size: clamp(28px, 4.2vw, 44px); line-height: 1.12; margin: 10px 0 14px; letter-spacing: -0.02em; }
+  h2 { font-size: clamp(21px, 2.6vw, 28px); line-height: 1.2; margin: 6px 0 8px; letter-spacing: -0.01em; }
+  h3 { font-size: 16px; margin: 0 0 4px; }
+  .lead { color: var(--ink-2); font-size: 17px; max-width: 760px; margin: 0; }
+  .bajada { color: var(--ink-2); margin: 0 0 18px; max-width: 800px; }
+  .meta { color: var(--muted); font-size: 13px; margin-top: 14px; display: flex; flex-wrap: wrap; gap: 4px 18px; }
+  .grid { display: grid; gap: 16px; }
+  .g2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .g4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  @media (max-width: 900px) { .g3, .g4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 640px) { .g2, .g3, .g4 { grid-template-columns: minmax(0, 1fr); } }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; min-width: 0; }
+  .card .sub { color: var(--muted); font-size: 13px; margin: 0 0 12px; }
+  .card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .ver-tabla { border: 1px solid var(--line); background: transparent; border-radius: 8px; padding: 3px 9px; font-size: 12px; color: var(--ink-2); cursor: pointer; white-space: nowrap; }
+  .kpi .v { font-size: clamp(26px, 3.4vw, 34px); font-weight: 650; line-height: 1.1; letter-spacing: -0.01em; }
+  .kpi .l { color: var(--ink-2); font-size: 13.5px; margin-top: 6px; }
+  .kpi .n { color: var(--muted); font-size: 12px; margin-top: 4px; }
+  .historia { border-left: 3px solid var(--blue); }
+  .historia ul { margin: 8px 0 0; padding-left: 18px; }
+  .historia li { margin-bottom: 4px; }
+  .seg { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; }
+  .seg button { border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 5px 12px; font-size: 13px; cursor: pointer; color: var(--ink-2); }
+  .seg button[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .barras { display: grid; gap: 8px; }
+  .barra { display: grid; grid-template-columns: minmax(110px, 34%) 1fr; gap: 10px; align-items: center; font-size: 13.5px; }
+  .barra .et { color: var(--ink-2); line-height: 1.25; }
+  .barra .et small { display: block; color: var(--muted); font-size: 12px; }
+  .barra .pista { position: relative; height: 26px; display: flex; align-items: center; gap: 8px; }
+  .barra .relleno { height: 100%; border-radius: 0 4px 4px 0; min-width: 2px; transition: width .25s ease; }
+  .barra .valor { color: var(--ink-2); font-size: 12.5px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .div-barra { grid-template-columns: minmax(150px, 42%) 1fr; }
+  .div-barra .pista { justify-content: flex-start; }
+  .div-eje { position: relative; height: 26px; }
+  .div-eje .cero { position: absolute; top: -4px; bottom: -4px; width: 1px; background: var(--ink-2); }
+  .div-eje .relleno { position: absolute; top: 0; bottom: 0; border-radius: 3px; }
+  .div-eje .valor { position: absolute; top: 4px; font-size: 12px; color: var(--ink-2); white-space: nowrap; }
+  @media (max-width: 640px) { .barra, .div-barra { grid-template-columns: minmax(0, 1fr); gap: 2px; } }
+  .ic-fila { display: grid; grid-template-columns: minmax(96px, 26%) 1fr; gap: 10px; align-items: center; font-size: 13.5px; margin-bottom: 8px; }
+  .ic-fila .et { color: var(--ink-2); }
+  .ic-pista { position: relative; height: 26px; }
+  .ic-pista .grilla { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--grid); }
+  .ic-pista .rango { position: absolute; top: 11px; height: 4px; border-radius: 2px; background: var(--gray-mark); }
+  .ic-pista .punto { position: absolute; top: 6px; width: 14px; height: 14px; margin-left: -7px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 0 2px var(--card); }
+  .ic-pista .valor { position: absolute; top: 4px; font-size: 12.5px; color: var(--ink-2); white-space: nowrap; }
+  .ic-eje { display: grid; grid-template-columns: minmax(96px, 26%) 1fr; gap: 10px; font-size: 11.5px; color: var(--muted); }
+  .ic-eje .marcas { position: relative; height: 16px; }
+  .ic-eje .marcas span { position: absolute; transform: translateX(-50%); }
+  svg.graf { width: 100%; height: auto; display: block; overflow: visible; }
+  svg.graf text { fill: var(--ink-2); font-size: 12px; }
+  svg.graf .grid line { stroke: var(--grid); stroke-width: 1; }
+  svg.graf .eje line, svg.graf .eje path { stroke: var(--axis); }
+  .leyenda { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12.5px; color: var(--ink-2); margin: 6px 0 4px; }
+  .leyenda span::before { content: ""; display: inline-block; width: 14px; height: 3px; border-radius: 2px; margin-right: 6px; vertical-align: middle; background: var(--c); }
+  .leyenda.cuadro span::before { height: 10px; width: 10px; }
+  .tabla-wrap { overflow-x: auto; margin-top: 10px; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th { text-align: left; color: var(--muted); font-weight: 600; border-bottom: 1px solid var(--axis); padding: 6px 8px; white-space: nowrap; }
+  td { border-bottom: 1px solid var(--line); padding: 6px 8px; }
+  td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .fuente { color: var(--muted); font-size: 12px; margin-top: 10px; }
+  .calor { display: grid; gap: 2px; font-size: 12px; min-width: 560px; }
+  .calor .c { text-align: center; padding: 7px 0; border-radius: 3px; font-variant-numeric: tabular-nums; }
+  .calor .h { color: var(--muted); text-align: center; padding: 4px 0; }
+  .calor .h.ref { color: var(--ink); font-weight: 700; }
+  .calor .f { color: var(--ink-2); padding: 7px 8px 7px 0; white-space: nowrap; }
+  .sim { display: grid; grid-template-columns: minmax(0, 360px) minmax(0, 1fr); gap: 16px; align-items: start; }
+  @media (max-width: 900px) { .sim { grid-template-columns: minmax(0, 1fr); } }
+  .control { margin-bottom: 14px; }
+  .control label { display: flex; justify-content: space-between; gap: 8px; font-size: 13.5px; color: var(--ink-2); margin-bottom: 4px; }
+  .control output { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .control input[type=range] { width: 100%; accent-color: var(--blue); }
+  .control select { width: 100%; background: var(--card-2); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; }
+  .check { display: flex; gap: 8px; align-items: center; font-size: 13.5px; color: var(--ink-2); }
+  .presets { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+  .presets button { border: 1px solid var(--line); background: var(--card-2); border-radius: 8px; padding: 5px 10px; font-size: 12.5px; cursor: pointer; }
+  .resultado .grande { font-size: clamp(34px, 5vw, 48px); font-weight: 700; line-height: 1.05; letter-spacing: -0.02em; }
+  .delta { display: inline-block; font-size: 13px; font-weight: 600; padding: 2px 9px; border-radius: 999px; background: var(--card-2); color: var(--ink-2); }
+  .delta.up { color: var(--ok); } .delta.down { color: var(--red); }
+  .ejemplo dl { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; margin: 8px 0 0; font-size: 13.5px; }
+  .ejemplo dt { color: var(--ink-2); } .ejemplo dd { margin: 0; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .callout { background: var(--blue-soft); border: 1px solid color-mix(in srgb, var(--blue) 35%, transparent); border-radius: var(--radius); padding: 16px 18px; }
+  .aviso { background: var(--card-2); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; font-size: 13.5px; color: var(--ink-2); }
+  .recuadro { border: 1px dashed var(--axis); border-radius: var(--radius); padding: 14px 16px; }
+  .tt { position: fixed; z-index: 50; pointer-events: none; background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 6px 9px; font-size: 12.5px; color: var(--ink); box-shadow: 0 6px 18px rgba(0,0,0,.18); max-width: 260px; }
+  .dyc { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  .dyc > div { padding: 14px 16px; font-size: 13.5px; color: var(--ink-2); background: var(--card); }
+  .dyc > div + div { border-left: 1px solid var(--line); }
+  .dyc b { display: block; color: var(--ink); margin-bottom: 4px; font-size: 13px; }
+  @media (max-width: 760px) { .dyc { grid-template-columns: minmax(0, 1fr); } .dyc > div + div { border-left: 0; border-top: 1px solid var(--line); } }
+  footer { border-top: 1px solid var(--line); margin-top: 48px; padding-block: 24px 40px; color: var(--muted); font-size: 12.5px; }
+  .links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .links a { border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 6px 14px; font-size: 13px; text-decoration: none; color: var(--ink); }
+  .links a:hover { border-color: var(--blue); }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="marca">Crédito hipotecario UVA · Dashboard</div>
+  <nav aria-label="Secciones">
+    <a href="#embudo">Embudo</a><a href="#simulador">Simulador</a><a href="#superficie">Superficie</a><a href="#que-pasa-si">¿Qué pasa si…?</a>
+    <a href="#quienes">Quiénes</a><a href="#riesgo">Riesgo</a><a href="#recomendacion">Recomendación</a><a href="#metodo">Método</a>
+  </nav>
+  <button class="tema" id="tema" type="button" aria-label="Cambiar tema claro u oscuro">Tema</button>
+</div></header>
+
+<main class="wrap">
+<section id="inicio">
+  <div class="kicker">Caso de análisis · Banco [EMPRESA] (ficticio)</div>
+  <h1>¿Quién puede pagar hoy un crédito hipotecario UVA?</h1>
+  <p class="lead" id="lead"></p>
+  <div class="meta" id="meta"></div>
+  <div class="grid g4" style="margin-top:22px" id="kpis"></div>
+  <div class="card historia" style="margin-top:16px" id="historia"></div>
+</section>
+
+<section id="embudo">
+  <div class="kicker">1 · Cuántos</div>
+  <h2 id="embudo-titulo"></h2>
+  <p class="bajada">Hogares inquilinos que superan cada condición del crédito, en orden. Elegí una zona para ver su embudo.</p>
+  <div class="seg" id="embudo-zonas" role="group" aria-label="Zona del embudo"></div>
+  <div class="grid g2">
+    <div class="card"><div class="card-head"><div><h3>Embudo de elegibilidad</h3><p class="sub">Escenario base: 20 años, 75% financiado, UVA + 7,5%, cuota hasta 25% del ingreso</p></div><button class="ver-tabla" data-tabla="t-embudo">Ver tabla</button></div>
+      <div class="barras" id="g-embudo"></div><div class="tabla-wrap" id="t-embudo" hidden></div></div>
+    <div class="card"><div class="card-head"><div><h3>Proporción de elegibles por zona</h3><p class="sub">Punto = estimación · línea = intervalo de confianza del 95%</p></div><button class="ver-tabla" data-tabla="t-zonas">Ver tabla</button></div>
+      <div id="g-zonas"></div><div class="tabla-wrap" id="t-zonas" hidden></div>
+      <p class="fuente" id="nota-zonas"></p></div>
+  </div>
+</section>
+
+<section id="simulador">
+  <div class="kicker">2 · Simulador</div>
+  <h2>Diseñá el crédito y mirá cuántos hogares califican</h2>
+  <p class="bajada">Cada cambio recalcula los cuatro filtros para los hogares inquilinos encuestados, con el mismo motor de cálculo del informe.</p>
+  <div class="sim">
+    <div class="card" id="controles">
+      <div class="presets" role="group" aria-label="Escenarios predefinidos">
+        <button type="button" data-preset="base">Escenario base</button>
+        <button type="button" data-preset="propuesto">Producto propuesto</button>
+        <button type="button" data-preset="indep">Propuesto + independientes</button>
+      </div>
+    </div>
+    <div class="grid" style="gap:16px">
+      <div class="card resultado">
+        <div class="seg" id="sim-zonas" role="group" aria-label="Zona del resultado"></div>
+        <div class="grid g2" style="gap:12px">
+          <div><div class="grande" id="sim-hogares" aria-live="polite"></div><div style="color:var(--ink-2);font-size:14px" id="sim-pct"></div><div style="margin-top:8px" id="sim-delta"></div></div>
+          <div class="ejemplo" id="sim-ejemplo"></div>
+        </div>
+      </div>
+      <div class="card"><h3>Dónde se quedan afuera</h3><p class="sub" id="sim-embudo-sub"></p><div class="barras" id="sim-embudo"></div></div>
+      <div class="card"><h3>Elegibles por zona con estas condiciones</h3><p class="sub">% de los hogares inquilinos de cada zona</p><div class="barras" id="sim-por-zona"></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="superficie">
+  <div class="kicker">3 · La vivienda</div>
+  <h2>Cuanto más grande la vivienda, menos hogares califican</h2>
+  <p class="bajada">% de hogares inquilinos que calificaría si todos buscaran la misma superficie. En negrita, la referencia por tamaño de hogar (45, 60 y 75 m²).</p>
+  <div class="seg" id="calor-modo" role="group" aria-label="Apertura del mapa de calor"></div>
+  <div class="card"><div class="tabla-wrap" style="margin-top:0"><div class="calor" id="g-calor"></div></div>
+    <p class="fuente">Fuente: INDEC (EPH), Zonaprop Index, BCRA; elaboración propia.</p></div>
+</section>
+
+<section id="que-pasa-si">
+  <div class="kicker">4 · Medidas y riesgos</div>
+  <h2>¿Qué pasa si…?</h2>
+  <p class="bajada" id="qps-bajada"></p>
+  <div class="grid g2">
+    <div class="card"><div class="card-head"><div><h3>Medidas que puede tomar el banco</h3><p class="sub">Hogares que se suman o se pierden</p></div><button class="ver-tabla" data-tabla="t-qps">Ver tabla</button></div>
+      <div class="barras" id="g-qps"></div><div class="tabla-wrap" id="t-qps" hidden></div></div>
+    <div class="card"><div class="card-head"><div><h3>Lo que lo empeora</h3><p class="sub">Hogares que se pierden</p></div><button class="ver-tabla" data-tabla="t-qle">Ver tabla</button></div>
+      <div class="barras" id="g-qle"></div><div class="tabla-wrap" id="t-qle" hidden></div></div>
+  </div>
+</section>
+
+<section id="quienes">
+  <div class="kicker">5 · Quiénes</div>
+  <h2>La composición del hogar pesa más que la zona</h2>
+  <p class="bajada">Mirada descriptiva: tipo de hogar y trabajos. Son asociaciones, no causas.</p>
+  <div class="grid g2">
+    <div class="card"><div class="card-head"><div><h3>Por tipo de hogar</h3><p class="sub">% elegible y peso dentro de los inquilinos</p></div><button class="ver-tabla" data-tabla="t-h3">Ver tabla</button></div>
+      <div class="barras" id="g-h3"></div><div class="tabla-wrap" id="t-h3" hidden></div></div>
+    <div class="card recuadro"><div class="card-head"><div><h3>Recuadro · posible punto de fuga</h3><p class="sub">Trabajos en el hogar</p></div><button class="ver-tabla" data-tabla="t-h7">Ver tabla</button></div>
+      <div class="barras" id="g-h7"></div><div class="tabla-wrap" id="t-h7" hidden></div><p style="font-size:13.5px;color:var(--ink-2);margin:12px 0 0" id="h7-texto"></p></div>
+  </div>
+  <div class="grid g3" style="margin-top:16px" id="independientes"></div>
+</section>
+
+<section id="riesgo">
+  <div class="kicker">6 · Riesgo</div>
+  <h2>Si la UVA le gana a los sueldos, la cuota pesa más</h2>
+  <p class="bajada">Un hogar que empieza pagando el 25% de su ingreso: la cuota sigue a la inflación (UVA) y el ingreso, al índice de salarios registrados.</p>
+  <div class="grid g2">
+    <div class="card"><div class="card-head"><div><h3>Cuota sobre ingreso desde el otorgamiento</h3><p class="sub" id="stress-sub"></p></div><button class="ver-tabla" data-tabla="t-stress">Ver tabla</button></div>
+      <div class="leyenda" id="l-stress"></div><div id="g-stress"></div><div class="tabla-wrap" id="t-stress" hidden></div>
+      <p class="fuente">Fuente: BCRA (UVA), INDEC (índice de salarios registrados); elaboración propia.</p></div>
+    <div class="card"><div class="card-head"><div><h3>El sueldo en tres lentes</h3><p class="sub">Mediana de la remuneración bruta de asalariados registrados del sector privado</p></div></div>
+      <div class="seg" id="lentes" role="group" aria-label="Lente del sueldo"></div>
+      <div class="leyenda" id="l-lentes"></div><div id="g-lentes"></div><p style="font-size:13.5px;color:var(--ink-2);margin:8px 0 0" id="lentes-texto"></p>
+      <p class="fuente">Fuente: SIPA vía datos.gob.ar, INDEC (IPC), BCRA (UVA), Banco Nación (dólar vendedor); elaboración propia.</p></div>
+  </div>
+</section>
+
+<section id="contexto">
+  <div class="kicker">7 · Contexto</div>
+  <h2>El crédito volvió, pero todavía es la mitad del pico de 2018</h2>
+  <div class="grid g2">
+    <div class="card"><h3>Stock real de hipotecarios a personas</h3><p class="sub">Billones de pesos de agosto de 2026 · zona gris: 2022-24, casi sin otorgamientos</p><div id="g-stock"></div></div>
+    <div class="card"><h3>Tasa promedio de hipotecarios UVA</h3><p class="sub">TNA sobre UVA, %</p><div id="g-tasa"></div></div>
+  </div>
+  <p class="fuente">Fuente: BCRA, API de Estadísticas (series 916, 1240 y 27); elaboración propia.</p>
+</section>
+
+<section id="recomendacion">
+  <div class="kicker">8 · Recomendación</div>
+  <h2>Qué haría el banco con estos datos</h2>
+  <div class="callout" id="recomendacion-texto"></div>
+  <div class="grid g3" style="margin-top:16px" id="acciones"></div>
+</section>
+
+<section id="metodo">
+  <div class="kicker">9 · Cómo se hizo</div>
+  <h2>Método, decisiones y límites</h2>
+  <div class="dyc" style="margin-bottom:16px">
+    <div><b>Qué decidió el autor</b>El alcance (CABA, GBA por corredor y Gran Córdoba), las condiciones del crédito, qué hipótesis mantener o reformular y los controles a sumar en cada punto de revisión.</div>
+    <div><b>Qué se automatizó</b>Descarga de fuentes públicas, limpieza en SQL, cálculos, gráficos y este tablero, para poder repetir todo desde cero.</div>
+    <div><b>Cómo se verificó</b>Cifras oficiales del INDEC reproducidas exactamente, comparación con el Censo 2022, controles de subdeclaración y no respuesta, y un test de paridad entre este simulador y el análisis.</div>
+  </div>
+  <div class="grid g2">
+    <div class="card"><h3>Robustez</h3><p class="sub">% de inquilinos elegibles con otros supuestos</p><div class="barras" id="g-robustez"></div></div>
+    <div class="card"><h3>Límites principales</h3>
+      <ul style="margin:6px 0 0;padding-left:18px;font-size:13.5px;color:var(--ink-2)">
+        <li>La encuesta no mide ahorros ni deudas: el anticipo es un supuesto (hasta 12 meses de ingreso).</li>
+        <li>La EPH capta algo menos de inquilinos que el Censo: las cantidades son conservadoras.</li>
+        <li>Precios de publicación, no de venta final. En el GBA se asume la misma distribución de ingresos en todos los partidos.</li>
+        <li>Sin historial crediticio. Estimaciones con margen de error, válidas a la fecha de corte.</li>
+      </ul></div>
+  </div>
+  <div class="aviso" style="margin-top:16px"><b>Aviso.</b> Ejercicio analítico independiente con datos públicos, para portfolio profesional. El banco es ficticio y los hogares con nombre son ilustrativos. No es asesoramiento financiero ni sirve para evaluar a una persona concreta. El simulador usa los microdatos anónimos de la EPH, sin identificadores.</div>
+  <div class="links" id="links"></div>
+</section>
+</main>
+
+<footer><div class="wrap">
+  <div id="pie"></div>
+  <div style="margin-top:6px"><b>Fuentes de datos:</b> INDEC (EPH 2T-2025 a 1T-2026, Censo 2022), BCRA (API de Estadísticas), datos.gob.ar (Índice de Salarios, RIPTE, SIPA, dólar Banco Nación), GCBA (avisos 2001-2020), Zonaprop Index.</div>
+</div></footer>
+<div class="tt" id="tt" hidden></div>
+
+<script>/*__MOTOR__*/</script>
+<script>var DATOS = /*__DATOS__*/;</script>
+<script>
+(function () {
+  "use strict";
+  var M = window.Motor, D = DATOS;
+  var C = M.fmtCantidad, P = M.fmtPct, MON = M.fmtMonto, DEC = M.fmtDecimal;
+  var ZONAS = ["CABA", "GBA Norte", "GBA Oeste", "GBA Sur", "Gran Córdoba"];
+  var BASE = Object.assign({ acepta_independientes: false, factor_precio: 1, m2_fijo: null }, D.base);
+
+  function $(id) { return document.getElementById(id); }
+  function css(v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+  function h(tag, attrs, html) {
+    var e = document.createElement(tag);
+    if (attrs) Object.keys(attrs).forEach(function (k) { if (k === "style") e.style.cssText = attrs[k]; else e.setAttribute(k, attrs[k]); });
+    if (html !== undefined) e.innerHTML = html;
+    return e;
+  }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function signo(x) { return (x > 0.5 ? "+" : x < -0.5 ? "−" : "") + C(Math.abs(x)); }
+  function mes(t) { var m = ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"]; var p = t.split("-"); return m[+p[1] - 1] + "-" + p[0].slice(2); }
+
+  // --- Tooltip ---------------------------------------------------------------
+  var tt = $("tt");
+  document.addEventListener("mousemove", function (e) {
+    var t = e.target.closest ? e.target.closest("[data-tt]") : null;
+    if (!t) { tt.hidden = true; return; }
+    tt.innerHTML = t.getAttribute("data-tt"); tt.hidden = false;
+    var x = Math.min(e.clientX + 14, window.innerWidth - tt.offsetWidth - 8), y = e.clientY + 14;
+    tt.style.left = x + "px"; tt.style.top = y + "px";
+  });
+
+  // --- Tablas ------------------------------------------------------------------
+  function tabla(id, cabecera, filas, numericas) {
+    var cont = $(id); if (!cont) return;
+    var t = "<table><thead><tr>" + cabecera.map(function (c, i) { return "<th" + (numericas.indexOf(i) >= 0 ? ' class="n"' : "") + ">" + esc(c) + "</th>"; }).join("") + "</tr></thead><tbody>";
+    filas.forEach(function (f) { t += "<tr>" + f.map(function (v, i) { return "<td" + (numericas.indexOf(i) >= 0 ? ' class="n"' : "") + ">" + esc(v) + "</td>"; }).join("") + "</tr>"; });
+    cont.innerHTML = t + "</tbody></table>";
+  }
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest ? e.target.closest(".ver-tabla") : null; if (!b) return;
+    var t = $(b.getAttribute("data-tabla")); t.hidden = !t.hidden; b.textContent = t.hidden ? "Ver tabla" : "Ocultar tabla";
+  });
+
+  // --- Barras horizontales (HTML) ------------------------------------------------
+  function barras(id, items, opts) {
+    var cont = $(id); cont.innerHTML = "";
+    var max = opts && opts.max || Math.max.apply(null, items.map(function (i) { return i.valor; })) || 1;
+    items.forEach(function (it) {
+      var fila = h("div", { class: "barra" });
+      fila.appendChild(h("div", { class: "et" }, esc(it.etiqueta) + (it.detalle ? "<small>" + esc(it.detalle) + "</small>" : "")));
+      var pista = h("div", { class: "pista", "data-tt": esc(it.tt || it.texto) });
+      pista.appendChild(h("div", { class: "relleno", style: "width:" + Math.max(0.4, 82 * it.valor / max) + "%;background:" + (it.color || css("--blue")) }));
+      pista.appendChild(h("span", { class: "valor" }, esc(it.texto)));
+      fila.appendChild(pista); cont.appendChild(fila);
+    });
+  }
+  function barrasDivergentes(id, items) {
+    var cont = $(id); cont.innerHTML = "";
+    var min = Math.min(0, Math.min.apply(null, items.map(function (i) { return i.valor; })));
+    var max = Math.max(0, Math.max.apply(null, items.map(function (i) { return i.valor; })));
+    var rango = (max - min) || 1, izq = 30, der = 30, util = 100 - izq * (min < 0 ? 1 : 0.05) - der * (max > 0 ? 1 : 0.05);
+    var x0 = (min < 0 ? izq : 1.5) + util * (-min / rango);
+    items.forEach(function (it) {
+      var fila = h("div", { class: "barra div-barra" });
+      fila.appendChild(h("div", { class: "et" }, esc(it.etiqueta) + (it.detalle ? "<small>" + esc(it.detalle) + "</small>" : "")));
+      var eje = h("div", { class: "div-eje", "data-tt": esc(it.texto) });
+      eje.appendChild(h("div", { class: "cero", style: "left:" + x0 + "%" }));
+      var ancho = util * Math.abs(it.valor) / rango;
+      var color = it.valor > 0.5 ? css("--blue") : it.valor < -0.5 ? css("--red") : css("--gray-mark");
+      if (Math.abs(it.valor) > 0.5) eje.appendChild(h("div", { class: "relleno", style: "background:" + color + ";width:" + ancho + "%;left:" + (it.valor >= 0 ? x0 : x0 - ancho) + "%" }));
+      var pos = it.valor >= 0 ? "left:" + (x0 + ancho + 1.5) + "%" : "right:" + (100 - x0 + ancho + 1.5) + "%";
+      eje.appendChild(h("div", { class: "valor", style: pos }, esc(it.texto)));
+      fila.appendChild(eje); cont.appendChild(fila);
+    });
+  }
+
+  // --- Líneas (SVG) ---------------------------------------------------------------
+  function lineas(id, series, o) {
+    var W = 440, H = o.alto || 240, m = { t: 14, r: o.margenDer || 62, b: 26, l: o.margenIzq || 44 };
+    var xs = series[0].puntos.map(function (p) { return p[0]; });
+    var todos = []; series.forEach(function (s) { s.puntos.forEach(function (p) { if (p[1] !== null && p[1] !== undefined) todos.push(p[1]); }); });
+    var yMin = o.yMin !== undefined ? o.yMin : Math.min.apply(null, todos), yMax = o.yMax !== undefined ? o.yMax : Math.max.apply(null, todos) * 1.08;
+    var log = !!o.log; var f = log ? Math.log10 : function (v) { return v; };
+    var X = function (i) { return m.l + (W - m.l - m.r) * i / (xs.length - 1); };
+    var Y = function (v) { return H - m.b - (H - m.t - m.b) * (f(v) - f(yMin)) / (f(yMax) - f(yMin)); };
+    var s = '<svg class="graf" viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="' + esc(o.aria || "Gráfico de líneas") + '">';
+    (o.bandas || []).forEach(function (b) {
+      var i0 = xs.indexOf(b[0]), i1 = xs.indexOf(b[1]); if (i0 < 0 || i1 < 0) return;
+      s += '<rect x="' + X(i0) + '" y="' + m.t + '" width="' + (X(i1) - X(i0)) + '" height="' + (H - m.t - m.b) + '" fill="' + css("--grid") + '" opacity="0.9"/>';
+    });
+    s += '<g class="grid">';
+    (o.yTicks || []).forEach(function (v) { s += '<line x1="' + m.l + '" x2="' + (W - m.r) + '" y1="' + Y(v) + '" y2="' + Y(v) + '"/><text x="' + (m.l - 6) + '" y="' + (Y(v) + 4) + '" text-anchor="end">' + esc(o.yFmt(v)) + "</text>"; });
+    s += "</g>";
+    (o.refs || []).forEach(function (r) { s += '<line x1="' + m.l + '" x2="' + (W - m.r) + '" y1="' + Y(r.v) + '" y2="' + Y(r.v) + '" stroke="' + css("--axis") + '" stroke-width="1.2"/><text x="' + (W - m.r) + '" y="' + (Y(r.v) + (r.abajo ? 14 : -5)) + '" text-anchor="end" style="fill:var(--muted)">' + esc(r.t) + "</text>"; });
+    (o.xTicks || []).forEach(function (i) { s += '<text x="' + X(i[0]) + '" y="' + (H - 6) + '" text-anchor="middle">' + esc(i[1]) + "</text>"; });
+    series.forEach(function (se) {
+      var d = "", abierto = false;
+      se.puntos.forEach(function (p, i) { if (p[1] === null || p[1] === undefined) { abierto = false; return; } d += (abierto ? "L" : "M") + X(i).toFixed(1) + "," + Y(p[1]).toFixed(1); abierto = true; });
+      s += '<path d="' + d + '" fill="none" stroke="' + se.color + '" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
+      var ult = null; for (var k = se.puntos.length - 1; k >= 0; k--) { if (se.puntos[k][1] !== null && se.puntos[k][1] !== undefined) { ult = k; break; } }
+      if (ult !== null && se.etiquetaFin) s += '<text x="' + (X(ult) + 5) + '" y="' + (Y(se.puntos[ult][1]) + 4 + (se.dy || 0)) + '">' + esc(se.etiquetaFin) + "</text>";
+    });
+    // capa de lectura: rectángulos por punto con tooltip
+    var paso = (W - m.l - m.r) / (xs.length - 1);
+    xs.forEach(function (x, i) {
+      var txt = "<b>" + esc(o.xFmt ? o.xFmt(x) : x) + "</b><br>" + series.map(function (se) { var v = se.puntos[i][1]; return v === null || v === undefined ? "" : esc(se.nombre) + ": " + esc(o.yFmtTt ? o.yFmtTt(v) : o.yFmt(v)); }).filter(Boolean).join("<br>");
+      s += '<rect x="' + (X(i) - paso / 2) + '" y="' + m.t + '" width="' + paso + '" height="' + (H - m.t - m.b) + '" fill="transparent" data-tt="' + txt.replace(/"/g, "&quot;") + '"/>';
+    });
+    $(id).innerHTML = s + "</svg>";
+  }
+  function leyenda(id, items) { $(id).innerHTML = items.map(function (i) { return '<span style="--c:' + i.color + '">' + esc(i.nombre) + "</span>"; }).join(""); }
+  function ticksAnuales(fechas, cada) { var out = []; fechas.forEach(function (f, i) { if (f.slice(5, 7) === "01" && (+f.slice(0, 4)) % (cada || 2) === 0) out.push([i, f.slice(0, 4)]); }); return out; }
+
+  // --- Segmentos (botones) --------------------------------------------------------
+  function segmentos(id, opciones, activo, alCambiar) {
+    var cont = $(id); cont.innerHTML = "";
+    opciones.forEach(function (op) {
+      var b = h("button", { type: "button", "aria-pressed": String(op === activo) }, esc(op));
+      b.addEventListener("click", function () { Array.prototype.forEach.call(cont.children, function (c) { c.setAttribute("aria-pressed", "false"); }); b.setAttribute("aria-pressed", "true"); alCambiar(op); });
+      cont.appendChild(b);
+    });
+  }
+
+  // --- Datos derivados ---------------------------------------------------------------
+  var K = D.kpis, T = D.textos;
+  var precioZona = (function () {
+    var out = { "CABA": D.mercado.usd_m2["CABA"], "Gran Córdoba": D.mercado.usd_m2["Gran Córdoba"] }, tot = 0, sum = 0;
+    ["Norte", "Oeste", "Sur"].forEach(function (c) {
+      var ps = D.mercado.gba_partidos.filter(function (p) { return p.corredor === c; });
+      out["GBA " + c] = ps.reduce(function (a, p) { return a + p.usd_m2 * p.peso_corredor; }, 0);
+    });
+    D.mercado.gba_partidos.forEach(function (p) { sum += p.usd_m2 * p.peso_gba; tot += p.peso_gba; });
+    out["Partidos del GBA"] = sum / tot;
+    return out;
+  })();
+  var baseRes = M.evaluar(D, BASE);
+
+  function colores() { return { blue: css("--blue"), orange: css("--orange"), aqua: css("--aqua"), yellow: css("--yellow"), pink: css("--pink"), red: css("--red"), gray: css("--gray-mark") }; }
+
+  // --- 0 · Encabezado -----------------------------------------------------------------
+  function encabezado() {
+    $("lead").innerHTML = "De los <b>" + C(K.inquilinos) + "</b> de hogares que alquilan en CABA, Partidos del GBA y Gran Córdoba, solo <b>" + C(K.elegibles_base) + "</b> podrían tomar hoy un hipotecario UVA. Lo que más frena es juntar el efectivo inicial frente al precio de la vivienda.";
+    $("meta").innerHTML = "<span>Autor: " + esc(T.autor) + "</span><span>Fecha de corte: " + esc(T.fecha_corte) + "</span><span>Datos: INDEC, BCRA, datos.gob.ar, Zonaprop Index</span>";
+    var kp = [
+      { v: C(K.inquilinos), l: "hogares inquilinos en los 3 mercados", n: "base de todos los porcentajes" },
+      { v: C(K.elegibles_base), l: "podrían tomar hoy el crédito (1 de cada " + Math.round(100 / K.elegibles_pct) + ")", n: P(K.elegibles_pct) + " · IC " + DEC(K.ic95[0]) + "–" + DEC(K.ic95[1]) + " · ajustado al Censo " + C(K.rango_censo[0]) + " a " + C(K.rango_censo[1]) },
+      { v: C(K.propuesto), l: "con 30 años y 80% financiado", n: "+" + P(100 * (K.propuesto / K.elegibles_base - 1), 0) + " sin subir el tope de cuota" },
+      { v: C(K.propuesto_indep), l: "sumando monotributistas y autónomos", n: "+" + P(100 * (K.propuesto_indep / K.elegibles_base - 1), 0) + " frente a hoy" }
+    ];
+    $("kpis").innerHTML = kp.map(function (k) { return '<div class="card kpi"><div class="v">' + k.v + '</div><div class="l">' + esc(k.l) + '</div><div class="n">' + esc(k.n) + "</div></div>"; }).join("");
+    var pr = T.protagonista;
+    $("historia").innerHTML = "<h3>Carla y Diego quieren dejar de alquilar</h3><p style='margin:4px 0 0;color:var(--ink-2);font-size:14px'>Tienen un hijo, alquilan en el oeste del conurbano y ganan <b>" + esc(pr.ingreso) + "</b> por mes entre los dos (lo que gana una pareja con hijos inquilina típica). Un 3 ambientes de " + pr.m2 + " m² cuesta <b>" + esc(pr.base.precio_usd) + "</b>.</p><ul style='font-size:14px;color:var(--ink-2)'>" +
+      "<li>Cuota inicial de <b>" + esc(pr.base.cuota) + "</b>: el " + esc(pr.base.ratio) + " de su ingreso (el banco acepta hasta 25%).</li>" +
+      "<li>Efectivo para anticipo y gastos: <b>" + esc(pr.base.efectivo) + "</b> (" + esc(pr.base.efectivo_usd) + "), unos " + esc(pr.base.anios_ahorro) + " años ahorrando el 20% de lo que ganan.</li>" +
+      "<li>Con 30 años y 80% financiado: cuota del " + esc(pr.propuesto.ratio) + ". Todavía no alcanza. Con una vivienda 20% más barata, <b>" + (pr.propuesto_barata.pasa_cuota && pr.propuesto_barata.pasa_anticipo ? "califican" : "siguen sin calificar") + "</b>.</li></ul>";
+  }
+
+  // --- 1 · Embudo ------------------------------------------------------------------------
+  var ETQ = { "Inquilinos": "Hogares inquilinos", "Pagan la cuota": "Pagan la cuota", "Juntan el anticipo": "Juntan el anticipo", "Ingreso demostrable": "Tienen ingreso demostrable", "Cumplen la edad": "Cumplen la edad" };
+  var DET = ["", "cuota hasta 25% del ingreso", "anticipo + gastos hasta 12 ingresos", "jefe/a o cónyuge con aportes", "edad + plazo hasta 85 años"];
+  function rampa(i) { var r = ["#86b6ef", "#5598e7", "#3987e5", "#256abf", "#184f95"]; if (document.documentElement.classList.contains("dark")) r = ["#2f5f99", "#3f7cc2", "#5598e7", "#7aaeed", "#a9cbf4"]; return r[i]; }
+  function dibujarEmbudo(res, id, zona) {
+    var e = res[zona];
+    barras(id, M.ETAPAS.map(function (et, i) { return { etiqueta: ETQ[et], detalle: DET[i], valor: e[i], texto: C(e[i]) + " · " + P(100 * e[i] / e[0]), color: rampa(i) }; }), { max: e[0] });
+    return e;
+  }
+  var zonaEmbudo = "Total";
+  function embudo() {
+    var e = dibujarEmbudo(baseRes, "g-embudo", zonaEmbudo);
+    $("embudo-titulo").textContent = zonaEmbudo === "Total" ? "Solo 1 de cada " + Math.round(e[0] / e[4]) + " hogares inquilinos podría tomar hoy el crédito" : zonaEmbudo + ": califica 1 de cada " + Math.round(e[0] / e[4]) + " hogares inquilinos";
+    tabla("t-embudo", ["Etapa", "Hogares", "% del total"], M.ETAPAS.map(function (et, i) { return [ETQ[et], C(e[i]), P(100 * e[i] / e[0])]; }), [1, 2]);
+  }
+  function zonasIC() {
+    var z = D.zonas.slice().sort(function (a, b) { return b.pct_elegible - a.pct_elegible; });
+    var max = 30, X = function (v) { return 64 * v / max; };
+    var html = "";
+    z.forEach(function (d) {
+      var grillas = [0, 10, 20, 30].map(function (v) { return '<div class="grilla" style="left:' + X(v) + '%"></div>'; }).join("");
+      html += '<div class="ic-fila"><div class="et">' + esc(d.zona) + '</div><div class="ic-pista" data-tt="' + esc(d.zona + ": " + P(d.pct_elegible) + " (IC " + DEC(d.ic95_inf) + "–" + DEC(d.ic95_sup) + ") · " + C(d.hogares_elegibles) + " hogares") + '">' + grillas +
+        '<div class="rango" style="left:' + X(d.ic95_inf) + "%;width:" + (X(d.ic95_sup) - X(d.ic95_inf)) + '%"></div><div class="punto" style="left:' + X(d.pct_elegible) + '%"></div>' +
+        '<div class="valor" style="left:' + (X(d.ic95_sup) + 2) + '%">' + P(d.pct_elegible) + " · " + C(d.hogares_elegibles) + "</div></div></div>";
+    });
+    html += '<div class="ic-eje"><div></div><div class="marcas">' + [0, 10, 20, 30].map(function (v) { return '<span style="left:' + X(v) + '%">' + v + "%</span>"; }).join("") + "</div></div>";
+    $("g-zonas").innerHTML = html;
+    tabla("t-zonas", ["Zona", "% elegible", "IC 95%", "Hogares elegibles"], z.map(function (d) { return [d.zona, P(d.pct_elegible), DEC(d.ic95_inf) + "–" + DEC(d.ic95_sup), C(d.hogares_elegibles)]; }), [1, 2, 3]);
+    $("nota-zonas").textContent = "Las diferencias entre mercados no son concluyentes con esta muestra. Los corredores del GBA son los mismos hogares evaluados con los precios de cada corredor. Fuente: INDEC (EPH), Zonaprop Index, BCRA.";
+  }
+
+  // --- 2 · Simulador ----------------------------------------------------------------------
+  var CONTROLES = [
+    { k: "tna", et: "Tasa sobre UVA (TNA)", min: 3, max: 12, paso: 0.5, fmt: function (v) { return DEC(v, 1) + "%"; }, a: function (v) { return v / 100; }, de: function (v) { return v * 100; } },
+    { k: "plazo_anios", et: "Plazo", min: 10, max: 30, paso: 5, fmt: function (v) { return v + " años"; } },
+    { k: "ltv", et: "% financiado", min: 50, max: 90, paso: 5, fmt: function (v) { return v + "%"; }, a: function (v) { return v / 100; }, de: function (v) { return Math.round(v * 100); } },
+    { k: "tope_cuota_ingreso", et: "Cuota máxima sobre el ingreso", min: 15, max: 40, paso: 5, fmt: function (v) { return v + "%"; }, a: function (v) { return v / 100; }, de: function (v) { return Math.round(v * 100); } },
+    { k: "meses_ingreso_anticipo", et: "Meses de ingreso para anticipo y gastos", min: 6, max: 36, paso: 3, fmt: function (v) { return v + " meses"; } },
+    { k: "factor_precio", et: "Precio de la vivienda", min: -40, max: 40, paso: 5, fmt: function (v) { return (v > 0 ? "+" : "") + v + "%"; }, a: function (v) { return 1 + v / 100; }, de: function (v) { return Math.round((v - 1) * 100); } },
+    { k: "edad_max_fin_credito", et: "Edad máxima al terminar de pagar", min: 70, max: 90, paso: 5, fmt: function (v) { return v + " años"; } }
+  ];
+  var PRESETS = { base: {}, propuesto: { plazo_anios: 30, ltv: 0.8 }, indep: { plazo_anios: 30, ltv: 0.8, acepta_independientes: true } };
+  var params = Object.assign({}, BASE), zonaSim = "Total", pendiente = false;
+  function armarControles() {
+    var cont = $("controles");
+    CONTROLES.forEach(function (c) {
+      var id = "c-" + c.k, d = h("div", { class: "control" });
+      d.innerHTML = '<label for="' + id + '"><span>' + esc(c.et) + '</span><output id="o-' + c.k + '"></output></label><input type="range" id="' + id + '" min="' + c.min + '" max="' + c.max + '" step="' + c.paso + '">';
+      cont.appendChild(d);
+      d.querySelector("input").addEventListener("input", function (e) { var v = +e.target.value; params[c.k] = c.a ? c.a(v) : v; programar(); });
+    });
+    var sel = h("div", { class: "control" });
+    var ops = '<option value="ref">Según integrantes (45 / 60 / 75 m²)</option>';
+    for (var m2 = 30; m2 <= 90; m2 += 5) ops += '<option value="' + m2 + '">' + m2 + " m² para todos</option>";
+    sel.innerHTML = '<label for="c-m2"><span>Superficie de la vivienda</span></label><select id="c-m2">' + ops + "</select>";
+    cont.appendChild(sel);
+    sel.querySelector("select").addEventListener("change", function (e) { params.m2_fijo = e.target.value === "ref" ? null : +e.target.value; programar(); });
+    var chk = h("div", { class: "control" });
+    chk.innerHTML = '<label class="check" for="c-indep" style="justify-content:flex-start"><input type="checkbox" id="c-indep"> Acepta monotributistas y autónomos con aportes</label>';
+    cont.appendChild(chk);
+    chk.querySelector("input").addEventListener("change", function (e) { params.acepta_independientes = e.target.checked; programar(); });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-preset]"), function (b) {
+      b.addEventListener("click", function () { params = Object.assign({}, BASE, PRESETS[b.getAttribute("data-preset")]); sincronizar(); programar(); });
+    });
+    segmentos("sim-zonas", ["Total", "CABA", "Partidos del GBA", "GBA Norte", "GBA Oeste", "GBA Sur", "Gran Córdoba"], zonaSim, function (z) { zonaSim = z; simular(); });
+    sincronizar();
+  }
+  function sincronizar() {
+    CONTROLES.forEach(function (c) { var v = c.de ? c.de(params[c.k]) : params[c.k]; $("c-" + c.k).value = v; $("o-" + c.k).textContent = c.fmt(v); });
+    $("c-m2").value = params.m2_fijo === null ? "ref" : String(params.m2_fijo);
+    $("c-indep").checked = !!params.acepta_independientes;
+  }
+  function programar() { sincronizar(); if (pendiente) return; pendiente = true; requestAnimationFrame(function () { pendiente = false; simular(); }); }
+  var ultimoRes = null;
+  function simular() {
+    var res = M.evaluar(D, params); ultimoRes = res;
+    var e = res[zonaSim], b = baseRes[zonaSim], dif = e[4] - b[4];
+    $("sim-hogares").textContent = C(e[4]) + " hogares";
+    $("sim-pct").textContent = P(100 * e[4] / e[0]) + " de los " + C(e[0]) + " hogares inquilinos" + (zonaSim === "Total" ? "" : " de " + zonaSim);
+    var cls = dif > 0.5 ? "up" : dif < -0.5 ? "down" : "";
+    $("sim-delta").innerHTML = '<span class="delta ' + cls + '">' + (Math.abs(dif) < 0.5 ? "igual que el escenario base" : signo(dif) + " hogares (" + (dif > 0 ? "+" : "−") + P(Math.abs(100 * dif / b[4]), 0) + ") frente al escenario base") + "</span>";
+    dibujarEmbudo(res, "sim-embudo", zonaSim);
+    $("sim-embudo-sub").textContent = "Hogares que superan cada condición · " + (zonaSim === "Total" ? "todos los mercados" : zonaSim);
+    barras("sim-por-zona", ZONAS.map(function (z) { var r = res[z]; return { etiqueta: z, valor: 100 * r[4] / r[0], texto: P(100 * r[4] / r[0]) + " · " + C(r[4]), tt: z + ": " + C(r[4]) + " de " + C(r[0]) + " hogares" }; }), { max: Math.max(35, Math.max.apply(null, ZONAS.map(function (z) { return 100 * res[z][4] / res[z][0]; }))) });
+    ejemplo();
+  }
+  function ejemplo() {
+    var z = zonaSim === "Total" ? "Partidos del GBA" : zonaSim, m2 = params.m2_fijo === null ? 60 : params.m2_fijo;
+    var precio = precioZona[z] * m2 * params.factor_precio * D.mercado.tc;
+    var prestamo = Math.min(params.ltv * precio, params.tope_prestamo_uva * D.mercado.uva);
+    var cuota = prestamo * M.factorCuota(params.tna, params.plazo_anios);
+    var efectivo = precio - prestamo + params.gastos_compra * precio;
+    var ingreso = Math.max(cuota / params.tope_cuota_ingreso, efectivo / params.meses_ingreso_anticipo);
+    $("sim-ejemplo").innerHTML = "<h3>Ejemplo: " + m2 + " m² en " + esc(z) + "</h3><dl>" +
+      "<dt>Precio</dt><dd>" + MON(precio / D.mercado.tc, "USD") + "</dd><dt>Préstamo</dt><dd>" + MON(prestamo) + "</dd>" +
+      "<dt>Cuota inicial</dt><dd>" + MON(cuota) + "</dd><dt>Efectivo necesario</dt><dd>" + MON(efectivo) + "</dd>" +
+      "<dt>Ingreso mensual necesario</dt><dd>" + MON(ingreso) + "</dd></dl>";
+  }
+
+  // --- 3 · Mapa de calor ---------------------------------------------------------------------
+  var modoCalor = "Por zona";
+  function hexRgb(h) { h = h.replace("#", ""); return [parseInt(h.substr(0, 2), 16), parseInt(h.substr(2, 2), 16), parseInt(h.substr(4, 2), 16)]; }
+  function mezcla(t) { var a = hexRgb(css("--ramp-lo")), b = hexRgb(css("--ramp-hi")); return a.map(function (v, i) { return Math.round(v + (b[i] - v) * t); }); }
+  function calor() {
+    var datos = modoCalor === "Por zona" ? D.calor_zona : D.calor_integrantes, clave = modoCalor === "Por zona" ? "zona" : "integrantes";
+    var filas = modoCalor === "Por zona" ? ["CABA", "GBA Norte", "GBA Oeste", "GBA Sur", "Gran Córdoba", "Total"] : ["1", "2", "3", "4", "5 o más"];
+    var cols = []; datos.forEach(function (d) { if (cols.indexOf(d.m2) < 0) cols.push(d.m2); });
+    var g = $("g-calor"); g.style.gridTemplateColumns = "110px repeat(" + cols.length + ", minmax(0,1fr))";
+    var html = '<div class="h"></div>' + cols.map(function (c) { return '<div class="h' + ([45, 60, 75].indexOf(c) >= 0 ? " ref" : "") + '">' + c + " m²</div>"; }).join("");
+    filas.forEach(function (f) {
+      html += '<div class="f">' + esc(modoCalor === "Por zona" ? f : f + (f === "1" ? " integrante" : " integrantes")) + "</div>";
+      cols.forEach(function (c) {
+        var d = datos.filter(function (x) { return x[clave] === f && x.m2 === c; })[0], v = d ? d.pct_elegible : 0;
+        var rgb = mezcla(Math.min(v, 40) / 40), lum = (0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]) / 255;
+        html += '<div class="c" style="background:rgb(' + rgb.join(",") + ");color:" + (lum < 0.5 ? "#fff" : "#0b0b0b") + '" data-tt="' + esc(f + " · " + c + " m²: " + P(v)) + '">' + DEC(v, 0) + "</div>";
+      });
+    });
+    g.innerHTML = html;
+  }
+
+  // --- 4 · ¿Qué pasa si? ----------------------------------------------------------------------
+  function quePasaSi() {
+    $("qps-bajada").textContent = "Cambios de a uno sobre el escenario base (" + C(K.elegibles_base) + " hogares elegibles). Lo que más suma ataca el efectivo inicial o el precio; bajar la tasa, sola, no suma.";
+    var q = D.que_pasa_si.slice().sort(function (a, b) { return b.diferencia - a.diferencia; });
+    barrasDivergentes("g-qps", q.map(function (r) { return { etiqueta: r.pregunta, detalle: r.por_que, valor: r.diferencia, texto: Math.abs(r.diferencia) < 0.5 ? "sin cambio" : signo(r.diferencia) }; }));
+    tabla("t-qps", ["Medida", "Hogares elegibles", "Diferencia"], q.map(function (r) { return [r.pregunta, C(r.hogares), signo(r.diferencia)]; }), [1, 2]);
+    var e = D.que_lo_empeora.slice().sort(function (a, b) { return a.diferencia - b.diferencia; });
+    barrasDivergentes("g-qle", e.map(function (r) { return { etiqueta: r.pregunta, valor: r.diferencia, texto: signo(r.diferencia) }; }));
+    tabla("t-qle", ["Riesgo", "Hogares elegibles", "Diferencia"], e.map(function (r) { return [r.pregunta, C(r.hogares), signo(r.diferencia)]; }), [1, 2]);
+  }
+
+  // --- 5 · Quiénes ------------------------------------------------------------------------------
+  function quienes() {
+    var orden = ["Pareja sin hijos", "Pareja con hijos", "Extendido o compuesto", "Unipersonal", "Monoparental"];
+    var t = orden.map(function (o) { return D.h3.filter(function (r) { return r.tipo_hogar === o && r.jefatura === "Todas"; })[0]; });
+    barras("g-h3", t.map(function (r) { return { etiqueta: r.tipo_hogar, detalle: P(r.pct_de_inquilinos, 0) + " de los inquilinos", valor: r.pct_elegible, texto: P(r.pct_elegible) + " elegible", tt: r.tipo_hogar + ": " + P(r.pct_elegible) + " (IC " + DEC(r.ic95_inf) + "–" + DEC(r.ic95_sup) + ") · ingreso mediano " + MON(r.ingreso_mediano) }; }), { max: 40 });
+    tabla("t-h3", ["Tipo de hogar", "% de inquilinos", "Ingreso mediano", "Con aportes", "% elegible", "IC 95%"], t.map(function (r) { return [r.tipo_hogar, P(r.pct_de_inquilinos), MON(r.ingreso_mediano), P(r.pct_ingreso_demostrable, 0), P(r.pct_elegible), DEC(r.ic95_inf) + "–" + DEC(r.ic95_sup)]; }), [1, 2, 3, 4, 5]);
+    var o7 = ["Sin trabajo en el hogar", "1 persona con 1 trabajo", "1 persona con 2 o más trabajos", "2 o más personas trabajando"];
+    var t7 = o7.map(function (o) { return D.h7.filter(function (r) { return r.grupo === o; })[0]; });
+    barras("g-h7", t7.map(function (r) { return { etiqueta: r.grupo, detalle: P(r.pct_de_inquilinos, 0) + " de los inquilinos", valor: r.pct_elegible, texto: P(r.pct_elegible) + " elegible" }; }), { max: 40 });
+    tabla("t-h7", ["Trabajos en el hogar", "% de inquilinos", "% elegible", "IC 95%"], t7.map(function (r) { return [r.grupo, P(r.pct_de_inquilinos), P(r.pct_elegible), DEC(r.ic95_inf) + "–" + DEC(r.ic95_sup)]; }), [1, 2, 3]);
+    $("h7-texto").textContent = "Lo que marca la diferencia es que trabajen dos personas. Una persona con dos empleos suele poder pagar, pero el segundo empleo casi nunca tiene recibo: son ingresos que el banco no ve.";
+    var ind = D.independientes;
+    $("independientes").innerHTML = [
+      { v: C(ind.inquilinos_con_independiente_registrado), l: "hogares inquilinos con jefe/a o cónyuge independiente con aportes" },
+      { v: C(ind.de_ellos_pasan_cuota_y_anticipo), l: "sin asalariado con aportes en la pareja, pagan la cuota y juntan el anticipo" },
+      { v: "+" + C(K.propuesto_indep - K.propuesto), l: "hogares que suma una línea para independientes sobre el producto propuesto" }
+    ].map(function (k) { return '<div class="card kpi"><div class="v">' + k.v + '</div><div class="l">' + esc(k.l) + "</div></div>"; }).join("");
+  }
+
+  // --- 6 · Riesgo ---------------------------------------------------------------------------------
+  function riesgo() {
+    var c = colores(), s18 = D.stress["2018-05-01"], s23 = D.stress["2023-09-01"];
+    var n = Math.max(s18.length, s23.length), pts = function (s) { var a = []; for (var i = 0; i < n; i++) a.push([i, s[i] ? 100 * s[i][1] : null]); return a; };
+    var s24 = D.stress_resumen.filter(function (r) { return r.horizonte_meses === 24; })[0];
+    $("stress-sub").textContent = "El " + P(s24.pct_ventanas_sobre_30, 0) + " de los períodos de 24 meses desde 2016 terminó por encima del 30%";
+    var series = [
+      { nombre: "Crédito tomado en may-2018", color: c.orange, puntos: pts(s18), etiquetaFin: P(100 * s18[s18.length - 1][1]) },
+      { nombre: "Crédito tomado en sep-2023", color: c.blue, puntos: pts(s23), etiquetaFin: P(100 * s23[s23.length - 1][1]) }
+    ];
+    leyenda("l-stress", series);
+    var ticks = []; for (var i = 0; i < n; i += 6) ticks.push([i, i + " m"]);
+    lineas("g-stress", series, { yMin: 22, yMax: 36, yTicks: [24, 28, 32, 36], yFmt: function (v) { return v + "%"; }, yFmtTt: function (v) { return P(v); }, xTicks: ticks, xFmt: function (x) { return "Mes " + x; }, refs: [{ v: 25, t: "25% al otorgar", abajo: true }, { v: 30, t: "30% del ingreso", abajo: true }], aria: "Cuota sobre ingreso en dos episodios" });
+    tabla("t-stress", ["Meses", "Crédito may-2018", "Crédito sep-2023"], s23.map(function (p, i) { return [p[0], s18[i] ? P(100 * s18[i][1]) : "", P(100 * p[1])]; }), [0, 1, 2]);
+    var modo = "En pesos";
+    segmentos("lentes", ["En pesos", "En dólares", "Poder de compra"], modo, function (m) { modo = m; lente(m); });
+    lente(modo);
+  }
+  function lente(modo) {
+    var c = colores(), tl = D.sueldo_tres_lentes, fechas = tl.map(function (r) { return r.mes; }), ult = tl[tl.length - 1];
+    var xt = ticksAnuales(fechas, 2);
+    if (modo === "En pesos") {
+      var series = [
+        { nombre: "Precios (IPC)", color: c.orange, puntos: tl.map(function (r) { return [r.mes, r.indice_ipc]; }) },
+        { nombre: "UVA", color: c.aqua, puntos: tl.map(function (r) { return [r.mes, r.indice_uva]; }) },
+        { nombre: "Sueldo", color: c.blue, puntos: tl.map(function (r) { return [r.mes, r.indice_sueldo]; }), etiquetaFin: "×" + DEC(ult.indice_sueldo / 100, 0) }
+      ];
+      leyenda("l-lentes", series);
+      lineas("g-lentes", series, { log: true, yMin: 90, yMax: 20000, yTicks: [100, 1000, 10000], yFmt: function (v) { return C(v); }, yFmtTt: function (v) { return DEC(v, 0); }, xTicks: xt, xFmt: mes, aria: "Índices de sueldo, IPC y UVA" });
+      $("lentes-texto").textContent = "Índice abril 2016 = 100, escala logarítmica. El sueldo se multiplicó por " + DEC(ult.indice_sueldo / 100, 0) + " y los precios por " + DEC(ult.indice_ipc / 100, 0) + ".";
+    } else if (modo === "En dólares") {
+      var s = [{ nombre: "Sueldo en USD (Banco Nación vendedor)", color: c.blue, puntos: tl.map(function (r) { return [r.mes, r.usd_bna]; }), etiquetaFin: MON(ult.usd_bna, "USD", true) }];
+      leyenda("l-lentes", s);
+      lineas("g-lentes", s, { yMin: 0, yMax: 1400, yTicks: [0, 400, 800, 1200], yFmt: function (v) { return MON(v, "USD", true); }, xTicks: xt, xFmt: mes, margenIzq: 70, aria: "Sueldo en dólares" });
+      $("lentes-texto").textContent = "En dólares volvió cerca del nivel de 2017: " + MON(ult.usd_bna, "USD", true) + " en " + mes(ult.mes) + ".";
+    } else {
+      var s2 = [{ nombre: "Sueldo en pesos de agosto de 2026", color: c.blue, puntos: tl.map(function (r) { return [r.mes, r.real_ago26]; }), etiquetaFin: MON(ult.real_ago26) }];
+      leyenda("l-lentes", s2);
+      lineas("g-lentes", s2, { yMin: 0, yMax: 2500000, yTicks: [0, 1000000, 2000000], yFmt: function (v) { return v ? MON(v) : "$ 0"; }, xTicks: xt, xFmt: mes, margenIzq: 92, margenDer: 104, aria: "Sueldo real" });
+      $("lentes-texto").textContent = "En poder de compra todavía está por debajo de 2017: " + MON(ult.real_ago26) + " en " + mes(ult.mes) + ".";
+    }
+  }
+
+  // --- 7 · Contexto --------------------------------------------------------------------------------
+  function contexto() {
+    var c = colores(), mc = D.mercado_credito, fechas = mc.map(function (r) { return r.mes; });
+    var bajo = mc.filter(function (r) { return r.bajo_volumen; }), banda = bajo.length ? [[bajo[0].mes, bajo[bajo.length - 1].mes]] : [];
+    var xt = ticksAnuales(fechas, 2);
+    lineas("g-stock", [{ nombre: "Stock real (billones)", color: c.blue, puntos: mc.map(function (r) { return [r.mes, r.stock]; }) }],
+      { yMin: 0, yMax: 16, yTicks: [0, 5, 10, 15], yFmt: function (v) { return DEC(v, 0); }, yFmtTt: function (v) { return DEC(v, 1) + " billones"; }, xTicks: xt, xFmt: mes, bandas: banda, aria: "Stock real de hipotecarios" });
+    lineas("g-tasa", [{ nombre: "Tasa UVA", color: c.blue, puntos: mc.map(function (r) { return [r.mes, r.tasa]; }) }],
+      { yMin: 0, yMax: 10, yTicks: [0, 2, 4, 6, 8, 10], yFmt: function (v) { return v + "%"; }, yFmtTt: function (v) { return P(v, 2); }, xTicks: xt, xFmt: mes, bandas: banda, aria: "Tasa hipotecaria UVA" });
+  }
+
+  // --- 8 · Recomendación y método ----------------------------------------------------------------------
+  function recomendacion() {
+    $("recomendacion-texto").innerHTML = "<b>Recomiendo un hipotecario UVA a 30 años, con 80% financiado y cuota de hasta 25% del ingreso, enfocado en hogares con dos ingresos, más una línea separada para monotributistas y autónomos con aportes,</b> porque es lo que más hogares suma sin subir el tope de cuota (de " + C(K.elegibles_base) + " a " + C(K.propuesto) + ", y a " + C(K.propuesto_indep) + " con independientes) y ataca el freno real: el efectivo inicial.";
+    var fgs = D.fgs;
+    $("acciones").innerHTML = [
+      { t: "Producto y foco", d: "30 años / 80% / cuota 25%. Sumar siempre el ingreso de la pareja: es lo que más diferencia hace." },
+      { t: "Independientes y ahorro", d: "Validar ingresos con facturación o aportes de 12 a 24 meses. Ahorro programado en UVA para quienes tienen recibo pero no el efectivo." },
+      { t: "Riesgo y fondeo", d: "Mantener el 25% y ofrecer extender el plazo si la cuota supera el 30% del sueldo. El programa alcanza para ~" + C(fgs.creditos) + " créditos: hay margen para seleccionar." }
+    ].map(function (a) { return '<div class="card"><h3>' + esc(a.t) + '</h3><p style="margin:4px 0 0;font-size:14px;color:var(--ink-2)">' + esc(a.d) + "</p></div>"; }).join("");
+    var r = D.robustez, c = colores();
+    barras("g-robustez", [
+      { etiqueta: "Base (reponderación del INDEC)", valor: r.base[0], texto: P(r.base[0]) + " (IC " + DEC(r.base[1]) + "–" + DEC(r.base[2]) + ")", color: c.gray },
+      { etiqueta: "Imputación de ingresos no declarados", valor: r.imputacion[0], texto: P(r.imputacion[0]) + " (IC " + DEC(r.imputacion[1]) + "–" + DEC(r.imputacion[2]) + ")" },
+      { etiqueta: "Sueldos corregidos por SIPA (mediana)", valor: r.sipa_mediana, texto: P(r.sipa_mediana) },
+      { etiqueta: "Sueldos corregidos por SIPA (promedio)", valor: r.sipa_promedio, texto: P(r.sipa_promedio) }
+    ], { max: 22 });
+    $("links").innerHTML = (T.links || []).map(function (l) { return '<a href="' + esc(l.url) + '"' + (l.externo ? ' target="_blank" rel="noopener noreferrer"' : "") + ">" + esc(l.texto) + "</a>"; }).join("");
+    $("pie").textContent = T.autor + " · Datos al " + T.fecha_corte + ". Ejercicio de portfolio con datos públicos; no es asesoramiento financiero.";
+  }
+
+  // --- Tema y render ------------------------------------------------------------------------------
+  function todo() {
+    encabezado(); embudo(); zonasIC(); simular(); calor(); quePasaSi(); quienes(); riesgo(); contexto(); recomendacion();
+    $("tema").textContent = document.documentElement.classList.contains("dark") ? "Tema claro" : "Tema oscuro";
+  }
+  $("tema").addEventListener("click", function () {
+    var oscuro = !document.documentElement.classList.contains("dark");
+    document.documentElement.classList.remove("light", "dark"); document.documentElement.classList.add(oscuro ? "dark" : "light");
+    try { localStorage.setItem("theme", oscuro ? "dark" : "light"); } catch (e) {}
+    todo();
+  });
+  segmentos("embudo-zonas", ["Total", "CABA", "Partidos del GBA", "GBA Norte", "GBA Oeste", "GBA Sur", "Gran Córdoba"], zonaEmbudo, function (z) { zonaEmbudo = z; embudo(); });
+  segmentos("calor-modo", ["Por zona", "Por integrantes"], modoCalor, function (m) { modoCalor = m; calor(); });
+  armarControles();
+  todo();
+})();
+</script>
+</body>
+</html>

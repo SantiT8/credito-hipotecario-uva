@@ -1,0 +1,70 @@
+{
+  "metodo": "PMM, m=10, k=5 donantes; reglas de Rubin",
+  "inquilinos_sin_ingreso_declarado_obs": 678,
+  "inquilinos_sin_ingreso_declarado_hogares": 348545.0,
+  "pct_inquilinos_sin_ingreso_declarado": 28.00028840188602,
+  "pct_elegible_imputacion": {
+    "estimacion": 11.134828516165387,
+    "ic95_inf": 9.652900155911508,
+    "ic95_sup": 12.616756876419265,
+    "varianza_dentro": 0.49395162739284687,
+    "varianza_entre": 0.07064932535979034,
+    "fraccion_info_faltante": 0.1359434940857698
+  },
+  "hogares_elegibles_imputacion": 138605.31539758897,
+  "hogares_elegibles_imputacion_min": 133581.91422179725,
+  "hogares_elegibles_imputacion_max": 143156.11592228714,
+  "pct_elegible_por_mercado_imputacion": {
+    "CABA": 9.405462186088485,
+    "Gran Córdoba": 15.19847067621158,
+    "Partidos del GBA": 11.155215171360894
+  },
+  "validacion": {
+    "repeticiones": 5,
+    "pct_elegible_real_promedio": 11.262364895370272,
+    "pct_elegible_imputado_promedio": 11.090029723905939,
+    "error_absoluto_medio_pp": 1.7412790876065032,
+    "detalle": [
+      {
+        "repeticion": 1,
+        "hogares_ocultos": 608,
+        "pct_elegible_real": 10.027778073422748,
+        "pct_elegible_imputado": 12.545888987643815,
+        "mediana_ingreso_real": 1948334.1463985874,
+        "mediana_ingreso_imputado": 1941481.8178893742
+      },
+      {
+        "repeticion": 2,
+        "hogares_ocultos": 608,
+        "pct_elegible_real": 12.501954580768434,
+        "pct_elegible_imputado": 9.133905792773346,
+        "mediana_ingreso_real": 1972575.9673826115,
+        "mediana_ingreso_imputado": 1971915.8459870615
+      },
+      {
+        "repeticion": 3,
+        "hogares_ocultos": 608,
+        "pct_elegible_real": 9.78811097760155,
+        "pct_elegible_imputado": 9.643903226474452,
+        "mediana_ingreso_real": 1997237.5229750476,
+        "mediana_ingreso_imputado": 1836514.7259954384
+      },
+      {
+        "repeticion": 4,
+        "hogares_ocultos": 608,
+        "pct_elegible_real": 11.232494903143172,
+        "pct_elegible_imputado": 12.636743779277527,
+        "mediana_ingreso_real": 1989985.4197354177,
+        "mediana_ingreso_imputado": 1891030.2009162758
+      },
+      {
+        "repeticion": 5,
+        "hogares_ocultos": 608,
+        "pct_elegible_real": 12.761485941915462,
+        "pct_elegible_imputado": 11.489706833360554,
+        "mediana_ingreso_real": 2107155.6036532773,
+        "mediana_ingreso_imputado": 1958248.5897346574
+      }
+    ]
+  }
+}

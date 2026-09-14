@@ -1,0 +1,89 @@
+# ¿Quién puede pagar hoy un crédito hipotecario UVA?
+
+Caso de análisis de datos de punta a punta: cuántos hogares inquilinos de **CABA, Partidos del GBA y Gran Córdoba** podrían tomar hoy un crédito hipotecario UVA, qué los frena y qué producto amplía el mercado sin aumentar el riesgo de cuota. Planteado para un banco ficticio (Banco [EMPRESA]) que relanza su línea hipotecaria con fondeo oficial.
+
+**Autor:** {{ autor }} · **Datos al:** {{ fecha_corte }} · **Stack:** SQL (DuckDB), Python (pandas, statsmodels, scikit-learn), Jupyter, HTML/JS
+
+| Material | Para qué sirve |
+|---|---|
+| [Dashboard interactivo](https://santiagotrotta.netlify.app/casos/credito-hipotecario-uva/) · [versión local](dashboard/index.html) | Recorrido del caso y simulador de condiciones del crédito |
+| [Presentación (PDF)](deck/presentacion.pdf) · [PPTX](deck/presentacion.pptx) | El relato en 16 diapositivas |
+| [Resumen en simple (PDF)](reports/resumen_en_simple.pdf) | Resultados sin tecnicismos |
+| [Documento metodológico (PDF)](reports/documento_metodologico.pdf) | Fuentes, limpieza, supuestos, resultados, límites y referencias |
+| [Recomendación](reports/03_recomendacion.md) · [Hallazgos](reports/02_insights.md) | La decisión y la evidencia |
+
+---
+
+## El resultado en 30 segundos
+
+- De **{{ r.inquilinos }}** de hogares que alquilan, **{{ r.elegibles }} ({{ r.elegibles_pct }}, 1 de cada {{ r.uno_de_cada }})** podrían tomar hoy un hipotecario UVA con las condiciones típicas. IC 95%: {{ r.ic_inf }}–{{ r.ic_sup }}.
+- **Lo que frena es el efectivo inicial:** la vivienda de referencia cuesta {{ r.mediana_precio_ing }} ingresos mensuales del hogar típico y el anticipo permite hasta {{ r.tope_anticipo }}. Bajar la tasa, sola, no suma hogares.
+- **Recomendación:** crédito a 30 años, 80% financiado y cuota hasta 25% del ingreso → **{{ r.prop }} hogares ({{ r.prop_delta }})**; con una línea para monotributistas y autónomos con aportes → **{{ r.prop_indep }}**.
+- **Riesgo:** si la UVA le gana a los sueldos, la cuota puede pasar del 25% al {{ r.stress24 }} del ingreso en dos años. Por eso no conviene subir el tope de cuota.
+- **Robustez:** con otros supuestos (imputación de ingresos no declarados, corrección por subdeclaración con el SIPA) la respuesta va de {{ r.nr.pct }} a {{ r.sub.promedio }}.
+
+![Embudo de elegibilidad](reports/figures/03_embudo_elegibilidad.png)
+
+## Cómo se hizo
+
+```
+Fuentes públicas ──► Carga cruda ──► Perfilado ──► Limpieza ──► Validación ──► Motor de elegibilidad ──► Análisis, dashboard, documentos y presentación
+ (download.py)     (01_staging)   (02_profiling)  (03_clean)   (INDEC, Censo)  (affordability.py)        (export_results.py, build_*.py)
+```
+
+1. **Datos:** microdatos de la EPH (INDEC, 4 trimestres), Censo 2022, API del BCRA, series de datos.gob.ar, avisos del GCBA y Zonaprop Index. Cada archivo queda registrado con su huella digital.
+2. **Limpieza en SQL** con reglas escritas y conteos: pool de trimestres con ponderadores, no respuesta de ingresos, inflación, 20 años de avisos con 5 formatos, unidades mal rotuladas en el BCRA.
+3. **Validación:** las cifras oficiales del INDEC (población, mediana y media del ingreso, Gini) se reproducen exactamente; la comparación con el Censo 2022 da un rango ajustado para las cantidades.
+4. **Análisis:** embudo de elegibilidad por hogar, intervalos por bootstrap de conglomerados, tests ajustados por efecto de diseño, regresión logística fraccional, escenarios "¿qué pasa si…?", stress test UVA-salarios, segmentación, imputación múltiple y corrección por subdeclaración.
+5. **Productos:** un único motor de cálculo alimenta el análisis, el dashboard (réplica en JavaScript con test de paridad), los documentos y la presentación. Ninguna cifra se escribe a mano.
+
+### Participación humana y herramientas
+
+El trabajo avanzó en cuatro puntos de control en los que el autor revisó resultados, cuestionó cifras y decidió cómo seguir. La IA generativa y la automatización se usaron como herramientas para buscar documentación, programar y redactar borradores. El flujo completo, etapa por etapa, está en la sección 11 del [documento metodológico](reports/documento_metodologico.pdf).
+
+| Qué decidió el autor | Qué se hizo con herramientas | Cómo se verificó |
+|---|---|---|
+| Tema y pregunta disparadora; fuentes; hipótesis y escenario base; alcance (se quitó Gran Rosario y se abrió el GBA por corredor); métodos y controles de robustez; recomendación y mensaje | Búsqueda de documentación, código de descarga, limpieza y análisis, gráficos y borradores de documentos, dashboard y presentación | Cifras del INDEC reproducidas, Censo 2022, imputación y subdeclaración, test de paridad del simulador, auditoría de publicación |
+
+## Estructura
+
+```
+src/          descarga, motor de elegibilidad, análisis, exportación y generación de documentos
+sql/          staging, perfilado, limpieza y marts (DuckDB)
+notebooks/    01 exploración · 02 limpieza y calidad · 03 hipótesis · 04 modelo y escenarios · 05 independientes
+data/         reference/ (precios y partidos) · processed/ (resultados, evidencia y Censo procesado)
+reports/      hallazgos, recomendación, documentos PDF/HTML y figuras
+dashboard/    dashboard autocontenido y motor de cálculo en JavaScript
+deck/         presentación y carrusel (PPTX y PDF)
+tools/        construcción de notebooks, test de paridad, portada y auditoría de publicación
+```
+
+## Reproducir
+
+```bash
+python -m venv .venv && .venv/Scripts/activate      # Windows (en Linux/macOS: source .venv/bin/activate)
+pip install -r requirements.txt
+python tools/correr_todo.py --descargar             # descarga, limpieza, análisis, notebooks, documentos, dashboard y presentación
+```
+
+El script corre, en orden: `src/download.py`, los notebooks 01-02 (SQL), `src/export_results.py`, los notebooks 03-05, `src/build_docs.py`, `src/build_deck.py`, `src/build_dashboard.py`, el test de paridad (requiere Node.js) y la verificación de consistencia de cifras.
+
+La exportación a PDF usa Microsoft Edge (documentos) y LibreOffice (presentación).
+
+## Fuentes de datos
+
+- **INDEC:** Encuesta Permanente de Hogares, bases usuarias 2T-2025 a 1T-2026; Censo 2022, hogares por régimen de tenencia.
+- **BCRA:** API de Estadísticas v4.0 (UVA, tasas, stock y destino del crédito hipotecario, inflación, tipo de cambio).
+- **datos.gob.ar:** Índice de Salarios, RIPTE, remuneraciones del SIPA, dólar Banco Nación.
+- **GCBA:** Departamentos en venta 2001-2020.
+- **Zonaprop Index:** reportes CABA y GBA (julio 2026) y Córdoba (marzo 2026).
+
+## Límites
+
+La EPH no mide ahorros, deudas ni historial crediticio (el anticipo es un supuesto); los precios son de publicación; en el GBA se asume la misma distribución de ingresos en todos los partidos; la encuesta capta algo menos de inquilinos que el Censo (cantidades reales entre {{ r.rango_censo }}). Es un ejercicio de dimensionamiento, no un scoring individual.
+
+## Aviso y licencia
+
+Ejercicio analítico independiente con datos públicos, para portfolio profesional. Banco [EMPRESA] es ficticio y los hogares con nombre son ilustrativos. No es asesoramiento financiero.
+
+Código bajo licencia [MIT](LICENSE). Documentos, gráficos, dashboard y presentación bajo [CC BY 4.0](LICENSE-DOCS.md).

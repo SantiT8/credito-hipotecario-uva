@@ -1,0 +1,299 @@
+{
+  "fecha_corte": "2026-09-13",
+  "files": [
+    {
+      "path": "bcra/bcra_1113_hipotecarios_construccion.csv",
+      "url": "https://api.bcra.gob.ar/estadisticas/v4.0/monetarias/1113",
+      "bytes": 16041,
+      "sha256": "1ecf807fca9cc61cacd6f0df45dbd4d00a0efe9c447f6cee9f00a79ebe43fbf8",
+      "downloaded_at": "2026-09-13T23:05:00+00:00"
+    },
+    {
+      "path": "bcra/bcra_1114_hipotecarios_refaccion.csv",
+      "url": "https://api.bcra.gob.ar/estadisticas/v4.0/monetarias/1114",
+      "bytes": 14832,
+      "sha256": "fd22d377e456470f1b6157d968ab7cf0504c330c1dda6857f2326f8a1492cd78",
+      "downloaded_at": "2026-09-13T23:05:00+00:00"
+    },
+    {
+      "path": "bcra/bcra_1115_hipotecarios_compra_nueva.csv",
+      "url": "https://api.bcra.gob.ar/estadisticas/v4.0/monetarias/1115",
+      "bytes": 16101,
+      "sha256": "25ab607398eeee647c604465192a6d31582eea76b44418044f3e33b568005de3",
+      "downloaded_at": "2026-09-13T23:05:01+00:00"
+    },
+    {
+      "path": "bcra/bcra_1116_hipotecarios_compra_usada.csv",
+      "url": "https://api.bcra.gob.ar/estadisticas/v4.0/monetarias/1116",
+      "bytes": 16104,
+      "sha256": "4305be4ddea6203d6216336f0325fce48c6ac27c7c2a862457c00d5ccd209b77",
+      "downloaded_at": "2026-09-13T23:05:01+00:00"
+    },
+    {
+      "path": "bcra/bcra_1117_hipotecarios_otros_destinos.csv",
+      "url": "https://api.bcra.gob.ar/estadisticas/v4.0/monetarias/1117",
+      "bytes": 16824,
+      "sha256": "e3734cd80a19733e7d30bf180e0f9d1f5527083281cc007399cafbd8ac4611f7",
+      "downloaded_at": "2026-09-13T23:05:01+00:00"
+    },
+    {
+      "path": "bcra/bcra_1217_tasa_hipotecaria_fija.csv",
+      "url": "https://api.bcra.gob.ar/estadisticas/v4.0/monetarias/1217",
+      "bytes": 14407,
+      "sha256": "b59a3e219ce99baaf3bbd6a4979c2411cbde27ce88f5ba003c24afc1ca947a40",
+      "downloaded_at": "2026-09-13T23:04:56+00:00"
+    },
+    {
+      "path": "bcra/bcra_1240_tasa_hipotecaria_uva.csv",
+      "url": "https://api.bcra.gob.ar/estadisticas/v4.0/monetarias/1240",
+      "bytes": 5347,
+      "sha256": "0cacb86d25560c88ca97e4414bb264985b3392f8542ac173d17a599162baf16b",
+      "downloaded_at": "2026-09-13T23:04:55+00:00"
+    },
+    {
+      "path": "bcra/bcra_27_inflacion_mensual.csv",
+      "url": "https://api.bcra.gob.ar/estadisticas/v4.0/monetarias/27",
+      "bytes": 11897,
+      "sha256": "bc2dce1db854b3383c7d0fa4045b413c9b933b3805b1aace41eb69ba2036c202",
+      "downloaded_at": "2026-09-13T23:04:56+00:00"
+    },
+    {
+      "path": "bcra/bcra_28_inflacion_interanual.csv",
+      "url": "https://api.bcra.gob.ar/estadisticas/v4.0/monetarias/28",
+      "bytes": 13087,
+      "sha256": "8372927dec61edcf69973e98c6a5cb5addad1ec69b942b68bc49b24f7d567865",
+      "downloaded_at": "2026-09-13T23:04:57+00:00"
+    },
+    {
+      "path": "bcra/bcra_31_uva.csv",
+      "url": "https://api.bcra.gob.ar/estadisticas/v4.0/monetarias/31",
+      "bytes": 97641,
+      "sha256": "886ae7b9b2d061401d466ac1b6edbd6f51cea7bcb8a9b4cf79365cc570437cb3",
+      "downloaded_at": "2026-09-13T23:04:55+00:00"
+    },
+    {
+      "path": "bcra/bcra_4_tipo_cambio_minorista.csv",
+      "url": "https://api.bcra.gob.ar/estadisticas/v4.0/monetarias/4",
+      "bytes": 166452,
+      "sha256": "0ba21a4852cc28d96ace9318fe63c0a542307656c6aaa087c4d70d33af88e043",
+      "downloaded_at": "2026-09-13T23:04:58+00:00"
+    },
+    {
+      "path": "bcra/bcra_5_tipo_cambio_mayorista.csv",
+      "url": "https://api.bcra.gob.ar/estadisticas/v4.0/monetarias/5",
+      "bytes": 260570,
+      "sha256": "02f18c56c8c57e5a1527699851c8eb6431c4d734cbc6768d851ed828dcd9cd3f",
+      "downloaded_at": "2026-09-13T23:04:59+00:00"
+    },
+    {
+      "path": "bcra/bcra_916_stock_hipotecarios_personas_humanas.csv",
+      "url": "https://api.bcra.gob.ar/estadisticas/v4.0/monetarias/916",
+      "bytes": 19173,
+      "sha256": "d29470a6bad7df83c2a7cd2c8f05aef898c68894fba4ce4d98046e3fdb7fc195",
+      "downloaded_at": "2026-09-13T23:04:56+00:00"
+    },
+    {
+      "path": "eph/EPH_registro_1T2026.pdf",
+      "url": "https://www.indec.gob.ar/ftp/cuadros/menusuperior/eph/EPH_registro_1T2026.pdf",
+      "bytes": 863180,
+      "sha256": "37e02ea24a5c5a199a587828391ea7ab87d2feaf7c1d3b305f7cb8ba54b0fa01",
+      "downloaded_at": "2026-09-13T23:04:54+00:00"
+    },
+    {
+      "path": "eph/EPH_usu_1_Trim_2026_txt.zip",
+      "url": "https://www.indec.gob.ar/ftp/cuadros/menusuperior/eph/EPH_usu_1_Trim_2026_txt.zip",
+      "bytes": 3518544,
+      "sha256": "d9d23945d4b1d3de362e154015fd9abacc76ed641aec6f41a805b809780c0343",
+      "downloaded_at": "2026-09-13T23:04:53+00:00"
+    },
+    {
+      "path": "eph/EPH_usu_2_Trim_2025_txt.zip",
+      "url": "https://www.indec.gob.ar/ftp/cuadros/menusuperior/eph/EPH_usu_2_Trim_2025_txt.zip",
+      "bytes": 3462812,
+      "sha256": "c4f92368e2590daecd566368451a80a7935515b58059518a54152ea0897ed359",
+      "downloaded_at": "2026-09-13T23:04:52+00:00"
+    },
+    {
+      "path": "eph/EPH_usu_3_Trim_2025_txt.zip",
+      "url": "https://www.indec.gob.ar/ftp/cuadros/menusuperior/eph/EPH_usu_3_Trim_2025_txt.zip",
+      "bytes": 2940149,
+      "sha256": "02e16a62a8330fddd67bbdfb334d6638ae1ad02b6b4040851e1e5250246fa848",
+      "downloaded_at": "2026-09-13T23:04:52+00:00"
+    },
+    {
+      "path": "eph/EPH_usu_4_Trim_2025_txt.zip",
+      "url": "https://www.indec.gob.ar/ftp/cuadros/menusuperior/eph/EPH_usu_4_Trim_2025_txt.zip",
+      "bytes": 2894565,
+      "sha256": "7e523150c1da6bae28e35bfa9277d445208a6de73fc150c9f7d0d0b03c8a3473",
+      "downloaded_at": "2026-09-13T23:04:53+00:00"
+    },
+    {
+      "path": "gcba/Departamentos-en-venta-2017.zip",
+      "url": "https://cdn.buenosaires.gob.ar/datosabiertos/datasets/secretaria-de-desarrollo-urbano/departamentos-venta/Departamentos-en-venta-2017.zip",
+      "bytes": 2308535,
+      "sha256": "8c887d70a50f7038eacb21be0bba225c73611df0a849472f25969e9ca4b0ccf1",
+      "downloaded_at": "2026-09-13T07:42:12+00:00"
+    },
+    {
+      "path": "gcba/Departamentos-en-venta-2018.zip",
+      "url": "https://cdn.buenosaires.gob.ar/datosabiertos/datasets/secretaria-de-desarrollo-urbano/departamentos-venta/Departamentos-en-venta-2018.zip",
+      "bytes": 6927273,
+      "sha256": "ac86dc42477045d50e637daf6d0c386f3ce7ae018c4bcd297f4b1647ffc1ec95",
+      "downloaded_at": "2026-09-13T07:42:13+00:00"
+    },
+    {
+      "path": "gcba/Departamentos-en-venta-2019.zip",
+      "url": "https://cdn.buenosaires.gob.ar/datosabiertos/datasets/secretaria-de-desarrollo-urbano/departamentos-venta/Departamentos-en-venta-2019.zip",
+      "bytes": 6868916,
+      "sha256": "1a6d49786cee76f52d10e4918522bc96d61b401aaa11d2dfe3b290a00f36d386",
+      "downloaded_at": "2026-09-13T07:42:13+00:00"
+    },
+    {
+      "path": "gcba/departamentos-en-venta-2001.csv",
+      "url": "https://cdn.buenosaires.gob.ar/datosabiertos/datasets/departamentos-en-venta/departamentos-en-venta-2001.csv",
+      "bytes": 1301005,
+      "sha256": "b0f197f112cff80b7a6a6c09417df145f133ece06c4b9152ffdd75ce3433442d",
+      "downloaded_at": "2026-09-13T07:42:05+00:00"
+    },
+    {
+      "path": "gcba/departamentos-en-venta-2002.csv",
+      "url": "https://cdn.buenosaires.gob.ar/datosabiertos/datasets/departamentos-en-venta/departamentos-en-venta-2002.csv",
+      "bytes": 734285,
+      "sha256": "c67f4f8cbd83ec3eac3d9fe9cac8564077c1747a518ffacac56f614dbacd2ff0",
+      "downloaded_at": "2026-09-13T07:42:05+00:00"
+    },
+    {
+      "path": "gcba/departamentos-en-venta-2003.csv",
+      "url": "https://cdn.buenosaires.gob.ar/datosabiertos/datasets/departamentos-en-venta/departamentos-en-venta-2003.csv",
+      "bytes": 1332058,
+      "sha256": "ffc2261f0c66b6aec6618a6d9d3df54fe66d2bb8d36b2b06d7c24932e8d2cbc9",
+      "downloaded_at": "2026-09-13T07:42:06+00:00"
+    },
+    {
+      "path": "gcba/departamentos-en-venta-2004.csv",
+      "url": "https://cdn.buenosaires.gob.ar/datosabiertos/datasets/departamentos-en-venta/departamentos-en-venta-2004.csv",
+      "bytes": 486213,
+      "sha256": "70800290f8ad9a078c1e8366164a101438574a4ccec4f7e55dab6579d2395ef4",
+      "downloaded_at": "2026-09-13T07:42:06+00:00"
+    },
+    {
+      "path": "gcba/departamentos-en-venta-2005.csv",
+      "url": "https://cdn.buenosaires.gob.ar/datosabiertos/datasets/departamentos-en-venta/departamentos-en-venta-2005.csv",
+      "bytes": 368396,
+      "sha256": "8b9f9cc9975a10377166864d8580cb3db725327d6a4e26ed1dcb7666bb06c7da",
+      "downloaded_at": "2026-09-13T07:42:06+00:00"
+    },
+    {
+      "path": "gcba/departamentos-en-venta-2006.csv",
+      "url": "https://cdn.buenosaires.gob.ar/datosabiertos/datasets/departamentos-en-venta/departamentos-en-venta-2006.csv",
+      "bytes": 373632,
+      "sha256": "c6d2ae409824ac6c82a76578dbb5f0282c445530b552cdd0999cb836bbe7df62",
+      "downloaded_at": "2026-09-13T07:42:06+00:00"
+    },
+    {
+      "path": "gcba/departamentos-en-venta-2007.csv",
+      "url": "https://cdn.buenosaires.gob.ar/datosabiertos/datasets/departamentos-en-venta/departamentos-en-venta-2007.csv",
+      "bytes": 866047,
+      "sha256": "6f4a2b4adde277ffc00d290f8506c51ea3d7612e4eb73619cd0f7279567698a9",
+      "downloaded_at": "2026-09-13T07:42:07+00:00"
+    },
+    {
+      "path": "gcba/departamentos-en-venta-2008.csv",
+      "url": "https://cdn.buenosaires.gob.ar/datosabiertos/datasets/departamentos-en-venta/departamentos-en-venta-2008.csv",
+      "bytes": 819414,
+      "sha256": "527a28274b0682d19462da0190299d3170a060f87306f6b24fc1c3812f2cbdfa",
+      "downloaded_at": "2026-09-13T07:42:07+00:00"
+    },
+    {
+      "path": "gcba/departamentos-en-venta-2009.csv",
+      "url": "https://cdn.buenosaires.gob.ar/datosabiertos/datasets/departamentos-en-venta/departamentos-en-venta-2009.csv",
+      "bytes": 2588022,
+      "sha256": "fd7ad2f675f0fead7675a165ba58b83137621d66d5c6a9718661cc1649c97740",
+      "downloaded_at": "2026-09-13T07:42:08+00:00"
+    },
+    {
+      "path": "gcba/departamentos-en-venta-2010.csv",
+      "url": "https://cdn.buenosaires.gob.ar/datosabiertos/datasets/departamentos-en-venta/departamentos-en-venta-2010.csv",
+      "bytes": 2099798,
+      "sha256": "b378527a709300296db08cacfcf2a440d33a046d98c1b44e9f3b9b21deaf8272",
+      "downloaded_at": "2026-09-13T07:42:08+00:00"
+    },
+    {
+      "path": "gcba/departamentos-en-venta-2011.csv",
+      "url": "https://cdn.buenosaires.gob.ar/datosabiertos/datasets/departamentos-en-venta/departamentos-en-venta-2011.csv",
+      "bytes": 1772125,
+      "sha256": "0f5c46a6b6bf24f51ad5bd08a48d79fa44792320f2c0800a2a7959e3dff9deec",
+      "downloaded_at": "2026-09-13T07:42:09+00:00"
+    },
+    {
+      "path": "gcba/departamentos-en-venta-2012.csv",
+      "url": "https://cdn.buenosaires.gob.ar/datosabiertos/datasets/departamentos-en-venta/departamentos-en-venta-2012.csv",
+      "bytes": 958613,
+      "sha256": "e17b483e2b01ad6e36dad794ec7719e4cb54b55face4387389b8541f80b98182",
+      "downloaded_at": "2026-09-13T07:42:09+00:00"
+    },
+    {
+      "path": "gcba/departamentos-en-venta-2013.csv",
+      "url": "https://cdn.buenosaires.gob.ar/datosabiertos/datasets/departamentos-en-venta/departamentos-en-venta-2013.csv",
+      "bytes": 2002858,
+      "sha256": "77523200e60083cb020c116f94b41b9d517752f712c59d1497ed1d7d162a4316",
+      "downloaded_at": "2026-09-13T07:42:09+00:00"
+    },
+    {
+      "path": "gcba/departamentos-en-venta-2014.csv",
+      "url": "https://cdn.buenosaires.gob.ar/datosabiertos/datasets/departamentos-en-venta/departamentos-en-venta-2014.csv",
+      "bytes": 1435027,
+      "sha256": "95db69646e0d6c528819af92623395a44fdf21cce7624bbaaa8a0803616365fb",
+      "downloaded_at": "2026-09-13T07:42:10+00:00"
+    },
+    {
+      "path": "gcba/departamentos-en-venta-2015.csv",
+      "url": "https://cdn.buenosaires.gob.ar/datosabiertos/datasets/departamentos-en-venta/departamentos-en-venta-2015.csv",
+      "bytes": 2764361,
+      "sha256": "c025f8e140236c01c404e5c2d7054800d6c6df23852ee8032de63f53a5c0b404",
+      "downloaded_at": "2026-09-13T07:42:10+00:00"
+    },
+    {
+      "path": "gcba/departamentos-en-venta-2016.csv",
+      "url": "https://cdn.buenosaires.gob.ar/datosabiertos/datasets/departamentos-en-venta/departamentos-en-venta-2016.csv",
+      "bytes": 2328709,
+      "sha256": "624d1ea1218c24fda6f812acdb251c72f377cb710babb50c8cb2e1f33a148485",
+      "downloaded_at": "2026-09-13T07:42:10+00:00"
+    },
+    {
+      "path": "gcba/departamentos-en-venta-2020.csv",
+      "url": "https://cdn.buenosaires.gob.ar/datosabiertos/datasets/secretaria-de-desarrollo-urbano/departamentos-venta/departamentos-en-venta-2020.csv",
+      "bytes": 14388993,
+      "sha256": "44b87373b216236c2465202566512db44cc9789f92466a2fcdb3049de27d12cb",
+      "downloaded_at": "2026-09-13T07:42:15+00:00"
+    },
+    {
+      "path": "series/dolar_bna_vendedor_mensual.csv",
+      "url": "https://apis.datos.gob.ar/series/api/series/?ids=168.1_T_CAMBIOR_D_0_0_26&format=csv&limit=5000&collapse=month&collapse_aggregation=avg",
+      "bytes": 4237,
+      "sha256": "60eb6c63403bb4fa777389986a9dbac5c1a20c118c7af9adff06ca0ac1bea59f",
+      "downloaded_at": "2026-09-13T23:05:06+00:00"
+    },
+    {
+      "path": "series/indice_salarios.csv",
+      "url": "https://apis.datos.gob.ar/series/api/series/?ids=149.1_TL_INDIIOS_OCTU_0_21%2C149.1_TL_REGIADO_OCTU_0_16&format=csv&limit=5000",
+      "bytes": 3381,
+      "sha256": "20a47bcd0d925463758975b86f9eb7b206127e27a7dcf1fb2fca93752a6c6a76",
+      "downloaded_at": "2026-09-13T23:05:03+00:00"
+    },
+    {
+      "path": "series/ripte.csv",
+      "url": "https://apis.datos.gob.ar/series/api/series/?ids=158.1_REPTE_0_0_5&format=csv&limit=5000",
+      "bytes": 7800,
+      "sha256": "fa4fb5832b71ca8698bb1e9b582ed13ee53584f0431fa04abe463d96d50904f9",
+      "downloaded_at": "2026-09-13T23:05:03+00:00"
+    },
+    {
+      "path": "series/sipa_remuneraciones.csv",
+      "url": "https://apis.datos.gob.ar/series/api/series/?ids=153.1_RNERACIDIO_2009_M_21%2C153.1_RNERACIANA_2009_M_20&format=csv&limit=5000",
+      "bytes": 11715,
+      "sha256": "dea639de1b17e5e27e11eaef811af3c64ea5629a41c1a0076c5384548a089b88",
+      "downloaded_at": "2026-09-13T23:05:05+00:00"
+    }
+  ]
+}

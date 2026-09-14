@@ -1,0 +1,5 @@
+corredor,partidos,partidos_sin_precio_propio,hogares_inquilinos_censo,pct_de_inquilinos_gba,usd_m2_ponderado_inquilinos,usd_m2_min,usd_m2_max
+Norte,10,0.0,228046.0,32.2,2125.0,1065.0,3025.0
+Oeste,9,2.0,245761.0,34.7,1506.0,1215.0,2084.0
+Sur,12,3.0,233695.0,33.0,1733.0,1444.0,1984.0
+Total GBA,31,5.0,707502.0,100.0,1781.0,1065.0,3025.0

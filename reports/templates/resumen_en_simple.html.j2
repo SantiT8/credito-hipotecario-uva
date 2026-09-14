@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resumen en simple · Crédito hipotecario UVA</title>
+<meta name="author" content="{{ autor }}">
+{% include "_estilos.html.j2" %}
+<style>
+  .def { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0 20px; }
+  .def > div { border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; background: #fff; break-inside: avoid; }
+  .def h4 { margin: 0 0 4px; font-size: 15px; }
+  .def p { margin: 0 0 6px; font-size: 14px; }
+  .def .src { font-size: 12px; color: var(--muted); margin: 0; }
+  @media (max-width: 640px) { .def { grid-template-columns: 1fr; } }
+  .big { font-size: 19px; line-height: 1.45; }
+  ul.check, ul.alert { list-style: none; padding-left: 0; }
+  ul.check li, ul.alert li { padding-left: 28px; position: relative; margin-bottom: 9px; }
+  ul.check li::before { content: "✓"; position: absolute; left: 4px; top: 0; color: #006300; font-weight: 700; }
+  ul.alert li::before { content: "!"; position: absolute; left: 8px; top: 0; color: #a12b2b; font-weight: 800; }
+</style>
+</head>
+<body>
+<main class="page">
+
+<div class="kicker">Resumen en simple · fecha de corte {{ fecha_corte }}</div>
+<h1>¿Quién puede comprar su casa con un crédito hipotecario hoy?</h1>
+<div class="subtitle">Los resultados del estudio, sin tecnicismos. El detalle técnico, las fuentes y los límites están en el repositorio público del caso: github.com/SantiT8/credito-hipotecario-uva.</div>
+<div class="meta"><span><b>Autor:</b> {{ autor }}</span><span><b>Dónde:</b> CABA, Partidos del GBA y Gran Córdoba</span></div>
+
+<div class="box descargo"><b>Aviso:</b> es un ejercicio de análisis con datos públicos, hecho para un portfolio profesional. El banco del caso es ficticio y los hogares con nombre son ilustrativos. No es asesoramiento financiero ni sirve para saber si una persona concreta califica para un crédito.</div>
+
+<p class="big">La pregunta: <b>de los hogares que hoy alquilan, ¿cuántos podrían sacar un crédito hipotecario UVA para comprar su vivienda? ¿Qué los frena y qué se puede hacer?</b></p>
+
+<div class="historia">
+  <h3>Carla y Diego</h3>
+  <p>Tienen un hijo, alquilan en el oeste del conurbano y entre los dos ganan <b>{{ prot.ingreso }} por mes</b>, lo que gana una pareja con hijos inquilina típica. Un 3 ambientes de {{ prot.m2 }} m² cuesta unos <b>{{ prot.base.precio_usd }}</b>.</p>
+  <ul style="margin:0 0 8px;padding-left:18px">
+    <li><b>La cuota:</b> {{ prot.base.cuota }} por mes, el {{ prot.base.ratio }} de su ingreso. El banco acepta hasta el 25%.</li>
+    <li><b>El efectivo:</b> {{ prot.base.efectivo }} ({{ prot.base.efectivo_usd }}) entre anticipo y gastos. Ahorrando el 20% de lo que ganan, tardarían unos {{ prot.base.anios_ahorro }} años.</li>
+    <li><b>Con 30 años y 80% financiado:</b> la cuota baja al {{ prot.propuesto.ratio }} y el efectivo a {{ prot.propuesto.efectivo }}. Todavía no alcanza.</li>
+    <li><b>Si además buscan algo un 20% más barato</b> (más chico o usado): {{ "califican" if prot.propuesto_barata.pasa_cuota and prot.propuesto_barata.pasa_anticipo else "siguen sin calificar" }}.</li>
+  </ul>
+  <p style="margin:0">Hay cientos de miles de hogares como ellos. Este resumen cuenta cuántos, qué los frena y qué puede hacer un banco.</p>
+</div>
+
+<!-- ===================================================================== -->
+<h2>1. Qué contamos y de dónde sale cada número</h2>
+<div class="def">
+  <div><h4>Hogar</h4><p>Las personas que viven bajo el mismo techo y comparten los gastos de comida. Una pareja con hijos es un hogar; dos amigos que alquilan juntos, también.</p><p class="src">Encuesta Permanente de Hogares (EPH) del INDEC.</p></div>
+  <div><h4>Hogar inquilino</h4><p>El hogar que dijo en la encuesta que <b>alquila</b> la vivienda donde vive. No cuentan los dueños ni quienes viven en una casa prestada u ocupada.</p><p class="src">Pregunta "régimen de tenencia" de la EPH.</p></div>
+  <div><h4>La base: sobre qué total calculamos</h4><p>En los tres mercados hay <b>{{ r.hogares }} de hogares</b>: {{ r.propietarios }} son dueños, <b>{{ r.inquilinos }} alquilan</b> y {{ r.otra }} están en otra situación. <b>Todos los porcentajes son sobre los hogares que alquilan.</b></p><p class="src">Promedio de abril 2025 a marzo 2026, comparado con el Censo 2022.</p></div>
+  <div><h4>Ingreso del hogar</h4><p>Lo que cobran por mes <b>todos</b> los que viven ahí: sueldos, trabajos por cuenta propia, jubilaciones, planes o alquileres. Está llevado a pesos de agosto de 2026.</p><p class="src">Declarado por cada hogar en la EPH.</p></div>
+  <div><h4>¿De dónde salen los sueldos?</h4><p>(1) El <b>ingreso de cada hogar</b>, de la EPH. (2) <b>Cómo evolucionan los sueldos</b>, del Índice de Salarios del INDEC y del registro de aportes (SIPA). (3) El <b>sueldo formal promedio</b> para comparar con el pasado, del RIPTE.</p><p class="src">INDEC y datos.gob.ar.</p></div>
+  <div><h4>Precio de la vivienda</h4><p>El precio publicado del m² en cada zona: CABA {{ r.usd_m2['CABA'] }}, GBA Norte {{ r.usd_m2['Norte'] }}, Oeste {{ r.usd_m2['Oeste'] }}, Sur {{ r.usd_m2['Sur'] }} y Córdoba {{ r.usd_m2['Gran Córdoba'] }}. En el GBA se tienen en cuenta los 31 partidos.</p><p class="src">Zonaprop Index · Banco Central · Censo 2022.</p></div>
+  <div><h4>"Elegible" (puede sacar el crédito)</h4><p>Cumple las 4 condiciones típicas: (1) la <b>cuota</b> no supera el 25% del ingreso; (2) puede <b>juntar el anticipo y los gastos</b> con hasta 12 meses de ingreso; (3) él/ella o su pareja tiene <b>recibo de sueldo</b>; (4) termina de pagar <b>antes de los 85 años</b>.</p><p class="src">Condiciones de Banco Nación y del programa oficial de fondeo.</p></div>
+  <div><h4>Independientes</h4><p>Monotributistas y autónomos que hacen sus aportes. Hoy los bancos suelen pedir recibo de sueldo, así que se analizan <b>aparte</b>, para mostrar cuánto sumarían.</p><p class="src">EPH: preguntas sobre aportes.</p></div>
+</div>
+
+<!-- ===================================================================== -->
+<h2>2. Lo que encontramos</h2>
+<figure>
+<svg viewBox="0 0 820 250" role="img" aria-label="De todos los hogares a los elegibles">
+  {% set maxw = 480 %}
+  {% for paso in r.universo %}
+    {% set y = 12 + loop.index0 * 58 %}
+    {% set w = [maxw * paso.valor / r.universo[0].valor, 4]|max %}
+    <text x="0" y="{{ y + 17 }}" font-size="13" font-weight="600" fill="#0b0b0b">{{ paso.titulo }}</text>
+    <text x="0" y="{{ y + 35 }}" font-size="11.5" fill="#52514e">{{ paso.detalle }}</text>
+    <rect x="210" y="{{ y + 4 }}" width="{{ w }}" height="32" rx="4" fill="{{ paso.color }}"/>
+    <text x="{{ 210 + w + 8 }}" y="{{ y + 25 }}" font-size="13" font-weight="600" fill="#0b0b0b">{{ paso.etiqueta }}</text>
+  {% endfor %}
+</svg>
+<figcaption><b>De todos los hogares a los que pueden sacar el crédito.</b> Cada barra es proporcional a la cantidad de hogares.</figcaption>
+</figure>
+<div class="tiles">
+  <div class="tile"><div class="v">1 de cada {{ r.uno_de_cada }}</div><div class="l">hogares que alquilan podría sacar hoy un hipotecario UVA ({{ r.elegibles }})</div></div>
+  <div class="tile"><div class="v">{{ r.no_cuota }} de cada 10</div><div class="l">no llegan a pagar la cuota</div></div>
+  <div class="tile"><div class="v">{{ r.mediana_precio_ing }} meses</div><div class="l">de ingreso cuesta la vivienda del hogar típico; se puede financiar hasta unos {{ r.tope_anticipo }}</div></div>
+</div>
+
+<h3>El tamaño de la vivienda cambia todo</h3>
+<figure><img src="{{ figs['03_calor_m2_zona'] }}" alt="Porcentaje de elegibles por superficie y zona"><figcaption>Cada casillero muestra qué porcentaje de los hogares que alquilan podría sacar el crédito si buscara una vivienda de esa superficie. Con 45 m² califica el {{ r.calor['Total_45'] }}; con 75 m², el {{ r.calor['Total_75'] }}.</figcaption></figure>
+
+<h3>¿Un trabajo o dos?</h3>
+<ul>
+  <li>Donde <b>trabajan dos personas o más</b>, califica el <b>{{ r.trab['2 o más personas trabajando'].pct }}</b>. Con <b>una persona y un trabajo</b>, el <b>{{ r.trab['1 persona con 1 trabajo'].pct }}</b>.</li>
+  <li>Tener <b>dos empleos siendo una sola persona</b> ayuda a pagar, pero ese segundo empleo casi nunca tiene recibo y el banco no lo toma en cuenta.</li>
+  <li>Las <b>parejas sin hijos</b> califican más ({{ r.perfil['Pareja sin hijos|Todas'].pct }}); los hogares con <b>un solo adulto</b>, mucho menos ({{ r.perfil['Unipersonal|Todas'].pct }} unipersonales y {{ r.perfil['Monoparental|Todas'].pct }} monoparentales).</li>
+</ul>
+
+<!-- ===================================================================== -->
+<h2>3. Lo positivo</h2>
+<ul class="check">
+  <li><b>Hay clientes de sobra para el programa oficial.</b> Con el crédito propuesto hay {{ r.prop }} hogares que califican y el programa alcanza para unos {{ r.fgs_creditos }} créditos: <b>{{ r.fgs_veces }} veces más hogares listos</b> que créditos disponibles.</li>
+  <li><b>Un crédito mejor diseñado amplía el grupo.</b> A 30 años con 80% financiado, los elegibles pasan de {{ r.elegibles }} a <b>{{ r.prop }} ({{ r.prop_delta }})</b> sin permitir cuotas más pesadas.</li>
+  <li><b>Hay {{ r.ind.pagan }} hogares de independientes</b> que ya podrían pagar la cuota y el anticipo; solo les falta poder demostrar sus ingresos. Con ellos, el total llega a <b>{{ r.prop_indep }}</b>.</li>
+  <li><b>Hay {{ r.casi }} hogares a un paso:</b> su ingreso ya cubre al menos el 60% de lo necesario.</li>
+  <li><b>En el oeste del GBA y en Córdoba la vivienda es más alcanzable:</b> califica el {{ r.zonas['GBA Oeste'].pct }} y el {{ r.zonas['Gran Córdoba'].pct }} de los inquilinos.</li>
+  <li><b>El sueldo recuperó dólares:</b> el sueldo mediano formal equivale a {{ r.sueldo.usd }}, cerca de los {{ r.sueldo.usd17 }} de 2017 y lejos de los {{ r.sueldo.usd19 }} de 2019.</li>
+  <li><b>El crédito volvió:</b> desde mediados de 2024 el stock de hipotecarios creció fuerte, aunque todavía es el {{ r.stock_pct_pico }} del pico de 2018.</li>
+</ul>
+
+<h2>4. Lo que preocupa</h2>
+<ul class="alert">
+  <li><b>La gran mayoría no llega.</b> El problema de fondo es juntar el efectivo inicial, porque la vivienda cuesta muchos meses de ingreso.</li>
+  <li><b>Un solo sueldo casi no alcanza</b>, y más de un tercio de los hogares que alquilan vive de un solo trabajo.</li>
+  <li><b>Riesgo si la inflación le gana a los sueldos:</b> quien sacó un crédito en septiembre de 2023 pasó de destinar el 25% de su ingreso a la cuota a destinar el <b>{{ r.stress24 }}</b> dos años después.</li>
+  <li><b>En poder de compra, el sueldo todavía está debajo de 2017</b> ({{ r.sueldo.real }} contra {{ r.sueldo.real17 }}, en pesos de hoy).</li>
+  <li><b>Exigir recibo de sueldo deja afuera</b> a hogares que sí podrían pagar.</li>
+</ul>
+
+<!-- ===================================================================== -->
+<h2>5. ¿Qué pasa si…?</h2>
+<figure class="alta"><img src="{{ figs['04_que_pasa_si'] }}" alt="Hogares que se suman o se pierden con cada medida"><figcaption>Cuántos hogares se suman o se pierden con cada medida, frente a los {{ r.elegibles }} de hoy.</figcaption></figure>
+
+<h3>Qué proponemos</h3>
+<div class="table-wrap"><table>
+  <thead><tr><th>Propuesta</th><th>A quién ayuda</th><th class="num">Cuánto suma</th><th>Por qué</th></tr></thead>
+  <tbody>
+    <tr><td><b>1. Crédito a 30 años con 80% financiado</b>, sin subir la cuota máxima del 25%</td><td>Parejas y familias con dos sueldos</td><td class="num">{{ r.prop_delta }}<br>({{ r.prop }})</td><td>Pedir menos efectivo inicial es lo que destraba; el plazo largo evita que la cuota suba</td></tr>
+    <tr><td><b>2. Aceptar ingresos de independientes</b> con aportes (monotributo, autónomos)</td><td>Quienes pueden pagar sin recibo de sueldo</td><td class="num">{{ r.qps['¿Y si acepta monotributistas y autónomos con aportes?'].dif }} solo<br>{{ r.prop_indep_delta }} con la 1</td><td>Pueden pagar, pero hoy el banco no ve su ingreso</td></tr>
+    <tr><td><b>3. Sumar siempre los dos sueldos de la pareja</b></td><td>Hogares con dos personas que trabajan</td><td class="num">Condición clave</td><td>Es lo que más cambia la chance de calificar</td></tr>
+    <tr><td><b>4. Ahorro en UVA para el anticipo</b> ("primero ahorrás, después te prestamos")</td><td>Quienes tienen recibo pero no el efectivo</td><td class="num">{{ r.qps['¿Y si un plan de ahorro permite juntar 24 meses de ingreso?'].dif }}</td><td>Ataca directamente el freno principal</td></tr>
+    <tr><td><b>5. Proteger la cuota</b>: mantener el 25% y ofrecer extender el plazo si pasa el 30% del sueldo</td><td>Todos los deudores</td><td class="num">Menos riesgo</td><td>En 2023-25 la cuota llegó a un tercio del ingreso</td></tr>
+    <tr><td><b>6. Viviendas más accesibles</b>: usadas, más chicas o en zonas más baratas</td><td>Quienes están cerca de calificar</td><td class="num">{{ r.qps['¿Y si se compra una vivienda 20% más barata (usada o más chica)?'].dif }} si el precio baja 20%</td><td>El precio es la palanca más potente de todas</td></tr>
+  </tbody>
+</table></div>
+
+<!-- ===================================================================== -->
+<h2>6. Cómo se hizo</h2>
+<ul>
+  <li><b>Decisiones del autor en cada etapa:</b> el alcance (se quitó Gran Rosario por muestra chica y se abrió el GBA por zonas), las condiciones del crédito, qué hipótesis mantener y cómo mostrarlas, y qué controles agregar.</li>
+  <li><b>Controles:</b> las cifras oficiales del INDEC se reprodujeron exactamente; se comparó con el Censo 2022; se probaron otros supuestos (ingresos no declarados y subdeclarados) y la conclusión se mantuvo: la respuesta va de {{ r.nr.pct }} a {{ r.sub.promedio }}.</li>
+  <li><b>Automatización:</b> la descarga, la limpieza en SQL, los cálculos y los gráficos se programaron para poder repetirse desde cero y dar siempre los mismos números.</li>
+</ul>
+
+<h2>7. Límites, en una línea cada uno</h2>
+<ul>
+  <li>La encuesta <b>no pregunta ahorros ni deudas</b>: la capacidad de juntar el anticipo es un supuesto.</li>
+  <li>La encuesta capta <b>algo menos de inquilinos</b> que el Censo 2022: los elegibles reales estarían entre {{ r.rango_censo }}.</li>
+  <li>Los precios son los <b>publicados en avisos</b>: la venta final suele cerrarse más barata.</li>
+  <li>Son <b>estimaciones con margen de error</b>: los elegibles están entre {{ r.ic_inf }} y {{ r.ic_sup }} de los inquilinos.</li>
+  <li>Todo vale a la <b>fecha de corte ({{ fecha_corte }})</b>: tasas y precios cambian seguido.</li>
+</ul>
+
+<footer><b>Fuentes de datos:</b> INDEC (EPH 2T-2025 a 1T-2026, Censo 2022), Banco Central (UVA, tasas, crédito, dólar), datos.gob.ar (Índice de Salarios, RIPTE, SIPA, dólar Banco Nación), GCBA (avisos 2001-2020) y Zonaprop Index. Metodología, notas y referencias: <i>Documento metodológico</i>. {{ autor }} · {{ fecha_doc }}.</footer>
+</main>
+</body>
+</html>

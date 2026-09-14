@@ -1,0 +1,14 @@
+serie,id_variable,observaciones,desde,hasta,fechas_duplicadas,valores_no_numericos,fechas_futuras
+hipotecarios_compra_nueva,1115,318,2000-01-31,2026-06-30,0,0.0,0.0
+hipotecarios_compra_usada,1116,318,2000-01-31,2026-06-30,0,0.0,0.0
+hipotecarios_construccion,1113,318,2000-01-31,2026-06-30,0,0.0,0.0
+hipotecarios_otros_destinos,1117,318,2000-01-31,2026-06-30,0,0.0,0.0
+hipotecarios_refaccion,1114,318,2000-01-31,2026-06-30,0,0.0,0.0
+inflacion_interanual,28,320,2000-01-31,2026-08-31,0,0.0,0.0
+inflacion_mensual,27,320,2000-01-31,2026-08-31,0,0.0,0.0
+stock_hipotecarios_personas_humanas,916,318,2000-01-31,2026-06-30,0,0.0,0.0
+tasa_hipotecaria_fija,1217,320,2000-01-31,2026-08-31,0,0.0,0.0
+tasa_hipotecaria_uva,1240,124,2016-05-31,2026-08-31,0,0.0,0.0
+tipo_cambio_mayorista,5,6011,2002-03-04,2026-09-11,0,0.0,0.0
+tipo_cambio_minorista,4,3962,2010-06-01,2026-09-11,0,0.0,0.0
+uva,31,3819,2016-03-31,2026-09-13,0,0.0,0.0

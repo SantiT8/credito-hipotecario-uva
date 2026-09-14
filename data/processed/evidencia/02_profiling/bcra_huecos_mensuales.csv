@@ -1,0 +1,6 @@
+serie,desde,hasta,meses_con_dato,meses_esperados,meses_faltantes
+inflacion_interanual,2000-01-01,2026-08-01,320,320,0
+inflacion_mensual,2000-01-01,2026-08-01,320,320,0
+stock_hipotecarios_personas_humanas,2000-01-01,2026-06-01,318,318,0
+tasa_hipotecaria_fija,2000-01-01,2026-08-01,320,320,0
+tasa_hipotecaria_uva,2016-05-01,2026-08-01,124,124,0

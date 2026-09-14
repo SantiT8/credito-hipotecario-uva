@@ -1,0 +1,16 @@
+{
+  "inquilinos_eph": 1244790.75,
+  "hogares_eph_3_mercados": 6004001.5,
+  "pct_inquilinos_eph": 20.732685526477635,
+  "inquilinos_con_pct_censo_24p": 1416381.1214853178,
+  "inquilinos_con_pct_censo_31p": 1407878.6149800634,
+  "factor_ajuste_min": 1.0912846195234018,
+  "factor_ajuste_max": 1.1378467597749404,
+  "hogares_censo_24p": 5574450.0,
+  "hogares_censo_31p": 5934950.0,
+  "alquilados_censo_24p": 1358421.0,
+  "alquilados_censo_31p": 1415167.0,
+  "pct_propia_pais_censo": 65.66588431477133,
+  "pct_alquilada_pais_censo": 20.97597698060205,
+  "hogares_pais_censo": 15932302.0
+}

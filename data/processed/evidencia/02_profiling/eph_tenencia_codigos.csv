@@ -1,0 +1,11 @@
+codigo,descripcion,hogares
+0,⚠ código inválido/sin dato,33
+1,Propietario vivienda y terreno,40956
+2,Propietario solo vivienda,3274
+3,Inquilino,12114
+4,Ocupante por impuestos/expensas,1586
+5,Ocupante en relación de dependencia,134
+6,Ocupante gratuito,3876
+7,Ocupante de hecho,143
+8,En sucesión,780
+9,Otra situación,114

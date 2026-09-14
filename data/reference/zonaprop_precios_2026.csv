@@ -1,0 +1,32 @@
+nivel,mercado,corredor,nombre,usd_m2,periodo,fuente,url
+mercado,CABA,,CABA,2471,2026-07,Zonaprop Index CABA - Reporte julio 2026 (departamentos en venta),https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/08/INDEX_CABA_REPORTE_2026-07.pdf
+mercado,Gran Córdoba,,Córdoba,1474,2026-03,Zonaprop Index Córdoba - Reporte marzo 2026 (departamentos en venta),https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/04/INDEX_CBA_REPORTE_2026-03.pdf
+corredor,Partidos del GBA,Norte,GBA Norte,2410,2026-07,Zonaprop Index GBA - Reporte julio 2026,https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/08/INDEX_GBA_REPORTE_2026-07.pdf
+corredor,Partidos del GBA,Oeste,GBA Oeste,1575,2026-07,Zonaprop Index GBA - Reporte julio 2026,https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/08/INDEX_GBA_REPORTE_2026-07.pdf
+corredor,Partidos del GBA,Sur,GBA Sur,1669,2026-07,Zonaprop Index GBA - Reporte julio 2026 (incluye La Plata),https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/08/INDEX_GBA_REPORTE_2026-07.pdf
+municipio,Partidos del GBA,Norte,Vicente López,3025,2026-07,Zonaprop Index GBA - Precio según municipio de zona norte,https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/08/INDEX_GBA_REPORTE_2026-07.pdf
+municipio,Partidos del GBA,Norte,San Isidro,2780,2026-07,Zonaprop Index GBA - Precio según municipio de zona norte,https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/08/INDEX_GBA_REPORTE_2026-07.pdf
+municipio,Partidos del GBA,Norte,Tigre,2758,2026-07,Zonaprop Index GBA - Precio según municipio de zona norte,https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/08/INDEX_GBA_REPORTE_2026-07.pdf
+municipio,Partidos del GBA,Norte,San Fernando,2217,2026-07,Zonaprop Index GBA - Precio según municipio de zona norte,https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/08/INDEX_GBA_REPORTE_2026-07.pdf
+municipio,Partidos del GBA,Norte,Escobar,2044,2026-07,Zonaprop Index GBA - Precio según municipio de zona norte,https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/08/INDEX_GBA_REPORTE_2026-07.pdf
+municipio,Partidos del GBA,Norte,Pilar,1952,2026-07,Zonaprop Index GBA - Precio según municipio de zona norte,https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/08/INDEX_GBA_REPORTE_2026-07.pdf
+municipio,Partidos del GBA,Norte,General San Martín,1610,2026-07,Zonaprop Index GBA - Precio según municipio de zona norte,https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/08/INDEX_GBA_REPORTE_2026-07.pdf
+municipio,Partidos del GBA,Norte,San Miguel,1586,2026-07,Zonaprop Index GBA - Precio según municipio de zona norte,https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/08/INDEX_GBA_REPORTE_2026-07.pdf
+municipio,Partidos del GBA,Norte,Malvinas Argentinas,1483,2026-07,Zonaprop Index GBA - Precio según municipio de zona norte,https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/08/INDEX_GBA_REPORTE_2026-07.pdf
+municipio,Partidos del GBA,Norte,José C. Paz,1065,2026-07,Zonaprop Index GBA - Precio según municipio de zona norte,https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/08/INDEX_GBA_REPORTE_2026-07.pdf
+municipio,Partidos del GBA,Oeste,Ituzaingó,2084,2026-07,Zonaprop Index GBA - Precio según municipio de GBA oeste,https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/08/INDEX_GBA_REPORTE_2026-07.pdf
+municipio,Partidos del GBA,Oeste,Morón,1597,2026-07,Zonaprop Index GBA - Precio según municipio de GBA oeste,https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/08/INDEX_GBA_REPORTE_2026-07.pdf
+municipio,Partidos del GBA,Oeste,Merlo,1526,2026-07,Zonaprop Index GBA - Precio según municipio de GBA oeste,https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/08/INDEX_GBA_REPORTE_2026-07.pdf
+municipio,Partidos del GBA,Oeste,La Matanza,1514,2026-07,Zonaprop Index GBA - Precio según municipio de GBA oeste,https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/08/INDEX_GBA_REPORTE_2026-07.pdf
+municipio,Partidos del GBA,Oeste,Tres de Febrero,1505,2026-07,Zonaprop Index GBA - Precio según municipio de GBA oeste,https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/08/INDEX_GBA_REPORTE_2026-07.pdf
+municipio,Partidos del GBA,Oeste,Hurlingham,1287,2026-07,Zonaprop Index GBA - Precio según municipio de GBA oeste,https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/08/INDEX_GBA_REPORTE_2026-07.pdf
+municipio,Partidos del GBA,Oeste,Moreno,1215,2026-07,Zonaprop Index GBA - Precio según municipio de GBA oeste,https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/08/INDEX_GBA_REPORTE_2026-07.pdf
+municipio,Partidos del GBA,Sur,Ezeiza,1984,2026-07,Zonaprop Index GBA - Precio según municipio de GBA sur,https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/08/INDEX_GBA_REPORTE_2026-07.pdf
+municipio,Partidos del GBA,Sur,Lomas de Zamora,1939,2026-07,Zonaprop Index GBA - Precio según municipio de GBA sur,https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/08/INDEX_GBA_REPORTE_2026-07.pdf
+municipio,Partidos del GBA,Sur,Almirante Brown,1855,2026-07,Zonaprop Index GBA - Precio según municipio de GBA sur,https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/08/INDEX_GBA_REPORTE_2026-07.pdf
+municipio,Partidos del GBA,Sur,Quilmes,1811,2026-07,Zonaprop Index GBA - Precio según municipio de GBA sur,https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/08/INDEX_GBA_REPORTE_2026-07.pdf
+municipio,Partidos del GBA,Sur,Berazategui,1793,2026-07,Zonaprop Index GBA - Precio según municipio de GBA sur,https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/08/INDEX_GBA_REPORTE_2026-07.pdf
+municipio,Partidos del GBA,Sur,Esteban Echeverría,1665,2026-07,Zonaprop Index GBA - Precio según municipio de GBA sur,https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/08/INDEX_GBA_REPORTE_2026-07.pdf
+municipio,Partidos del GBA,Sur,Lanús,1591,2026-07,Zonaprop Index GBA - Precio según municipio de GBA sur,https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/08/INDEX_GBA_REPORTE_2026-07.pdf
+municipio,Partidos del GBA,Sur,Avellaneda,1518,2026-07,Zonaprop Index GBA - Precio según municipio de GBA sur,https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/08/INDEX_GBA_REPORTE_2026-07.pdf
+municipio,Partidos del GBA,Sur,Florencio Varela,1444,2026-07,Zonaprop Index GBA - Precio según municipio de GBA sur,https://www.zonaprop.com.ar/blog/wp-content/uploads/2026/08/INDEX_GBA_REPORTE_2026-07.pdf

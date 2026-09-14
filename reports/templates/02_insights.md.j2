@@ -1,0 +1,109 @@
+# 02 · Hallazgos: qué pasa, por qué importa y qué evidencia lo respalda
+
+> **Estado:** versión final, con las correcciones y decisiones del Checkpoint 3.
+>
+> **Fuente única de cifras:** `data/processed/resultados/kpis.json`, generado por `src/export_results.py`. Este archivo se genera con `src/build_docs.py`.
+>
+> **Notebooks:** `03_analisis_hipotesis.ipynb`, `04_modelo_segmentacion_simulador.ipynb`, `05_independientes.ipynb`.
+>
+> **Escenario base:** UVA + 7,5% · 20 años · 75% financiado · cuota hasta 25% del ingreso · anticipo + gastos hasta 12 ingresos · ingreso demostrable · edad al terminar hasta 85 años. UVA {{ r.uva }} · dólar minorista {{ r.tc }} · Zonaprop Index.
+
+---
+
+## Resumen en una frase
+
+**Hoy 1 de cada {{ r.uno_de_cada }} hogares inquilinos ({{ r.elegibles }} de {{ r.inquilinos }}) podría tomar un hipotecario UVA.** El freno es el efectivo inicial frente al precio. **Un producto a 30 años con 80% financiado lleva ese número a {{ r.prop }} ({{ r.prop_delta }}) sin subir el tope de cuota, y una línea para independientes con aportes lo lleva a {{ r.prop_indep }}.**
+
+---
+
+## Hallazgo 1 · El mercado elegible: {{ r.elegibles }} hogares ({{ r.elegibles_pct }})
+
+- **Qué pasa.** Hogares que superan cada filtro, sobre {{ r.inquilinos }} de hogares inquilinos en CABA, Partidos del GBA y Gran Córdoba:
+
+  | Filtro | Hogares | % del total |
+  |---|---|---|
+{% for e in r.etapas %}  | {{ e.etapa }} | {{ e.hogares }} | {{ e.pct }} |
+{% endfor %}
+- **Por qué importa.** El mercado "listo" es de {{ r.elegibles }} hogares (IC 95% {{ r.ic_inf }}–{{ r.ic_sup }}; ajustado al Censo, entre {{ r.rango_censo }}). Si la campaña apunta a todos los inquilinos, la mayoría de las solicitudes van a ser rechazadas.
+- **H1 · {{ r.h1_veredicto }}:** el {{ r.cuota_pct }} paga la cuota (IC {{ r.cuota_ic_inf }}–{{ r.cuota_ic_sup }}).
+- **Evidencia.** Figura `03_embudo_elegibilidad`; `embudo_total.csv`; `embudo_por_zona.csv`.
+
+## Hallazgo 2 · La superficie cambia todo (H1 como mapa de calor)
+
+- **Qué pasa.** Si todos buscaran 45 m², calificaría el {{ r.calor['Total_45'] }}; con 60 m², el {{ r.calor['Total_60'] }}; con 75 m², el {{ r.calor['Total_75'] }}. En CABA pasa de {{ r.calor['CABA_45'] }} a {{ r.calor['CABA_75'] }}; en GBA Oeste, de {{ r.calor['GBA Oeste_45'] }} a {{ r.calor['GBA Oeste_75'] }}.
+- **Por qué importa.** Viviendas más chicas o usadas son una palanca comercial directa.
+- **Evidencia.** Figuras `03_calor_m2_zona` y `03_calor_m2_integrantes`; `h1_calor_zona.csv`.
+
+## Hallazgo 3 · El freno es el efectivo inicial
+
+- **Qué pasa.** Un hogar califica si la vivienda cuesta hasta {{ r.tope_anticipo }} ingresos mensuales (anticipo) o {{ r.tope_cuota }} (cuota). La vivienda de referencia del hogar típico cuesta {{ r.mediana_precio_ing }} ingresos. El {{ r.fallan_ambos }} no alcanza ninguno de los dos límites.
+- **Por qué importa.** Bajar la tasa o subir el tope de cuota, por separado, no suma hogares. **H2 confirmada con matiz.** % financiado de equilibrio: {{ r.ltv_eq }}.
+- **Evidencia.** Figura `03_precio_en_ingresos`; `kpis.json → h2`.
+
+## Hallazgo 4 · ¿Qué pasa si…? Lo que suma y lo que resta
+
+| Medida | Hogares |
+|---|---|
+{% for q in r.qps_lista %}| {{ q.pregunta }} | {{ q.dif }} |
+{% endfor %}
+| Riesgo | Hogares |
+|---|---|
+{% for q in r.qle_lista %}| {{ q.pregunta }} | {{ q.dif }} |
+{% endfor %}
+- **Evidencia.** Figuras `04_que_pasa_si`, `04_que_lo_empeora`, `04_grilla_plazo_ltv`, `04_escenarios_producto`.
+
+## Hallazgo 5 · Composición del hogar (H3, descriptiva)
+
+- Parejas con hijos: {{ r.perfil['Pareja con hijos|Todas'].share }} de los inquilinos, {{ r.perfil['Pareja con hijos|Todas'].pct }} elegible.
+- Parejas sin hijos: {{ r.perfil['Pareja sin hijos|Todas'].pct }} elegible (dos ingresos, mayor ingreso por persona).
+- Hogares de un solo adulto: unipersonales {{ r.perfil['Unipersonal|Todas'].pct }}, monoparentales {{ r.perfil['Monoparental|Todas'].pct }}.
+- En las parejas, la elegibilidad es similar según quién figura como jefe/a. Las diferencias aparecen en hogares de un solo adulto, con menor ingreso por persona cuando encabeza una mujer. El modelo logístico (AUC {{ r.auc }}) muestra asociaciones, no causas: estudios superiores ×{{ r.or['educacion_Superior completo'] }}, dos o más perceptores ×{{ r.or['dos_o_mas_perceptores'] }}, pareja sin hijos ×{{ r.or['tipo_hogar_Pareja sin hijos'] }}.
+- **Evidencia.** Figuras `03_perfil_hogares`, `04_logit_odds`; `h3_perfil_hogares.csv`.
+
+## Hallazgo 6 · Dónde y a qué edad (H4, parcialmente confirmada)
+
+| Zona | % elegible | Hogares elegibles |
+|---|---|---|
+{% for z, v in r.zonas.items() %}| {{ z }} | {{ v.pct }} (IC {{ v.ic }}) | {{ v.hog }} |
+{% endfor %}
+- Diferencia entre mercados no concluyente (p = {{ r.p_zona }}); por edad sí (p = {{ r.p_edad }}). Los corredores son los mismos hogares del GBA con los precios de cada corredor.
+- **Evidencia.** Figura `03_elegibles_por_zona_edad`; `h4_zona.csv`, `h4_edad.csv`.
+
+## Hallazgo 7 · Independientes: {{ r.ind.pagan }} hogares pueden pagar sin recibo de sueldo
+
+- {{ r.ind.con }} hogares inquilinos tienen jefe/a o cónyuge independiente con aportes; en {{ r.ind.solo }} no hay asalariado con aportes en la pareja; {{ r.ind.pagan }} pagan la cuota y juntan el anticipo (ingreso mediano {{ r.ind.ingreso }}).
+- Su ingreso varía más entre trimestres: cambio típico {{ r.vol['Independiente con aportes'].cambio }} contra {{ r.vol['Asalariado con aportes'].cambio }} de los asalariados con aportes.
+- **Evidencia.** Notebook 05; figuras `05_independientes_embudo`, `05_volatilidad_ingresos`.
+
+## Hallazgo 8 · Riesgo: la cuota puede pasar a un tercio del ingreso (H5, confirmada)
+
+- Un crédito de sep-2023 con cuota al 25% llegó al {{ r.stress24 }} a los 24 meses. El {{ r.stress24_sobre30 }} de las ventanas de 24 meses desde 2016 superó el 30%.
+- El sueldo mediano registrado equivale a {{ r.sueldo.usd }} (cerca de 2017 en dólares), pero en poder de compra vale {{ r.sueldo.real }} contra {{ r.sueldo.real17 }} en 2017.
+- **Evidencia.** Figuras `03_stress_uva_salarios`, `03_sueldo_tres_lentes`.
+
+## Recuadro · posible punto de fuga (H7)
+
+- Donde trabajan dos o más personas califica el {{ r.trab['2 o más personas trabajando'].pct }}; con una persona y un trabajo, el {{ r.trab['1 persona con 1 trabajo'].pct }}. Una persona con dos empleos pasa cuota y anticipo en el {{ r.trab['1 persona con 2 o más trabajos'].pasan }} de los casos, pero solo el {{ r.trab['1 persona con 2 o más trabajos'].formal }} tiene ingreso demostrable.
+
+## Hallazgo 9 · {{ r.casi }} hogares cerca de calificar
+
+| Perfil | Hogares | Edad | Con aportes | Dos ingresos | Cubren del ingreso necesario |
+|---|---|---|---|---|---|
+{% for s in r.segmentos %}| {{ s.nombre }} | {{ s.hogares }} | {{ s.edad }} | {{ s.formal }} | {{ s.dos }} | {{ s.cobertura }} |
+{% endfor %}
+- Segmentación exploratoria (silhouette {{ r.silhouette }}): guía comercial, no grupos rígidos.
+
+## Hallazgo 10 · El cuello de botella está en el fondeo
+
+- Préstamo medio con el producto propuesto: {{ r.prestamo_medio }}. El programa ({{ r.fgs }}) financia ~{{ r.fgs_creditos }} créditos, frente a {{ r.prop }} hogares elegibles ({{ r.fgs_veces }} veces más).
+
+## Robustez
+
+- Imputación de la no respuesta: {{ r.nr.pct }} (IC {{ r.nr.ic }}); error de validación {{ r.nr.error }} puntos.
+- Subdeclaración corregida con el SIPA: {{ r.sub.mediana }} (mediana) a {{ r.sub.promedio }} (promedio).
+- Censo 2022: cantidades absolutas entre {{ r.rango_censo }}.
+
+## Contexto de mercado
+
+- Stock real de hipotecarios: {{ r.stock_hoy }} billones de pesos de ago-26, el {{ r.stock_pct_pico }} del pico de {{ r.mes_pico }}. Tasa UVA promedio: {{ r.tasa_uva }}.
+- En {{ r.destino_mes }}, el {{ r.destino_compra }} del saldo financia compra de vivienda.

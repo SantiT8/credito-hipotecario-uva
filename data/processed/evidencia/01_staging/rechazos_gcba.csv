@@ -1,0 +1,11 @@
+file_path,line,error_type,errores_registrados,csv_line
+data/raw/gcba/departamentos-en-venta-2007.csv,4951,TOO MANY COLUMNS,14,"
+;;;;;;;;;;;;;;;;4400;58.0;33000;569.0;0;0;;;;0;;;PARQUE AVELLANEDA;9;"
+data/raw/gcba/departamentos-en-venta-2007.csv,4986,TOO MANY COLUMNS,14,"
+;;;;;;;;;;;;;;;;4200;49.0;36000;734.7;0;0;;;;0;;;VILLA LUGANO;8;"
+data/raw/gcba/departamentos-en-venta-2007.csv,4988,TOO MANY COLUMNS,14,"
+;;;;;;;;;;;;;;;;4600;72.0;56900;790.3;4;20;CONTRAFRENTE;;;0;SI;;VILLA LUGANO;8;"
+data/raw/gcba/departamentos-en-venta-2007.csv,4990,TOO MANY COLUMNS,14,"
+;;;;;;;;;;;;;;;;4700;62.0;40000;645.2;4;30;CONTRAFRENTE;;;0;;;VILLA LUGANO;8;"
+data/raw/gcba/departamentos-en-venta-2007.csv,4992,TOO MANY COLUMNS,14,"
+;;;;;;;;;;;;;;;;4900;70.0;34500;492.9;4;70;FRENTE;;;0;SI;;VILLA LUGANO;8;"

@@ -1,0 +1,601 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Documento metodológico · Crédito hipotecario UVA</title>
+<meta name="author" content="{{ autor }}">
+{% include "_estilos.html.j2" %}
+</head>
+<body>
+<main class="page">
+{% macro dyc(autor_txt, auto_txt, verif_txt) %}
+<div class="dyc"><div class="t">Decisiones y controles</div><div class="g">
+  <div><span class="lbl">Qué decidió el autor</span>{{ autor_txt }}</div>
+  <div><span class="lbl">Qué se automatizó</span>{{ auto_txt }}</div>
+  <div><span class="lbl">Cómo se verificó</span>{{ verif_txt }}</div>
+</div></div>
+{% endmacro %}
+
+<div class="kicker">Documento metodológico · versión {{ version }}</div>
+<h1>¿Quién puede pagar hoy un crédito hipotecario UVA?</h1>
+<div class="subtitle">De dónde salen los datos, cómo se limpiaron y validaron, qué supuestos se usan, qué se encontró y hasta dónde llegan las conclusiones.</div>
+<div class="meta">
+  <span><b>Autor:</b> {{ autor }}</span>
+  <span><b>Rol del caso:</b> analista de crédito y negocio</span>
+  <span><b>Fecha de corte de datos:</b> {{ fecha_corte }}</span>
+  <span><b>Versión:</b> {{ version }}</span>
+</div>
+
+<section class="box descargo" id="descargo">
+  <h3>Descargo de responsabilidad</h3>
+  <ul>
+    <li>Es un <b>ejercicio analítico independiente con fines de portfolio profesional</b>. "Banco [EMPRESA]" es una <b>entidad ficticia</b>; cualquier parecido con una entidad real es coincidencia.</li>
+    <li><b>No es asesoramiento</b> financiero, crediticio, legal ni de inversión, ni una oferta de crédito. No sirve para evaluar si una persona u hogar concreto puede acceder a un préstamo.</li>
+    <li>Los resultados son <b>estimaciones</b>: salen de datos públicos, de supuestos declarados en este documento y de métodos estadísticos con margen de error.</li>
+    <li>Tasas, precios y condiciones de crédito cambian seguido. Todos los valores corresponden a la <b>fecha de corte ({{ fecha_corte }})</b>.</li>
+    <li>Los organismos y empresas se citan <b>solo como fuentes</b>; la mención no implica afiliación ni aval. Los microdatos de la EPH son anónimos y el análisis no identifica personas. Los hogares con nombre de este documento son <b>ilustrativos</b>: se construyen con promedios y medianas, no son casos reales.</li>
+  </ul>
+</section>
+
+<section class="box callout">
+  <b>Resumen en 30 segundos</b>
+  <ul class="resumen" style="margin:8px 0 0;padding-left:18px">
+    <li><b>La pregunta:</b> de los {{ r.inquilinos }} de hogares que alquilan en CABA, Partidos del GBA y Gran Córdoba, cuántos podrían pagar hoy un crédito hipotecario UVA, qué los frena y qué condiciones del crédito ampliarían ese grupo.</li>
+    <li><b>Los datos:</b> {{ n.n_archivos }} archivos públicos: la encuesta de hogares y el Censo 2022 del INDEC, el Banco Central, series de salarios y dólar de datos.gob.ar, avisos del GCBA y el Zonaprop Index.</li>
+    <li><b>La confianza:</b> al recalcular desde los microdatos las cifras oficiales del INDEC (población, ingreso mediano, ingreso medio y desigualdad), <b>coinciden exactamente</b>. Frente al Censo, la encuesta capta 2 a 4 puntos menos de inquilinos: las cantidades son conservadoras.</li>
+    <li><b>El resultado:</b> <b>{{ r.elegibles }} hogares ({{ r.elegibles_pct }}, 1 de cada {{ r.uno_de_cada }})</b> podrían tomar hoy el crédito. El freno es el efectivo inicial y el precio: la vivienda de referencia cuesta {{ r.mediana_precio_ing }} ingresos mensuales del hogar típico.</li>
+    <li><b>La recomendación:</b> un crédito a <b>30 años con 80% financiado</b> y cuota de hasta 25% del ingreso lleva ese número a <b>{{ r.prop }} ({{ r.prop_delta }})</b>; una línea separada para monotributistas y autónomos con aportes lo lleva a <b>{{ r.prop_indep }}</b>.</li>
+    <li><b>El riesgo:</b> si la inflación le gana a los sueldos, la cuota puede pasar del 25% a un tercio del ingreso en dos años. Por eso no conviene subir el tope de cuota.</li>
+    <li><b>La robustez:</b> con otros supuestos (imputación de ingresos no declarados, corrección por subdeclaración) la respuesta se mueve entre {{ r.nr.pct }} y {{ r.sub.promedio }}; la conclusión no cambia.</li>
+  </ul>
+</section>
+
+<h3 style="margin-top:26px">Contenido</h3>
+<ol class="toc">
+  <li><a href="#s0">Una historia para empezar</a></li>
+  <li><a href="#s1">La pregunta y el alcance</a></li>
+  <li><a href="#s2">Glosario</a></li>
+  <li><a href="#s3">Fuentes de datos</a></li>
+  <li><a href="#s4">Cómo se procesaron los datos</a></li>
+  <li><a href="#s5">Decisiones de limpieza, en simple</a></li>
+  <li><a href="#s6">¿Podemos confiar en los datos?</a></li>
+  <li><a href="#s7">Supuestos del análisis</a></li>
+  <li><a href="#s8">Resultados</a></li>
+  <li><a href="#s9">Recomendación</a></li>
+  <li><a href="#s10">Limitaciones</a></li>
+  <li><a href="#s11">Cómo se trabajó y reproducibilidad</a></li>
+  <li><a href="#notas">Notas y referencias</a></li>
+</ol>
+
+<!-- ===================================================================== -->
+<h2 id="s0">Una historia para empezar</h2>
+<div class="historia">
+  <h3>Carla y Diego quieren dejar de alquilar</h3>
+  <p>Carla y Diego tienen un hijo y alquilan en el oeste del conurbano. Entre los dos ganan <b>{{ prot.ingreso }} por mes</b>, lo mismo que una pareja con hijos inquilina típica de los tres mercados. Ella trabaja en relación de dependencia con recibo de sueldo. Buscan un 3 ambientes de {{ prot.m2 }} m², que en el GBA Oeste cuesta alrededor de <b>{{ prot.base.precio_usd }}</b> ({{ prot.usd_m2 }} por m²).</p>
+  <p>Con las condiciones típicas de hoy (20 años, 75% financiado, UVA + 7,5%), la cuota inicial sería de <b>{{ prot.base.cuota }}</b>: el {{ prot.base.ratio }} de su ingreso, por encima del 25% que aceptan los bancos. Además, tendrían que poner <b>{{ prot.base.efectivo }}</b> ({{ prot.base.efectivo_usd }}) entre anticipo y gastos: {{ prot.base.meses }} meses de ingreso. Ahorrando el 20% de lo que ganan, tardarían unos {{ prot.base.anios_ahorro }} años. Para calificar necesitarían ganar {{ prot.base.ingreso_req }}.</p>
+  <p>Con un crédito a 30 años y 80% financiado, la cuota baja a {{ prot.propuesto.cuota }} ({{ prot.propuesto.ratio }} del ingreso) y el efectivo a {{ prot.propuesto.efectivo }}: <b>todavía no alcanza</b>. Si además eligieran una vivienda un 20% más barata (más chica o usada), la cuota quedaría en {{ prot.propuesto_barata.ratio }} y el efectivo en {{ prot.propuesto_barata.meses }} meses de ingreso: <b>{{ "calificarían" if prot.propuesto_barata.pasa_cuota and prot.propuesto_barata.pasa_anticipo else "seguirían sin calificar" }}</b>.</p>
+  <p style="margin:0">Este documento cuenta, con datos, cuántos hogares están en la situación de Carla y Diego, qué los frena y qué puede hacer un banco al respecto.</p>
+</div>
+
+<!-- ===================================================================== -->
+<h2 id="s1">1. La pregunta y el alcance</h2>
+<p>Desde 2024 volvió el crédito hipotecario en Argentina. En septiembre de 2026 se lanzó un programa que da a los bancos fondos del FGS de ANSES para prestar a una tasa máxima de <b>UVA + 7,5%</b><sup class="fn"><a href="#n1">1</a></sup>, con 120 días para colocarlos. Un banco que recibe esos fondos tiene que decidir <b>a quién apuntar</b> y <b>con qué condiciones</b>. El caso se plantea para un banco ficticio con tres preguntas de negocio:</p>
+<ol>
+  <li>¿Cuántos hogares inquilinos podrían pagar hoy un crédito UVA y dónde están?</li>
+  <li>¿Qué los frena: la cuota, el anticipo, la formalidad o la edad?</li>
+  <li>¿Qué producto y qué política de riesgo amplían el mercado sin aumentar la morosidad esperada?</li>
+</ol>
+<div class="table-wrap"><table>
+  <thead><tr><th style="width:50%">Qué SÍ responde el estudio</th><th>Qué NO responde</th></tr></thead>
+  <tbody>
+    <tr><td>Cuántos hogares inquilinos cumplen, en promedio, los requisitos típicos de un crédito UVA</td><td>Si una persona o familia en particular califica</td></tr>
+    <tr><td>En qué paso se queda afuera la mayoría</td><td>Su historial crediticio, deudas o ahorros reales (la encuesta no los mide)</td></tr>
+    <tr><td>Cuánto cambia el grupo elegible si se modifican plazo, tasa, % financiado o el tipo de ingreso aceptado</td><td>Cuánto va a pedir prestado la gente efectivamente (demanda real)</td></tr>
+    <tr><td>Qué riesgo aparece si la UVA sube más que los salarios</td><td>Qué va a pasar con la inflación o las tasas</td></tr>
+    <tr><td>CABA, Partidos del GBA (abierto en corredores Norte, Oeste y Sur) y Gran Córdoba</td><td>El resto del país, Gran Rosario ni las zonas rurales</td></tr>
+  </tbody>
+</table></div>
+{{ dyc("Eligió el tema y el cliente del caso, validó las tres preguntas y el escenario base. En la revisión de resultados quitó Gran Rosario (muestra chica) y pidió abrir el GBA por corredor en lugar de usar un precio único.",
+       "La búsqueda de series en las APIs públicas y la descarga de archivos.",
+       "Cada decisión de alcance quedó registrada en un punto de control con su motivo; el alcance final se aplica igual en SQL, análisis, dashboard y presentación.") }}
+
+<!-- ===================================================================== -->
+<h2 id="s2">2. Glosario</h2>
+<dl class="glosario">
+  <dt>Hogar</dt><dd>Una persona o grupo de personas que vive en la misma vivienda y comparte los gastos de comida. Dos amigos que alquilan juntos y comparten gastos son un hogar.</dd>
+  <dt>Hogar inquilino</dt><dd>El hogar que respondió en la encuesta que <b>alquila</b> la vivienda donde vive (pregunta II7 de la EPH). No incluye dueños ni a quienes viven en una vivienda prestada, cedida u ocupada.</dd>
+  <dt>Base del estudio</dt><dd>Los {{ r.hogares }} de hogares de CABA, Partidos del GBA y Gran Córdoba, de los cuales <b>{{ r.inquilinos }} alquilan</b> ({{ r.pct_inquilinos }}). Cuando se dice "% de inquilinos", el total es ese número. Es el promedio de cuatro trimestres (abril 2025 a marzo 2026).</dd>
+  <dt>Ingreso del hogar</dt><dd>Lo que cobran por mes todos los integrantes: sueldos, trabajos por cuenta propia, jubilaciones, planes o rentas, tal como lo declaran en la EPH. Se expresa en pesos de agosto de 2026.</dd>
+  <dt>Salarios (tres fuentes)</dt><dd>(1) El <b>ingreso de cada hogar</b> sale de la EPH. (2) La <b>evolución de los sueldos</b>, para el riesgo de la cuota, sale del Índice de Salarios del INDEC y de las remuneraciones del SIPA. (3) El <b>sueldo formal promedio</b> de la comparación histórica es el RIPTE.</dd>
+  <dt>Ingreso demostrable</dt><dd>En el escenario base: jefe/a o cónyuge asalariado con aportes jubilatorios (recibo de sueldo). En el módulo de independientes se suman monotributistas, autónomos y asalariados que aportan por su cuenta.</dd>
+  <dt>Independiente con aportes</dt><dd>Quien trabaja por su cuenta o como patrón y aporta como monotributista o autónomo (EPH <code>PP05I</code>), o quien trabaja en relación de dependencia sin descuento pero aporta por su cuenta (<code>PP07I</code>).</dd>
+  <dt>Corredor del GBA</dt><dd>Agrupación de los partidos del conurbano en Norte, Oeste y Sur, como la publica el Zonaprop Index.</dd>
+  <dt>UVA</dt><dd>Unidad de Valor Adquisitivo. Se actualiza todos los días con la inflación. Un crédito UVA se toma y se paga en UVAs: la cuota en pesos sube con la inflación<sup class="fn"><a href="#n2">2</a></sup>. Valor al corte: {{ n.uva_ultimo }}.</dd>
+  <dt>TNA</dt><dd>Tasa nominal anual. En un crédito UVA es el interés que se cobra <i>además</i> de la actualización por inflación (UVA + 7,5%).</dd>
+  <dt>Relación cuota / ingreso</dt><dd>Qué parte del ingreso mensual se lleva la cuota. Los bancos suelen poner un máximo del 25%.</dd>
+  <dt>% financiado (LTV)</dt><dd>Qué parte del precio presta el banco. Con 75%, el comprador pone el 25% restante como anticipo.</dd>
+  <dt>Gastos de compra</dt><dd>Escribano, impuestos, registro y comisión inmobiliaria, que se pagan aparte del precio.</dd>
+  <dt>EPH</dt><dd>Encuesta Permanente de Hogares del INDEC: encuesta trimestral a hogares de 31 aglomerados urbanos, con datos de ingresos, trabajo y vivienda.</dd>
+  <dt>Ponderador</dt><dd>Cuántos hogares reales representa cada hogar encuestado. Sin ponderar, la encuesta no representa a la población.</dd>
+  <dt>Pool de trimestres</dt><dd>Juntar los cuatro trimestres como una sola muestra, dividiendo cada ponderador por 4. El resultado estima el promedio del año.</dd>
+  <dt>Mediana</dt><dd>El valor del medio: la mitad gana menos y la otra mitad más. Con ingresos se usa en lugar del promedio porque pocos ingresos muy altos lo inflan.</dd>
+  <dt>Intervalo de confianza (IC 95%)</dt><dd>Rango dentro del cual está el valor real con alta probabilidad, dado que se trabaja con una muestra.</dd>
+  <dt>Imputación múltiple</dt><dd>Completar un dato faltante varias veces con valores plausibles tomados de casos parecidos, para medir cuánto depende el resultado de ese faltante.</dd>
+  <dt>SIPA</dt><dd>Sistema Integrado Previsional Argentino: registro administrativo de los aportes de los trabajadores formales. Sirve para contrastar los sueldos que declara la encuesta.</dd>
+  <dt>Elegible</dt><dd>Un hogar que pasa los cuatro filtros del embudo de la sección 7.</dd>
+</dl>
+
+<!-- ===================================================================== -->
+<h2 id="s3">3. Fuentes de datos</h2>
+<p>Todas las fuentes son públicas y de acceso gratuito. Cada archivo descargado queda registrado con su dirección web, tamaño, fecha y huella digital (SHA-256) en <code>data/raw/manifest.json</code>. Las condiciones de crédito de los bancos, que no son datos sino supuestos, se citan aparte en las notas.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Fuente</th><th>Organismo</th><th>Qué aporta al estudio</th><th>Período</th></tr></thead>
+  <tbody>
+    <tr><td>EPH, microdatos de hogares e individuos <a href="#r1">[R1]</a></td><td>INDEC</td><td>Ingreso de los hogares, tenencia de la vivienda, trabajo, aportes, composición del hogar</td><td>2T-2025 a 1T-2026</td></tr>
+    <tr><td>Censo 2022, hogares por régimen de tenencia <a href="#r5">[R5]</a></td><td>INDEC</td><td>Validación del universo y peso de cada partido del GBA según sus hogares inquilinos</td><td>2022</td></tr>
+    <tr><td>API de Estadísticas v4.0 <a href="#r6">[R6]</a></td><td>BCRA</td><td>UVA, tasas y stock de hipotecarios, destino del crédito, inflación, dólar</td><td>2001 a 09-2026</td></tr>
+    <tr><td>API de Series de Tiempo <a href="#r7">[R7]</a></td><td>datos.gob.ar (INDEC, Secretaría de Trabajo, BNA)</td><td>Índice de Salarios, RIPTE, remuneraciones del SIPA, dólar Banco Nación vendedor</td><td>1994 a 07-2026</td></tr>
+    <tr><td>Departamentos en venta <a href="#r8">[R8]</a></td><td>GCBA</td><td>Precios de avisos en CABA durante 20 años (contexto histórico)</td><td>2001 a 2020</td></tr>
+    <tr><td>Zonaprop Index, reportes mensuales <a href="#r9">[R9]</a></td><td>Zonaprop</td><td>Precio del m² en CABA, en cada partido y corredor del GBA y en Córdoba</td><td>03-2026 a 07-2026</td></tr>
+  </tbody>
+</table></div>
+{{ dyc("Usar solo datos públicos verificables y descartar cualquier fuente que no se pudiera comprobar al 100% (por ejemplo, precios difundidos por prensa sin el reporte original).",
+       "La descarga reproducible de las " ~ n.n_archivos ~ " fuentes y el registro de su huella digital.",
+       "Cada archivo se valida antes de usarlo: los Excel del Censo se controlan por su firma de archivo y las páginas del INDEC que devuelven HTML en lugar de datos se rechazan. Los precios del Zonaprop Index se tomaron de sus reportes oficiales.") }}
+
+<!-- ===================================================================== -->
+<h2 id="s4">4. Cómo se procesaron los datos</h2>
+<p>El proceso sigue siempre el mismo camino y cada paso deja un registro para poder revisarlo:</p>
+<figure>
+<svg viewBox="0 0 820 170" role="img" aria-label="Diagrama del proceso de datos en 6 pasos">
+  <defs><marker id="ah" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#898781"/></marker></defs>
+  {% set pasos = [
+    ("1 · Descarga", n.n_archivos ~ " archivos", "fuentes públicas"),
+    ("2 · Carga cruda", "Todo como viene", "sin modificar"),
+    ("3 · Perfilado", n.n_chequeos ~ " controles", "medir problemas"),
+    ("4 · Limpieza", "Reglas escritas", "en SQL, con conteos"),
+    ("5 · Validación", "Contra INDEC", "y Censo 2022"),
+    ("6 · Análisis", "Motor único", "para todo el caso")
+  ] %}
+  {% for t, a, b in pasos %}
+    {% set x = 4 + loop.index0 * 137 %}
+    <rect x="{{ x }}" y="30" width="118" height="104" rx="8" fill="{{ '#eaf2fc' if loop.index in [4,5] else '#ffffff' }}" stroke="{{ '#2a78d6' if loop.index in [4,5] else '#c3c2b7' }}" stroke-width="1.2"/>
+    <text x="{{ x + 59 }}" y="62" text-anchor="middle" font-size="12.5" font-weight="600" fill="#0b0b0b">{{ t }}</text>
+    <text x="{{ x + 59 }}" y="90" text-anchor="middle" font-size="11.5" fill="#52514e">{{ a }}</text>
+    <text x="{{ x + 59 }}" y="108" text-anchor="middle" font-size="11.5" fill="#52514e">{{ b }}</text>
+    {% if not loop.last %}<line x1="{{ x + 120 }}" y1="82" x2="{{ x + 133 }}" y2="82" stroke="#898781" stroke-width="1.5" marker-end="url(#ah)"/>{% endif %}
+  {% endfor %}
+  <text x="410" y="160" text-anchor="middle" font-size="11" fill="#898781">Pasos 2 a 4 en SQL (DuckDB) · pasos 1, 5 y 6 en Python · todo se puede volver a correr desde cero (sección 11)</text>
+</svg>
+<figcaption><b>Figura 1.</b> Del dato crudo al resultado. Ninguna fila se descarta sin dejar registro.</figcaption>
+</figure>
+
+<!-- ===================================================================== -->
+<h2 id="s5">5. Decisiones de limpieza, en simple</h2>
+<p>Cada problema se presenta igual: <b>qué pasaba</b>, <b>por qué importa</b>, <b>qué se hizo</b> y <b>cuánto afecta</b>. El detalle técnico, con la consulta SQL de cada caso, está en <code>reports/01_calidad_datos.md</code>.</p>
+
+<h3>5.1 La encuesta hay que ponderarla</h3>
+<div class="cards">
+  <div><span class="lbl q">Qué pasaba</span>La EPH encuesta a una muestra: cada hogar encuestado representa a cientos o miles de hogares reales.</div>
+  <div><span class="lbl">Por qué importa</span>Si se cuenta cada hogar encuestado como "1", los resultados no representan a la población.</div>
+  <div><span class="lbl">Qué se hizo</span>Todos los cálculos usan los ponderadores oficiales del INDEC.</div>
+  <div><span class="lbl">Cuánto afecta</span>Las {{ n.obs_hogar_trimestre }} observaciones de {{ n.hogares_distintos }} hogares encuestados representan a {{ n.hogares_expandidos }} de hogares.</div>
+</div>
+
+<h3>5.2 Muchos hogares no declaran su ingreso</h3>
+<div class="cards">
+  <div><span class="lbl q">Qué pasaba</span>En el país, el {{ n.eph_nr_pct }} de los hogares encuestados no respondió cuánto gana. En la base aparecen con ingreso "$ 0".</div>
+  <div><span class="lbl">Por qué importa</span>Tomar ese $ 0 como real hace creer que la gente gana mucho menos. Para los inquilinos, la mediana cae un {{ med.caida_inq }}.</div>
+  <div><span class="lbl">Qué se hizo</span>Se usa el ponderador de ingresos del INDEC (PONDIH), que reparte el peso de quienes no respondieron entre hogares parecidos que sí lo hicieron<sup class="fn"><a href="#n3">3</a></sup>. Como control, se imputaron esos ingresos con otro método (sección 8.12).</div>
+  <div><span class="lbl">Cuánto afecta</span>Mediana de inquilinos: {{ med.ingenua_inq }} con el cálculo ingenuo y <b>{{ med.correcta_inq }}</b> con el correcto.</div>
+</div>
+<figure><img src="{{ figs.ponderar }}" alt="Mediana de ingreso ingenua y correcta para inquilinos y propietarios"><figcaption><b>Figura 2.</b> El mismo dato, calculado bien y mal. Fuente: INDEC, EPH 1T-2026; elaboración propia.</figcaption></figure>
+<figure><img src="{{ figs.no_respuesta }}" alt="Porcentaje de hogares sin ingreso declarado por mercado"><figcaption><b>Figura 3.</b> La falta de respuesta cambia según el mercado y es mayor en el GBA y CABA, donde los resultados tienen más margen de error. Fuente: INDEC, EPH; elaboración propia.</figcaption></figure>
+
+<h3>5.3 Los mismos hogares aparecen dos veces: se usan todas las visitas</h3>
+<div class="cards">
+  <div><span class="lbl q">Qué pasaba</span>La EPH visita cada vivienda 2 trimestres seguidos, la deja 2 y vuelve otros 2<sup class="fn"><a href="#n4">4</a></sup>. Al juntar 4 trimestres, el {{ n.eph_panel_pct }} de los hogares aparece dos veces.</div>
+  <div><span class="lbl">Por qué importa</span>La primera versión se quedaba con la visita más reciente de cada hogar. Eso sobrerrepresentaba a los inquilinos: se mudan más y aparecen una sola vez con más frecuencia.</div>
+  <div><span class="lbl">Qué se hizo</span>Se corrigió con un <b>pool</b>: cada trimestre es una muestra representativa, así que se usan todas las visitas y cada ponderador se divide por 4. Las visitas de un mismo hogar se tratan juntas al calcular márgenes de error.</div>
+  <div><span class="lbl">Cuánto afecta</span>Los inquilinos del pool ({{ n.pool_inquilinos }}) coinciden {{ "exactamente" if n.pool_ok else "aproximadamente" }} con el promedio de los cuatro trimestres calculados por separado.</div>
+</div>
+<figure>
+<svg viewBox="0 0 820 215" role="img" aria-label="Diagrama del pool de trimestres de la EPH">
+  {% set trims = ["2T-2025", "3T-2025", "4T-2025", "1T-2026"] %}
+  {% set filas = [("Hogar A", [1,1,0,0]), ("Hogar B", [0,1,1,0]), ("Hogar C", [0,0,1,1]), ("Hogar D", [0,0,0,1])] %}
+  {% for t in trims %}<text x="{{ 215 + loop.index0 * 130 }}" y="22" text-anchor="middle" font-size="12" font-weight="600" fill="#52514e">{{ t }}</text>{% endfor %}
+  {% for nombre, visitas in filas %}
+    {% set y = 36 + loop.index0 * 38 %}
+    <text x="20" y="{{ y + 20 }}" font-size="12.5" fill="#0b0b0b">{{ nombre }}</text>
+    {% for v in visitas %}
+      {% set x = 160 + loop.index0 * 130 %}
+      {% if v %}
+        <rect x="{{ x }}" y="{{ y }}" width="110" height="28" rx="6" fill="#2a78d6"/><text x="{{ x + 55 }}" y="{{ y + 18 }}" text-anchor="middle" font-size="11" fill="#fff" font-weight="600">peso ÷ 4</text>
+      {% else %}
+        <rect x="{{ x }}" y="{{ y }}" width="110" height="28" rx="6" fill="none" stroke="#e1e0d9"/>
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+  <text x="20" y="206" font-size="11" fill="#898781">Esquema ilustrativo: se usan todas las visitas; cada trimestre aporta un cuarto del promedio anual.</text>
+</svg>
+<figcaption><b>Figura 4.</b> Pool de cuatro trimestres: ningún hogar pesa doble y ningún grupo queda sobrerrepresentado.</figcaption>
+</figure>
+
+<h3>5.4 La inflación: todos los ingresos a pesos de agosto de 2026</h3>
+<div class="cards">
+  <div><span class="lbl q">Qué pasaba</span>Los ingresos de cada trimestre están en pesos de ese momento, y entre trimestres hubo inflación.</div>
+  <div><span class="lbl">Por qué importa</span>Comparar $ 1 millón de mayo de 2025 con $ 1 millón de febrero de 2026 es comparar cosas distintas.</div>
+  <div><span class="lbl">Qué se hizo</span>Cada ingreso se ajusta por la inflación oficial acumulada hasta agosto de 2026, el último dato publicado<sup class="fn"><a href="#n5">5</a></sup>.</div>
+  <div><span class="lbl">Cuánto afecta</span>Un ingreso del 2T-2025 se multiplica por {{ n.factores[0].factor }}.</div>
+</div>
+<div class="tiles">
+  {% for f in n.factores %}<div class="tile"><div class="v">{{ f.ejemplo }}</div><div class="l">equivale hoy a <b>$ 1 millón</b> del {{ f.trimestre }}</div></div>{% endfor %}
+</div>
+
+<h3>5.5 Avisos de departamentos: el dataset más desordenado</h3>
+<div class="cards">
+  <div><span class="lbl q">Qué pasaba</span>El GCBA publicó 20 años de avisos con <b>5 formatos distintos</b>, {{ n.gcba_r4 }} avisos duplicados (el {{ n.gcba_dup_2017 }} en 2017 y el {{ n.gcba_dup_2020 }} en 2020), precios de USD 1, casas mezcladas con departamentos y barrios mal escritos.</div>
+  <div><span class="lbl">Por qué importa</span>Con duplicados y errores, el precio típico del m² queda sesgado hacia los avisos que se repiten.</div>
+  <div><span class="lbl">Qué se hizo</span>Se unificaron los formatos y se aplicaron 5 reglas en orden: solo departamentos en venta, precio y m² válidos, barrio reconocible, sin duplicados, sin precios extremos<sup class="fn"><a href="#n6">6</a></sup>.</div>
+  <div><span class="lbl">Cuánto afecta</span>{{ n.gcba_crudos }} avisos → <b>{{ n.gcba_limpios }} limpios ({{ n.gcba_pct }})</b>. Casi todo lo descartado son duplicados.</div>
+</div>
+<figure><img src="{{ figs.embudo_gcba }}" alt="Avisos crudos y limpios por año"><figcaption><b>Figura 5.</b> Lo que sacó cada año la limpieza. Por regla: {{ n.gcba_r1 }} no eran departamentos en venta · {{ n.gcba_r2 }} con precio o m² inválido · {{ n.gcba_r3 }} sin barrio reconocible · {{ n.gcba_r4 }} duplicados · {{ n.gcba_r5 }} precios extremos. Fuente: GCBA; elaboración propia.</figcaption></figure>
+<p><b>Un ejemplo concreto: el barrio de Núñez.</b> Por errores al guardar la letra Ñ, el mismo barrio aparece escrito de {{ n.nunez|length }} maneras. Sin corregirlo, esos avisos se habrían descartado como "barrio desconocido":</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Cómo figura en el archivo</th><th class="num">Avisos</th><th>Años</th></tr></thead>
+  <tbody>{% for x in n.nunez %}<tr><td><code>{{ x.variante }}</code></td><td class="num">{{ x.avisos }}</td><td>{{ x.anios }}</td></tr>{% endfor %}</tbody>
+</table></div>
+<ul>
+  <li>En 2001, latitud y longitud estaban <b>invertidas</b> en los {{ n.gcba_coord_2001 }} avisos del año: se volvieron a invertir.</li>
+  <li>En 2019, {{ n.gcba_coord_2019 }} avisos tenían coordenadas (0,0), un punto en el océano: se marcaron como "sin ubicación".</li>
+  <li>Desde 2016 el archivo calcula el precio por m² <b>cubierto</b> y antes lo hacía por m² <b>total</b>. Para que los 20 años sean comparables, se recalculó con m² totales en todos los años.</li>
+  <li>Barrios divididos en 2019-2020 (Flores Norte/Sur, Barracas Este/Oeste) o con el nombre cortado se llevaron a los <b>48 barrios oficiales</b>.</li>
+</ul>
+
+<h3>5.6 Datos del "futuro" y unidades mal rotuladas en el Banco Central</h3>
+<div class="cards">
+  <div><span class="lbl q">Qué pasaba</span>La API del BCRA devolvía valores de UVA posteriores a la fecha de corte (se calculan por adelantado). Además, las series de destino del crédito dicen estar "en miles de pesos", pero sus valores corresponden a millones.</div>
+  <div><span class="lbl">Por qué importa</span>Usar UVAs que todavía no rigen desfasa las cuotas; leer mal la unidad multiplica por mil los saldos.</div>
+  <div><span class="lbl">Qué se hizo</span>Solo se usan datos hasta la fecha de corte. La unidad del destino se contrastó con el stock total de hipotecarios (serie 916) y se corrigió.</div>
+  <div><span class="lbl">Cuánto afecta</span>UVA usada: {{ n.uva_ultimo }}. La suma de los destinos coincide con el orden de magnitud del stock total.</div>
+</div>
+
+<h3>5.7 El GBA no tiene un solo precio</h3>
+<div class="cards">
+  <div><span class="lbl q">Qué pasaba</span>La EPH no dice en qué partido vive cada hogar del GBA, pero el precio del m² va de {{ n.corredores[-1].rango }} según el partido.</div>
+  <div><span class="lbl">Por qué importa</span>Un precio único para todo el conurbano esconde diferencias grandes entre Vicente López y Merlo.</div>
+  <div><span class="lbl">Qué se hizo</span>Cada hogar inquilino del GBA se evalúa en los <b>31 partidos</b>, con el precio de cada uno y un peso proporcional a sus hogares inquilinos según el Censo 2022. Los 5 partidos sin precio propio toman el promedio de su corredor<sup class="fn"><a href="#n7">7</a></sup>.</div>
+  <div><span class="lbl">Cuánto afecta</span>Se pueden leer resultados por corredor. Supuesto: los ingresos de los inquilinos se distribuyen igual en todos los partidos (la EPH no permite verlo).</div>
+</div>
+<div class="table-wrap"><table>
+  <thead><tr><th>Corredor</th><th class="num">Partidos</th><th class="num">Sin precio propio</th><th class="num">Hogares inquilinos (Censo)</th><th class="num">% del GBA</th><th class="num">USD/m² ponderado</th><th>Rango</th></tr></thead>
+  <tbody>{% for c in n.corredores %}<tr><td>{{ c.corredor }}</td><td class="num">{{ c.partidos }}</td><td class="num">{{ c.sin_precio }}</td><td class="num">{{ c.inquilinos }}</td><td class="num">{{ c.pct }}</td><td class="num">{{ c.usd_m2 }}</td><td>{{ c.rango }}</td></tr>{% endfor %}</tbody>
+</table></div>
+{{ dyc("Cuestionó el total de hogares del primer informe. La revisión contra el Censo confirmó el universo y detectó el sesgo de quedarse con una sola visita por hogar, que se corrigió con el pool. También definió no usar un precio único para el GBA.",
+       "Las consultas SQL de perfilado y limpieza, con un conteo por cada regla, y la grilla de precios por partido.",
+       "El pool reproduce el promedio de los cuatro trimestres; la suma de partidos coincide con el total provincial del Censo; ningún partido quedó sin precio ni sin peso.") }}
+
+<!-- ===================================================================== -->
+<h2 id="s6">6. ¿Podemos confiar en los datos?</h2>
+<p>La mejor prueba de que los datos se leyeron bien es <b>reproducir cifras que ya publicó el organismo oficial</b>. Si da lo mismo, la lectura, los códigos y los ponderadores están bien.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Indicador (1T-2026)</th><th class="num">Calculado en este estudio</th><th class="num">Publicado por INDEC <a href="#r2">[R2]</a></th><th>Resultado</th></tr></thead>
+  <tbody>
+    <tr><td>Población representada</td><td class="num">{{ n.indec.pob }} millones</td><td class="num">30,1 millones</td><td class="ok">Coincide</td></tr>
+    <tr><td>Ingreso por persona: mediana</td><td class="num">{{ n.indec.mediana }}</td><td class="num">$ 500.000</td><td class="ok">Coincide</td></tr>
+    <tr><td>Ingreso por persona: promedio</td><td class="num">{{ n.indec.media }}</td><td class="num">$ 728.008</td><td class="ok">Coincide</td></tr>
+    <tr><td>Desigualdad (coeficiente de Gini)</td><td class="num">0,442</td><td class="num">0,442</td><td class="ok">Coincide</td></tr>
+  </tbody>
+</table></div>
+
+<p><b>Segunda verificación, contra el Censo 2022 <a href="#r5">[R5]</a>.</b> En todo el país hay {{ r.censo_hog_pais }} de hogares: el {{ r.censo_propia_pais }} vive en vivienda propia y el {{ r.censo_alq_pais }} alquila. En los tres mercados:</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Zona</th><th>Geografía del Censo</th><th class="num">Hogares Censo</th><th class="num">Hogares EPH</th><th class="num">% alquila Censo</th><th class="num">% alquila EPH</th><th class="num">Diferencia</th></tr></thead>
+  <tbody>{% for c in n.censo %}<tr><td>{{ c.zona }}</td><td>{{ c.geo }}</td><td class="num">{{ c.hogares_censo }}</td><td class="num">{{ c.hogares_eph }}</td><td class="num">{{ c.alq_censo }}</td><td class="num">{{ c.alq_eph }}</td><td class="num">{{ c.dif }}</td></tr>{% endfor %}</tbody>
+</table></div>
+<figure><img src="{{ figs['02_eph_vs_censo'] }}" alt="Porcentaje de inquilinos según EPH y Censo"><figcaption><b>Figura 6.</b> La EPH capta algo menos de inquilinos que el Censo. Los hogares del GBA según la EPH quedan entre los 24 y los 31 partidos del Censo porque el aglomerado incluye partes de 7 partidos del segundo cordón.</figcaption></figure>
+<div class="box warn">
+  <b>Qué significa:</b> la EPH describe bien <i>cómo</i> son los hogares, pero capta menos inquilinos de los que cuenta el Censo. Por eso, cuando el estudio dice "{{ r.elegibles }} hogares elegibles", el número real probablemente esté entre <b>{{ r.rango_censo }}</b> (factor {{ r.censo_factor_min }} a {{ r.censo_factor_max }}). Los porcentajes no cambian.
+</div>
+{{ dyc("Exigir que las cifras oficiales coincidan antes de analizar y pedir una revisión minuciosa de población, muestra y universo contra el Censo.",
+       "El recálculo de indicadores oficiales y la comparación con los cuadros del Censo.",
+       "4 de 4 indicadores coinciden con el INDEC. La diferencia con el Censo se transformó en un rango explícito en lugar de ocultarse.") }}
+
+<!-- ===================================================================== -->
+<h2 id="s7">7. Supuestos del análisis</h2>
+<p>La EPH no dice quién califica para un crédito: se calcula aplicando a cada hogar las condiciones típicas de los bancos. Estas son las <b>condiciones del escenario base</b>; el simulador del dashboard permite cambiarlas.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Condición</th><th class="num">Escenario base</th><th>De dónde sale</th></tr></thead>
+  <tbody>
+    <tr><td>Tasa (TNA sobre UVA)</td><td class="num">{{ P(base.tna * 100) }}</td><td>Tasa máxima del programa de fondeo<sup class="fn"><a href="#n1">1</a></sup></td></tr>
+    <tr><td>Plazo</td><td class="num">{{ base.plazo_anios }} años</td><td>Oferta típica de 15 a 30 años<sup class="fn"><a href="#n8">8</a></sup></td></tr>
+    <tr><td>% financiado</td><td class="num">{{ P(base.ltv * 100, 0) }}</td><td>Banco Nación financia hasta el 75%<sup class="fn"><a href="#n8">8</a></sup></td></tr>
+    <tr><td>Cuota máxima sobre el ingreso</td><td class="num">{{ P(base.tope_cuota_ingreso * 100, 0) }}</td><td>Banco Nación: la cuota inicial no puede superar el 25%<sup class="fn"><a href="#n8">8</a></sup></td></tr>
+    <tr><td>Gastos de compra</td><td class="num">{{ P(base.gastos_compra * 100, 0) }} del precio</td><td>Estimaciones de mercado entre 5% y 10%<sup class="fn"><a href="#n9">9</a></sup></td></tr>
+    <tr><td>Anticipo + gastos</td><td class="num">hasta {{ base.meses_ingreso_anticipo }} ingresos</td><td><b>Supuesto propio</b>: equivale a ahorrar el 20% del ingreso durante 5 años (la EPH no mide ahorros)</td></tr>
+    <tr><td>Ingreso demostrable</td><td class="num">Asalariado con aportes</td><td>Jefe/a o cónyuge con recibo de sueldo. Independientes: módulo aparte (8.7)</td></tr>
+    <tr><td>Edad al terminar de pagar</td><td class="num">hasta {{ base.edad_max_fin_credito }} años</td><td>Banco Nación: hasta 85 años inclusive<sup class="fn"><a href="#n8">8</a></sup></td></tr>
+    <tr><td>Tamaño de la vivienda</td><td class="num">45 / 60 / 75 m²</td><td>Referencia según integrantes (1-2 / 3-4 / 5 o más). No es una regla: el mapa de calor (8.3) muestra de 30 a 90 m²</td></tr>
+    <tr><td>Precio del m²</td><td class="num">{{ r.usd_m2['Gran Córdoba'] }} a {{ r.usd_m2['CABA'] }}</td><td>Zonaprop Index: CABA {{ r.usd_m2['CABA'] }}, GBA Norte {{ r.usd_m2['Norte'] }}, Oeste {{ r.usd_m2['Oeste'] }}, Sur {{ r.usd_m2['Sur'] }}, Córdoba {{ r.usd_m2['Gran Córdoba'] }}</td></tr>
+    <tr><td>Dólar y UVA</td><td class="num">{{ r.tc }} · {{ r.uva }}</td><td>BCRA, tipo de cambio minorista y UVA a la fecha de corte</td></tr>
+  </tbody>
+</table></div>
+
+<h3>El embudo de elegibilidad</h3>
+<p>Cada hogar inquilino pasa por los filtros en orden. Así se ve <b>en qué paso</b> se queda afuera la mayoría, que es lo que el banco necesita para diseñar el producto.</p>
+<figure>
+<svg viewBox="0 0 820 300" role="img" aria-label="Embudo de elegibilidad en 5 pasos">
+  {% set etapas = [
+    ("Hogares inquilinos", "CABA, Partidos del GBA y Gran Córdoba"),
+    ("Pueden pagar la cuota", "cuota inicial hasta 25% del ingreso"),
+    ("Pueden juntar el anticipo", "anticipo + gastos hasta 12 ingresos"),
+    ("Tienen ingreso demostrable", "jefe/a o cónyuge con aportes"),
+    ("Cumplen la edad", "edad + plazo hasta 85 años")
+  ] %}
+  {% for t, d in etapas %}
+    {% set w = 760 - loop.index0 * 120 %}
+    {% set x = (820 - w) / 2 %}
+    {% set y = 10 + loop.index0 * 56 %}
+    <rect x="{{ x }}" y="{{ y }}" width="{{ w }}" height="46" rx="8" fill="{{ ['#86b6ef','#5598e7','#3987e5','#256abf','#184f95'][loop.index0] }}"/>
+    <text x="410" y="{{ y + 20 }}" text-anchor="middle" font-size="13" font-weight="600" fill="{{ '#0b0b0b' if loop.index0 == 0 else '#ffffff' }}">{{ loop.index }}. {{ t }}</text>
+    <text x="410" y="{{ y + 37 }}" text-anchor="middle" font-size="11" fill="{{ '#0b0b0b' if loop.index0 == 0 else '#ffffff' }}">{{ d }}</text>
+  {% endfor %}
+</svg>
+<figcaption><b>Figura 7.</b> Estructura del embudo. El ancho es ilustrativo; los números de cada paso están en la sección 8.</figcaption>
+</figure>
+
+<h3>Cuánto cuesta y cuánto hay que ganar (60 m², escenario base)</h3>
+<div class="table-wrap"><table>
+  <thead><tr><th>Zona</th><th class="num">Precio</th><th class="num">Cuota inicial</th><th class="num">Efectivo necesario</th><th class="num">Ingreso necesario</th><th class="num">Años ahorrando 20% del ingreso típico</th></tr></thead>
+  <tbody>{% for e in r.ejemplos %}<tr><td>{{ e.zona }}</td><td class="num">{{ e.precio_usd }}</td><td class="num">{{ e.cuota }}</td><td class="num">{{ e.efectivo }} ({{ e.efectivo_usd }})</td><td class="num">{{ e.ingreso }}</td><td class="num">{{ e.anios }}</td></tr>{% endfor %}</tbody>
+</table></div>
+<p style="font-size:13px;color:var(--ink-2)">El ingreso mensual mediano de un hogar inquilino es {{ r.ingreso_mediano_inq }}. Los años de ahorro son ilustrativos y en pesos constantes.</p>
+{{ dyc("El escenario base en los primeros puntos de control, el embudo completo con formalidad y edad, y la corrección de la edad máxima de 75 a 85 años al encontrar el criterio publicado. En la revisión de resultados pidió no fijar una regla de m².",
+       "Un único motor de cálculo (<code>src/affordability.py</code>) que usan el análisis, el dashboard, los documentos y la presentación.",
+       "La tabla de ejemplos por zona se puede recalcular a mano con una calculadora de sistema francés.") }}
+
+<!-- ===================================================================== -->
+<h2 id="s8">8. Resultados</h2>
+<p>Cada resultado responde a una pregunta del banco. Todas las cifras salen de <code>data/processed/resultados/kpis.json</code>: el dashboard y la presentación usan los mismos números.</p>
+
+<h3>8.1 ¿Cuántos hogares podrían tomar hoy el crédito?</h3>
+<div class="tiles">
+  <div class="tile"><div class="v">{{ r.inquilinos }}</div><div class="l">hogares inquilinos en los 3 mercados</div></div>
+  <div class="tile"><div class="v">{{ r.cuota_pct }}</div><div class="l">puede pagar la cuota ({{ r.cuota_hog }})</div></div>
+  <div class="tile"><div class="v">{{ r.elegibles }}</div><div class="l">pasan todos los filtros: <b>{{ r.elegibles_pct }}</b> (IC {{ r.ic_inf }}–{{ r.ic_sup }})<sup class="fn"><a href="#n10">10</a></sup></div></div>
+</div>
+<figure><img src="{{ figs['03_embudo_elegibilidad'] }}" alt="Embudo de elegibilidad con hogares por etapa"><figcaption><b>Figura 8.</b> Hogares que superan cada filtro. La mayor caída está en el primer paso.</figcaption></figure>
+<p><b>En simple:</b> de cada 10 hogares que alquilan, {{ r.no_cuota }} no llegan a la cuota. De los que llegan, una parte no puede juntar el anticipo, y de los que quedan, el {{ r.sin_formal_pct }} no tiene recibo de sueldo para demostrar su ingreso. El ingreso mediano de los elegibles es {{ r.ingreso_mediano_eleg }}, más del doble que el de todos los inquilinos.</p>
+
+<h3>8.2 ¿Por qué tan pocos? El freno es el efectivo inicial</h3>
+<p>Con las condiciones base, un hogar califica si la vivienda cuesta hasta <b>{{ r.tope_anticipo }} veces su ingreso mensual</b> (límite del anticipo) o hasta {{ r.tope_cuota }} (límite de la cuota). La vivienda de referencia del hogar típico cuesta <b>{{ r.mediana_precio_ing }} veces</b> su ingreso.</p>
+<figure><img src="{{ figs['03_precio_en_ingresos'] }}" alt="Distribución del precio de la vivienda medido en ingresos mensuales"><figcaption><b>Figura 9.</b> Cada barra agrupa hogares según cuántos meses de ingreso cuesta su vivienda de referencia. Solo califican los que quedan a la izquierda de las líneas.</figcaption></figure>
+<div class="box callout"><b>Por qué importa para el producto:</b> como el anticipo es el límite más exigente, <b>bajar la tasa, alargar el plazo o permitir una cuota más alta, por separado, no suma hogares</b>. El {{ r.fallan_ambos }} no alcanza ninguno de los dos límites. El % financiado de equilibrio, donde ambos coinciden, es {{ r.ltv_eq }}.</div>
+
+<h3>8.3 ¿Y si cambia la superficie? (H1)</h3>
+<p>En lugar de fijar una regla de m², se calcula qué proporción calificaría si todos buscaran la misma superficie.</p>
+<figure><img src="{{ figs['03_calor_m2_zona'] }}" alt="Mapa de calor de elegibilidad por superficie y zona"><figcaption><b>Figura 10.</b> Con 45 m² calificaría el {{ r.calor['Total_45'] }} de los inquilinos; con 60 m², el {{ r.calor['Total_60'] }}; con 75 m², el {{ r.calor['Total_75'] }}. En CABA la proporción pasa de {{ r.calor['CABA_45'] }} a {{ r.calor['CABA_75'] }} entre 45 y 75 m².</figcaption></figure>
+<figure><img src="{{ figs['03_calor_m2_integrantes'] }}" alt="Mapa de calor de elegibilidad por superficie e integrantes"><figcaption><b>Figura 11.</b> Los hogares de una persona son los que menos califican en cualquier superficie: dependen de un solo ingreso.</figcaption></figure>
+<p><b>H1 · "Menos del 20% puede pagar la cuota":</b> el {{ r.cuota_pct }} puede pagarla (IC {{ r.cuota_ic_inf }}–{{ r.cuota_ic_sup }}). Veredicto: <b>{{ r.h1_veredicto|lower }}</b>. Lo firme: 1 de cada 5 paga la cuota y 1 de cada {{ r.uno_de_cada }} pasa el embudo completo.</p>
+
+<h3>8.4 ¿Cómo son los hogares que califican? (H3)</h3>
+<p>Mirada <b>descriptiva y neutral</b>: composición del hogar y, dentro de ella, quién figura como jefe o jefa (la persona que el propio hogar reconoce como tal en la encuesta).</p>
+<figure><img src="{{ figs['03_perfil_hogares'] }}" alt="Distribución y elegibilidad por tipo de hogar"><figcaption><b>Figura 12.</b> Las parejas con hijos son el grupo más grande ({{ r.perfil['Pareja con hijos|Todas'].share }}) y califica el {{ r.perfil['Pareja con hijos|Todas'].pct }}. Las parejas sin hijos, con dos ingresos y más ingreso por persona, llegan al {{ r.perfil['Pareja sin hijos|Todas'].pct }}. Los hogares con un solo adulto quedan mayormente afuera.</figcaption></figure>
+<div class="table-wrap"><table>
+  <thead><tr><th>Tipo de hogar</th><th>Jefatura</th><th class="num">% de inquilinos</th><th class="num">Ingreso mediano</th><th class="num">Por persona</th><th class="num">Con aportes</th><th class="num">% elegible</th><th class="num">IC 95%</th><th class="num">Muestra</th></tr></thead>
+  <tbody>{% for x in r.perfil_tabla %}<tr class="{{ 'chica' if x.chica else '' }}"><td>{{ x.tipo }}</td><td>{{ x.jef }}</td><td class="num">{{ x.share }}</td><td class="num">{{ x.ing }}</td><td class="num">{{ x.ipp }}</td><td class="num">{{ x.formal }}</td><td class="num">{{ x.pct }}</td><td class="num">{{ x.ic }}</td><td class="num">{{ x.n }}{{ " *" if x.chica else "" }}</td></tr>{% endfor %}</tbody>
+</table></div>
+<p style="font-size:13px;color:var(--ink-2)">* Menos de 50 hogares encuestados: dato de referencia, no concluyente. En las parejas la elegibilidad es similar según quién figura como jefe/a; las diferencias aparecen en hogares de un solo adulto, donde el ingreso por persona es más bajo cuando encabeza una mujer.</p>
+<figure class="alta"><img src="{{ figs['04_logit_odds'] }}" alt="Factores asociados a poder pagar"><figcaption><b>Figura 13.</b> Con las demás características constantes<sup class="fn"><a href="#n11">11</a></sup>, lo que más se asocia a poder pagar es un jefe o jefa con estudios superiores (×{{ r.or['educacion_Superior completo'] }}), dos o más personas con ingresos (×{{ r.or['dos_o_mas_perceptores'] }}) y ser pareja sin hijos (×{{ r.or['tipo_hogar_Pareja sin hijos'] }}). Que figure una mujer como jefa muestra una asociación negativa moderada (×{{ r.or['jefatura_mujer'] }}, IC {{ r.or_mujer_ic }}) que <b>no debe leerse como efecto del género</b>: el modelo no incluye el ingreso ni variables como antigüedad u horas, y ese coeficiente resume diferencias de ingreso que las demás variables no capturan.</figcaption></figure>
+
+<h3>8.5 ¿Dónde y a qué edad? (H4)</h3>
+<figure><img src="{{ figs['03_elegibles_por_zona_edad'] }}" alt="Elegibilidad por zona y por edad"><figcaption><b>Figura 14.</b> La proporción de elegibles va de {{ r.zonas['GBA Norte'].pct }} en GBA Norte a {{ r.zonas['GBA Oeste'].pct }} en GBA Oeste; Córdoba {{ r.zonas['Gran Córdoba'].pct }} y CABA {{ r.zonas['CABA'].pct }}. Entre mercados la diferencia no es concluyente (p = {{ r.p_zona }}); por edad sí (p = {{ r.p_edad }}). En volumen, CABA aporta la mayor cantidad de elegibles ({{ r.zonas['CABA'].hog }}). Los corredores son los mismos hogares del GBA evaluados con los precios de cada corredor.</figcaption></figure>
+
+<h3>8.6 ¿Qué pasa si…? Medidas del banco y riesgos del contexto</h3>
+<figure class="alta"><img src="{{ figs['04_que_pasa_si'] }}" alt="Hogares que se suman o pierden con cada medida"><figcaption><b>Figura 15.</b> Cada fila es una pregunta en lenguaje simple, con los hogares que se suman o se pierden y el motivo. Lo que más suma ataca el efectivo inicial o el precio.</figcaption></figure>
+<figure class="alta"><img src="{{ figs['04_que_lo_empeora'] }}" alt="Hogares que se pierden con cada riesgo"><figcaption><b>Figura 16.</b> Lo que más resta: tener que juntar el anticipo en menos tiempo o que suban los precios.</figcaption></figure>
+<figure><img src="{{ figs['04_grilla_plazo_ltv'] }}" alt="Porcentaje de elegibles según plazo y porcentaje financiado"><figcaption><b>Figura 17.</b> Combinando plazo y % financiado sin subir el tope de cuota, la mejor opción es 30 años con 80% financiado. Financiar 85% o 90% resta porque la cuota supera el tope.</figcaption></figure>
+<figure><img src="{{ figs['04_escenarios_producto'] }}" alt="Hogares elegibles por escenario de producto"><figcaption><b>Figura 18.</b> Escenario base, producto propuesto y producto propuesto con independientes.</figcaption></figure>
+
+<h3>8.7 Independientes: un módulo aparte</h3>
+<p>Los resultados anteriores exigen un asalariado con aportes. Para no alterar esa base, los independientes se analizan por separado.</p>
+<figure><img src="{{ figs['05_independientes_embudo'] }}" alt="Inquilinos con independientes con aportes"><figcaption><b>Figura 19.</b> {{ r.ind.con }} hogares inquilinos tienen a jefe/a o cónyuge trabajando como independiente con aportes; en {{ r.ind.solo }} no hay un asalariado con aportes en la pareja; de ellos, {{ r.ind.pagan }} pagan la cuota y juntan el anticipo. Su ingreso mediano es {{ r.ind.ingreso }}.</figcaption></figure>
+<figure><img src="{{ figs['05_volatilidad_ingresos'] }}" alt="Variación del ingreso entre trimestres según inserción laboral"><figcaption><b>Figura 20.</b> Entre dos trimestres, el ingreso real de un hogar con asalariado con aportes cambia típicamente un {{ r.vol['Asalariado con aportes'].cambio }}; con independiente, un {{ r.vol['Independiente con aportes'].cambio }}. Parte de esa variación es error de medición de la encuesta, común a todos los grupos. El monotributo social casi no aparece en la EPH de los tres mercados y no se puede dimensionar.</figcaption></figure>
+
+<h3>8.8 ¿Qué riesgo aparece? (H5)</h3>
+<figure><img src="{{ figs['03_stress_uva_salarios'] }}" alt="Evolución de la cuota sobre el ingreso en dos episodios"><figcaption><b>Figura 21.</b> En un crédito UVA la cuota sigue a la inflación, pero el sueldo puede ir más lento. Quien empezó en sep-2023 con el 25% de su ingreso llegó al {{ r.stress24 }} a los 24 meses. Desde 2016, el {{ r.stress24_sobre30 }} de los períodos de 24 meses terminó por encima del 30%.</figcaption></figure>
+<figure class="alta"><img src="{{ figs['03_sueldo_tres_lentes'] }}" alt="El sueldo en pesos, en dólares y en poder de compra"><figcaption><b>Figura 22.</b> El sueldo mediano registrado ({{ r.sueldo.bruto }} brutos en {{ r.sueldo.mes }}) equivale a {{ r.sueldo.usd }} al dólar Banco Nación, cerca de los {{ r.sueldo.usd17 }} de nov-2017 y lejos del piso de {{ r.sueldo.usd19 }} de nov-2019. En poder de compra vale {{ r.sueldo.real }}, contra {{ r.sueldo.real17 }} en 2017. El dólar define el precio de la vivienda; la UVA, la cuota.</figcaption></figure>
+<div class="box warn"><b>Implicancia:</b> otorgar con un tope de cuota del 30% en lugar del 25% dejaría a esos deudores cerca del 40% de su ingreso en un episodio así. El producto propuesto <b>mantiene el 25%</b>. Veredicto H5: <b>confirmada</b>.</div>
+
+<h3>8.9 Recuadro · posible punto de fuga: los trabajos del hogar (H7)</h3>
+<figure><img src="{{ figs['03_acceso_por_trabajos'] }}" alt="Elegibilidad según trabajos en el hogar"><figcaption><b>Figura 23.</b> Donde trabajan dos o más personas califica el {{ r.trab['2 o más personas trabajando'].pct }}; con una persona y un trabajo, el {{ r.trab['1 persona con 1 trabajo'].pct }}. Una persona con dos empleos pasa más seguido la cuota y el anticipo ({{ r.trab['1 persona con 2 o más trabajos'].pasan }}), pero solo el {{ r.trab['1 persona con 2 o más trabajos'].formal }} tiene ingreso demostrable. Si el banco computa solo el ingreso de jefe/a y cónyuge, los elegibles bajan {{ r.solo_titulares }}. El punto de fuga: hogares que pueden pagar con ingresos que el banco no ve.</figcaption></figure>
+
+<h3>8.10 ¿Quiénes están cerca de calificar?</h3>
+<p>Hay <b>{{ r.casi }} hogares</b> que no califican pero cuyo ingreso cubre al menos el 60% de lo necesario. Agrupados por características parecidas<sup class="fn"><a href="#n12">12</a></sup> aparecen {{ r.k_seg }} perfiles:</p>
+<figure><img src="{{ figs['04_segmentos'] }}" alt="Hogares casi elegibles por perfil"><figcaption><b>Figura 24.</b> Perfiles de hogares cerca de calificar.</figcaption></figure>
+<div class="table-wrap"><table>
+  <thead><tr><th>Perfil</th><th class="num">Hogares</th><th class="num">Edad</th><th class="num">Integrantes</th><th class="num">Con aportes</th><th class="num">Dos ingresos</th><th class="num">Cubren del ingreso necesario</th></tr></thead>
+  <tbody>{% for s in r.segmentos %}<tr><td>{{ s.nombre }}</td><td class="num">{{ s.hogares }}</td><td class="num">{{ s.edad }}</td><td class="num">{{ s.miembros }}</td><td class="num">{{ s.formal }}</td><td class="num">{{ s.dos }}</td><td class="num">{{ s.cobertura }}</td></tr>{% endfor %}</tbody>
+</table></div>
+
+<h3>8.11 Contexto de mercado</h3>
+<figure><img src="{{ figs['03_mercado_credito'] }}" alt="Stock real de créditos hipotecarios y tasa UVA"><figcaption><b>Figura 25.</b> El crédito hipotecario volvió desde 2024, pero en términos reales hoy es el {{ r.stock_pct_pico }} del pico de {{ r.mes_pico }} ({{ r.stock_hoy }} contra {{ r.stock_pico }} billones de pesos de agosto de 2026). La relación entre tasa y crecimiento del stock es débil: se usa como contexto, no como hipótesis.</figcaption></figure>
+<figure><img src="{{ figs['03_destino_credito'] }}" alt="Saldo del crédito hipotecario por destino"><figcaption><b>Figura 26.</b> En {{ r.destino_mes }}, el {{ r.destino_compra }} del saldo financia compra de vivienda nueva o usada.</figcaption></figure>
+<figure><img src="{{ figs['03_m2_por_salario'] }}" alt="Metros cuadrados que compra un salario formal"><figcaption><b>Figura 27.</b> Un sueldo formal compra hoy medio m² en CABA, cerca del promedio de 2002-2017. En años de convertibilidad o cepo, el dólar oficial exagera el poder de compra<sup class="fn"><a href="#n13">13</a></sup>.</figcaption></figure>
+<div class="tiles">
+  <div class="tile"><div class="v">{{ r.prestamo_medio }}</div><div class="l">préstamo promedio de un hogar elegible con el producto propuesto</div></div>
+  <div class="tile"><div class="v">~{{ r.fgs_creditos }}</div><div class="l">créditos que alcanza a financiar el programa ({{ r.fgs }})</div></div>
+  <div class="tile"><div class="v">{{ r.fgs_veces }} veces</div><div class="l">más hogares elegibles que créditos financiables: <b>falta fondeo, no clientes</b></div></div>
+</div>
+
+<h3>8.12 Robustez: ¿la conclusión depende de los supuestos?</h3>
+<figure><img src="{{ figs['03_robustez'] }}" alt="Elegibilidad bajo distintos supuestos"><figcaption><b>Figura 28.</b> (1) <b>No respuesta:</b> imputando el ingreso del {{ r.nr.share }} de inquilinos que no lo declaró<sup class="fn"><a href="#n14">14</a></sup>, la elegibilidad es {{ r.nr.pct }} (IC {{ r.nr.ic }}); al ocultar ingresos conocidos e imputarlos, el error promedio fue de {{ r.nr.error }} puntos. (2) <b>Subdeclaración:</b> la EPH capta el {{ r.sub.cob_med }} del sueldo mediano formal del SIPA y el {{ r.sub.cob_prom }} del promedio; corrigiendo solo los sueldos formales, la elegibilidad sube a {{ r.sub.mediana }}–{{ r.sub.promedio }}. (3) <b>Censo:</b> las cantidades absolutas estarían entre {{ r.rango_censo }} hogares.</figcaption></figure>
+
+<h3>8.13 Tablero de hipótesis</h3>
+<div class="table-wrap"><table>
+  <thead><tr><th>#</th><th>Qué se quería comprobar</th><th>Qué mostraron los datos</th><th>Veredicto</th></tr></thead>
+  <tbody>
+    <tr><td>H1</td><td>Menos del 20% de los inquilinos puede pagar la cuota</td><td>{{ r.cuota_pct }} (IC {{ r.cuota_ic_inf }}–{{ r.cuota_ic_sup }}); {{ r.elegibles_pct }} pasa el embudo completo</td><td><span class="pill both">{{ r.h1_veredicto }}</span></td></tr>
+    <tr><td>H2</td><td>Lo que más frena es el anticipo, más que la cuota</td><td>El anticipo es más exigente ({{ r.tope_anticipo }} contra {{ r.tope_cuota }} ingresos), pero el {{ r.fallan_ambos }} no alcanza ninguno</td><td><span class="pill up">Confirmada con matiz</span></td></tr>
+    <tr><td>H3</td><td>Composición del hogar y elegibilidad</td><td>Parejas sin hijos {{ r.perfil['Pareja sin hijos|Todas'].pct }}; un solo adulto {{ r.perfil['Monoparental|Todas'].pct }}–{{ r.perfil['Unipersonal|Todas'].pct }}</td><td><span class="pill">Descriptiva</span></td></tr>
+    <tr><td>H4</td><td>La elegibilidad cambia según zona y edad</td><td>Zonas {{ r.zonas['GBA Norte'].pct }}–{{ r.zonas['GBA Oeste'].pct }} (p = {{ r.p_zona }}); edad p = {{ r.p_edad }}</td><td><span class="pill both">Parcial</span></td></tr>
+    <tr><td>H5</td><td>Si la UVA supera a los salarios, la cuota pasa el 30%</td><td>Crédito de sep-2023: 25% → {{ r.stress24 }} a los 24 meses</td><td><span class="pill up">Confirmada</span></td></tr>
+    <tr><td>—</td><td>Tasa y crecimiento del crédito (ex H6)</td><td>Relación débil, pocos ciclos</td><td><span class="pill">Contexto</span></td></tr>
+    <tr><td>H7</td><td>Tener más de un trabajo mejora el acceso</td><td>Dos personas trabajando {{ r.trab['2 o más personas trabajando'].pct }}; una persona con dos empleos {{ r.trab['1 persona con 2 o más trabajos'].pct }}</td><td><span class="pill">Recuadro</span></td></tr>
+  </tbody>
+</table></div>
+{{ dyc("Qué hipótesis mantener, reformular o pasar a contexto: H1 como mapa de calor, H3 descriptiva y neutral, independientes en un módulo separado, H6 como contexto y H7 como recuadro. También pidió rediseñar el gráfico de sensibilidad, que no se entendía, y sumar controles de subdeclaración y no respuesta.",
+       "Intervalos por bootstrap, tests, modelo logístico, segmentación, escenarios y gráficos.",
+       "Márgenes de error por conglomerado, tests ajustados por efecto de diseño, muestras chicas marcadas y tres controles de robustez con resultados coherentes.") }}
+
+<!-- ===================================================================== -->
+<h2 id="s9">9. Recomendación</h2>
+<div class="box callout">
+  <p style="margin:0"><b>Recomiendo lanzar un hipotecario UVA a 30 años, con 80% financiado y cuota inicial de hasta 25% del ingreso, dirigido a hogares inquilinos con dos ingresos, y abrir una línea separada para monotributistas y autónomos con aportes,</b> porque es la combinación que más hogares suma sin subir el tope de cuota (de {{ r.elegibles }} a {{ r.prop }}, y a {{ r.prop_indep }} con independientes), ataca el verdadero freno (el efectivo inicial) y deja margen frente a un desacople entre UVA y salarios. El 80% financiado aumenta la exposición por crédito: se compensa con la selección de perfiles y la protección de la cuota.</p>
+</div>
+<div class="table-wrap"><table>
+  <thead><tr><th>Acción</th><th>Para quién</th><th>Por qué</th></tr></thead>
+  <tbody>
+    <tr><td><b>1. Producto 30 años / 80% / cuota 25%</b></td><td>Hogares con dos ingresos de hasta 55 años</td><td>{{ r.prop_delta }} de hogares elegibles sin subir el tope de cuota</td></tr>
+    <tr><td><b>2. Línea de independientes</b> con validación por facturación o aportes de 12 a 24 meses</td><td>Monotributistas y autónomos con aportes</td><td>{{ r.ind.pagan }} hogares pagarían la cuota y el anticipo pero no tienen recibo</td></tr>
+    <tr><td><b>3. Sumar siempre el ingreso de la pareja</b></td><td>Hogares con dos personas que trabajan</td><td>Es lo que más diferencia hace en la elegibilidad</td></tr>
+    <tr><td><b>4. Ahorro programado en UVA para el anticipo</b></td><td>Casi elegibles con ingreso formal</td><td>Juntar 24 ingresos en lugar de 12 suma {{ r.qps['¿Y si un plan de ahorro permite juntar 24 meses de ingreso?'].dif }} hogares</td></tr>
+    <tr><td><b>5. Protección de la cuota</b>: tope del 25% y opción de extender plazo si la cuota supera el 30% del sueldo</td><td>Todos los deudores</td><td>En 2023-25 la cuota llegó a un tercio del ingreso</td></tr>
+    <tr><td><b>6. Colocación priorizada</b> en los 120 días del programa</td><td>El banco</td><td>El fondeo alcanza para ~{{ r.fgs_creditos }} créditos frente a {{ r.prop }} hogares elegibles: se puede seleccionar por menor riesgo</td></tr>
+  </tbody>
+</table></div>
+<p><b>Próximos pasos:</b> validar con datos propios del banco (mora histórica por perfil y scoring), piloto en GBA Oeste y Gran Córdoba, medir la demanda real con una campaña de precalificación y dimensionar el monotributo social con datos administrativos.</p>
+
+<!-- ===================================================================== -->
+<h2 id="s10">10. Limitaciones</h2>
+<p>Estos son los límites del estudio y en qué dirección pueden mover los resultados:</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Limitación</th><th>Por qué ocurre</th><th>Efecto probable</th></tr></thead>
+  <tbody>
+    <tr><td>No se conocen ahorros ni deudas de los hogares</td><td>La EPH no lo pregunta</td><td><span class="pill both">Incierto</span> el test de anticipo es un supuesto; hay hogares con deudas que no calificarían</td></tr>
+    <tr><td>La EPH capta 2 a 4 puntos menos de inquilinos que el Censo</td><td>Diferencias de marco muestral y de fecha</td><td><span class="pill down">Subestima</span> cantidades; se informa un rango ajustado</td></tr>
+    <tr><td>Ingresos declarados por debajo de lo real</td><td>Subdeclaración conocida en encuestas</td><td><span class="pill down">Subestima</span> elegibles; se midió contra el SIPA (8.12)</td></tr>
+    <tr><td>Alta falta de respuesta de ingresos en GBA y CABA</td><td>Hogares que no declaran ingresos</td><td><span class="pill both">Más incertidumbre</span> la imputación da un resultado algo menor</td></tr>
+    <tr><td>Precios de publicación, no de venta final</td><td>No hay datos abiertos de escrituras con precio</td><td><span class="pill down">Subestima</span> elegibles</td></tr>
+    <tr><td>No se observa en qué partido del GBA vive cada hogar</td><td>La EPH solo identifica el aglomerado</td><td><span class="pill both">Incierto</span> corredores como escenarios de precio sobre los mismos hogares</td></tr>
+    <tr><td>No se evalúa historial crediticio</td><td>Dato privado</td><td><span class="pill up">Sobreestima</span> elegibles</td></tr>
+    <tr><td>Solo 3 mercados urbanos</td><td>Muestra y precios confiables</td><td><span class="pill">Alcance</span> no se generaliza al resto del país</td></tr>
+    <tr><td>Condiciones y precios cambian rápido</td><td>Mercado en movimiento</td><td><span class="pill">Vigencia</span> válido a la fecha de corte</td></tr>
+    <tr><td>Márgenes de error aproximados</td><td>La base pública de la EPH no incluye el diseño completo de la muestra</td><td><span class="pill both">Incierto</span> el margen real probablemente sea algo mayor</td></tr>
+    <tr><td>Ingresos a pesos de agosto; precio, UVA y dólar a septiembre</td><td>Último IPC publicado</td><td><span class="pill down">Subestima</span> levemente elegibles</td></tr>
+    <tr><td>El modelo muestra asociaciones, no causas</td><td>Encuesta en un momento dado</td><td><span class="pill">Interpretación</span> no explica por qué un perfil puede pagar más</td></tr>
+    <tr><td>Los perfiles de casi elegibles se superponen</td><td>Separación débil (silhouette {{ r.silhouette }})</td><td><span class="pill">Interpretación</span> guía comercial, no grupos rígidos</td></tr>
+    <tr><td>No hay índice de ingresos de independientes</td><td>Sin serie oficial comparable</td><td><span class="pill both">Incierto</span> su riesgo de cuota se analiza de forma descriptiva</td></tr>
+    <tr><td>El stress test usa el salario registrado promedio</td><td>No hay series de salario por hogar en el tiempo</td><td><span class="pill both">Incierto</span> cada deudor puede tener un recorrido mejor o peor</td></tr>
+  </tbody>
+</table></div>
+
+<!-- ===================================================================== -->
+<h2 id="s11">11. Cómo se trabajó y reproducibilidad</h2>
+<p><b>Participación humana en cada etapa.</b> El proyecto avanzó en cuatro puntos de control. En cada uno, el autor revisó resultados intermedios, cuestionó cifras y decidió cómo seguir: el alcance y el escenario base (1), el embudo completo y el estándar de documentación (2), la revisión de hipótesis, población y fuentes (3) y el plan de cierre con relato, presentación y publicación (4). El código, los cálculos y los borradores se produjeron con apoyo de herramientas de automatización, incluida IA generativa para programación y redacción; las preguntas, los supuestos, los criterios y las conclusiones son del autor.</p>
+
+<figure class="flujo" aria-label="Flujo de trabajo del caso: qué decidió el autor y qué se hizo con herramientas en cada etapa">
+  <div class="fl-leyenda">
+    <span><i class="fl-sw autor"></i>Decide y revisa el autor</span>
+    <span><i class="fl-sw herr"></i>Herramientas: IA generativa y automatización</span>
+    <span><i class="fl-sw pc"></i>Punto de control</span>
+  </div>
+  <div class="fl-cab"><span>Etapa</span><span>Autor</span><span>Herramientas</span></div>
+  {% set etapas = [
+    ("Tema y pregunta", "Elige la temática, formula la pregunta disparadora y define el caso: banco ficticio, mercados y producto.", "Borradores del encuadre y de la lista de hipótesis para discutir.", None),
+    ("Fuentes e hipótesis", "Revisa qué fuentes públicas existen y cuáles son confiables (INDEC, BCRA, datos.gob.ar, GCBA, Zonaprop). Fija las hipótesis y el escenario base con condiciones publicadas.", "Búsqueda de la documentación de cada fuente y de las condiciones de crédito vigentes.", "Punto de control 1 · alcance y escenario base"),
+    ("Datos y limpieza", "Define las reglas de limpieza y exige validar contra las cifras oficiales del INDEC y el Censo 2022.", "Código de descarga, carga y limpieza en SQL y Python, con el conteo de cada regla.", "Punto de control 2 · embudo completo y estándar de documentación"),
+    ("Análisis y robustez", "Elige entre métodos alternativos y cuestiona las cifras. De esa revisión salen el tratamiento del panel, el GBA por corredor, los independientes aparte y los controles de subdeclaración y no respuesta.", "Propuestas de método y código de modelos, bootstrap, imputación y gráficos.", "Punto de control 3 · hipótesis, población y fuentes"),
+    ("Resultados y propuesta", "Interpreta los resultados y arma la recomendación de producto a partir de los datos.", "Cálculo de escenarios y tablas para comparar alternativas.", None),
+    ("Relato y productos", "Define el mensaje, el tono y qué ve cada público.", "Borradores de textos, dashboard y presentación, generados desde las mismas cifras.", "Punto de control 4 · relato, presentación y publicación"),
+    ("Publicación", "Revisa el material final y decide qué se publica.", "Auditoría automática de datos personales y metadatos, y control de consistencia de cifras.", None)
+  ] %}
+  <ol class="fl">
+  {% for etapa, autor_txt, herr_txt, pc in etapas %}
+    <li class="fl-paso">
+      <div class="fl-n"><b>{{ loop.index }}</b><span>{{ etapa }}</span></div>
+      <div class="fl-autor">{{ autor_txt }}</div>
+      <div class="fl-herr">{{ herr_txt }}</div>
+    </li>
+    {% if pc %}<li class="fl-pc"><span>{{ pc }}</span></li>{% endif %}
+  {% endfor %}
+  </ol>
+  <figcaption><b>Figura 29.</b> Flujo de trabajo. Las herramientas se usaron para buscar, programar y redactar borradores; cada etapa pasó por la revisión del autor, y en los cuatro puntos de control se decidió cómo seguir. La documentación, las fuentes y el código para repetir cada paso están en el repositorio público del caso.</figcaption>
+</figure>
+
+<p><b>Para rehacer el estudio desde cero:</b></p>
+<ol>
+  <li><code>python src/download.py</code>: descarga las fuentes y registra la huella digital de cada archivo.</li>
+  <li><code>notebooks/01_exploracion.ipynb</code> y <code>02_limpieza_calidad.ipynb</code>: carga cruda, perfilado, limpieza y validaciones (SQL).</li>
+  <li><code>python src/export_results.py</code>: hipótesis, escenarios, modelo, segmentos y robustez → <code>kpis.json</code>.</li>
+  <li><code>notebooks/03</code> a <code>05</code>: análisis narrado y gráficos.</li>
+  <li><code>python src/build_docs.py</code>: regenera este documento y el resumen.</li>
+</ol>
+<p><b>Herramientas:</b> Python 3.13, DuckDB (SQL), pandas, statsmodels, scikit-learn, matplotlib, Jupyter.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Versión</th><th>Contenido</th><th>Cambios relevantes</th></tr></thead>
+  <tbody>
+    <tr><td>0.1</td><td>Encuadre, hipótesis y supuestos</td><td>Escenario base validado</td></tr>
+    <tr><td>0.2</td><td>Datos, limpieza y validación</td><td>Embudo completo. <b>Corrección:</b> edad máxima de 75 a 85 años (criterio publicado)</td></tr>
+    <tr><td>0.3</td><td>Primeros resultados</td><td>Cuota y anticipo dependen del mismo cociente precio/ingreso</td></tr>
+    <tr><td>1.0</td><td>Informe final</td><td><b>Correcciones de la revisión:</b> pool de trimestres en lugar de una visita por hogar; Gran Rosario fuera; GBA por partido y corredor con pesos del Censo; precios del Zonaprop Index tomados de reportes oficiales; independientes en módulo aparte; controles de subdeclaración (SIPA) y no respuesta (imputación); H1 como mapa de calor y H3 descriptiva; recomendación</td></tr>
+  </tbody>
+</table></div>
+
+<!-- ===================================================================== -->
+<h2 id="notas">Notas</h2>
+<ol class="notas">
+  <li id="n1">Programa de fondeo con recursos del FGS de ANSES: licitaciones por {{ r.fgs }} en total, tasa tope UVA + 7,5%, primera vivienda, hasta 150.000 UVA [S1].</li>
+  <li id="n2">La UVA se actualiza diariamente por el Coeficiente de Estabilización de Referencia (CER). Serie 31 de la API del BCRA [R6].</li>
+  <li id="n3">El INDEC corrige la no respuesta de ingresos redistribuyendo el peso de los hogares que no responden entre respondentes de características similares; los primeros quedan con ponderador cero en PONDIH [R4].</li>
+  <li id="n4">Esquema de rotación 2-2-2 de la EPH continua [R3]. Las visitas de un mismo hogar se tratan como conglomerado en el bootstrap y en los errores del modelo [M5].</li>
+  <li id="n5">Índice construido encadenando la inflación mensual publicada por el BCRA (serie 27). La serie viene redondeada a un decimal, lo que genera un error acumulado menor [R6].</li>
+  <li id="n6">Precios extremos: se descartan los muy alejados del rango habitual de su año (regla de Tukey con k = 3 sobre el logaritmo del precio por m²) [M1].</li>
+  <li id="n7">Los 26 partidos con precio propio siguen la agrupación del Zonaprop Index; Cañuelas, Presidente Perón y San Vicente se asignaron al corredor Sur y General Rodríguez y Marcos Paz al Oeste por ubicación. El peso de cada partido es su cantidad de hogares inquilinos en el Censo 2022 (31 partidos) [R5, R9].</li>
+  <li id="n8">Banco Nación: la relación cuota inicial-ingreso no puede superar el 25%; financia hasta el 75%; plazos de hasta 30 años; edad máxima de cancelación de 85 años inclusive [S2].</li>
+  <li id="n9">Las guías de mercado ubican los gastos del comprador entre 5% y 10% del precio según exenciones y comisión [S3].</li>
+  <li id="n10">IC 95% por bootstrap de conglomerados (1.000 remuestreos de hogares por mercado) [M3]. Las diferencias entre grupos se evaluaron con chi-cuadrado ajustado por el efecto de diseño de Kish [M2].</li>
+  <li id="n11">Regresión logística fraccional ponderada (n = {{ r.n_logit }} observaciones de {{ r.hog_logit }} hogares; AUC = {{ r.auc }}), con errores robustos por hogar [M6, M5]. Resultado: pasar cuota y anticipo. Referencia: GBA, jefe/a de 30-39 años, asalariado formal, secundario completo, pareja con hijos.</li>
+  <li id="n12">K-means ponderado sobre ingreso (log), cobertura del ingreso requerido, edad, integrantes, perceptores y formalidad, con variables estandarizadas. Se eligió la mayor silhouette entre las soluciones con al menos 30 hogares encuestados por grupo [M4].</li>
+  <li id="n13">m² por salario = RIPTE promedio anual en dólares (tipo de cambio mayorista oficial) ÷ precio mediano del m² en CABA. 2001-2020 con avisos del GCBA; 2026 con el Zonaprop Index, una metodología distinta.</li>
+  <li id="n14">Imputación múltiple por predictive mean matching (10 imputaciones, 5 donantes), con covariables laborales y demográficas que la EPH releva aunque no haya respuesta de ingresos, combinadas con las reglas de Rubin [M7, M8].</li>
+</ol>
+
+<h2>Referencias</h2>
+<p style="font-size:13px;color:var(--ink-2)">Fecha de consulta de las fuentes en línea: {{ fecha_corte }}.</p>
+<h3>Fuentes de datos</h3>
+<ol class="refs">
+  <li id="r1">[R1] INDEC (2025-2026). <i>Encuesta Permanente de Hogares: bases de microdatos usuarias, 2T-2025 a 1T-2026</i>. https://www.indec.gob.ar/indec/web/Institucional-Indec-BasesDeDatos</li>
+  <li id="r2">[R2] INDEC (2026). <i>Evolución de la distribución del ingreso (EPH). Primer trimestre de 2026</i>. https://www.indec.gob.ar</li>
+  <li id="r3">[R3] INDEC. <i>Encuesta Permanente de Hogares: metodología de la EPH continua</i>. https://www.indec.gob.ar/ftp/cuadros/sociedad/metodologia_eph_continua.pdf</li>
+  <li id="r4">[R4] INDEC (2020). <i>EPH. Consideraciones metodológicas</i>. https://www.indec.gob.ar/ftp/cuadros/menusuperior/eph/EPH_consideraciones_metodologicas_2t20.pdf</li>
+  <li id="r5">[R5] INDEC (2023). <i>Censo Nacional de Población, Hogares y Viviendas 2022. Resultados definitivos: hogares por régimen de tenencia de la vivienda</i> (cuadros 6, 6.1, 6.2, 6.2 bis y 6.6). https://censo.gob.ar</li>
+  <li id="r6">[R6] Banco Central de la República Argentina. <i>API de Estadísticas v4.0</i>: series 4, 5, 27, 28, 31, 916, 1113 a 1117, 1217 y 1240. https://api.bcra.gob.ar</li>
+  <li id="r7">[R7] Datos Argentina. <i>API de Series de Tiempo</i>: Índice de Salarios (INDEC), RIPTE, remuneraciones del SIPA (promedio y mediana) y tipo de cambio Banco Nación vendedor. https://apis.datos.gob.ar/series</li>
+  <li id="r8">[R8] Gobierno de la Ciudad de Buenos Aires. <i>Departamentos en venta 2001-2020</i>. https://data.buenosaires.gob.ar/dataset/departamentos-venta</li>
+  <li id="r9">[R9] Zonaprop. <i>Zonaprop Index</i>: reportes CABA (julio 2026), GBA (julio 2026) y Córdoba (marzo 2026). https://www.zonaprop.com.ar/blog/</li>
+</ol>
+<h3>Referencias de supuestos</h3>
+<ol class="refs">
+  <li id="s1">[S1] Infobae (07-09-2026). <i>Nuevos créditos hipotecarios UVA: qué bancos bajaron sus tasas por el plan del Gobierno</i>.</li>
+  <li id="s2">[S2] iProfesional (03-12-2025). <i>Cómo funciona el crédito hipotecario del Banco Nación: requisitos, tasas y plazos en UVA + CER</i>.</li>
+  <li id="s3">[S3] Mudafy (2026). <i>Cuánto cuesta escriturar una casa en Argentina 2026: gastos e impuestos</i>.</li>
+</ol>
+<h3>Referencias metodológicas</h3>
+<ol class="refs">
+  <li>[M1] Tukey, J. W. (1977). <i>Exploratory Data Analysis</i>. Addison-Wesley.</li>
+  <li>[M2] Kish, L. (1965). <i>Survey Sampling</i>. John Wiley &amp; Sons.</li>
+  <li>[M3] Efron, B. y Tibshirani, R. J. (1993). <i>An Introduction to the Bootstrap</i>. Chapman &amp; Hall.</li>
+  <li>[M4] Rousseeuw, P. J. (1987). Silhouettes: a graphical aid to the interpretation and validation of cluster analysis. <i>Journal of Computational and Applied Mathematics</i>, 20, 53-65.</li>
+  <li>[M5] Cameron, A. C. y Miller, D. L. (2015). A practitioner's guide to cluster-robust inference. <i>Journal of Human Resources</i>, 50(2), 317-372.</li>
+  <li>[M6] Papke, L. E. y Wooldridge, J. M. (1996). Econometric methods for fractional response variables with an application to 401(k) plan participation rates. <i>Journal of Applied Econometrics</i>, 11(6), 619-632.</li>
+  <li>[M7] Rubin, D. B. (1987). <i>Multiple Imputation for Nonresponse in Surveys</i>. John Wiley &amp; Sons.</li>
+  <li>[M8] Little, R. J. A. (1988). Missing-data adjustments in large surveys. <i>Journal of Business &amp; Economic Statistics</i>, 6(3), 287-296.</li>
+</ol>
+
+
+<footer>{{ autor }} · Documento metodológico, versión {{ version }} · {{ fecha_doc }}. Ver el descargo al inicio.</footer>
+</main>
+</body>
+</html>
